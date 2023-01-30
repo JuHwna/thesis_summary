@@ -5,3 +5,4 @@
 
 
 - https://hub.docker.com/r/nvidia/cuda
+- https://mintpsyco.tistory.com/m/32
