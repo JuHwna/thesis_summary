@@ -30,4 +30,16 @@
 
 ## 5.1 기존 조사와의 차이점
 - 추천 연구의 중요성과 인기를 고려할 때, 최근에 발표된 일부 연구도 검토했다. 여기서 우리는 이 연구의 필요성과 중요성을 강조하기 위해 이러한 연구와의 주요 차이점에 대해 간단히 논의한다.
-- 기존 연구는 두 가지 중요한 파트로 구성된다. 첫 번째 파트는 협업 필터링, 크로스 도메인 추천, 설명가능한 추천, 지시 그래프에서 부가 정보 활용과 같은 특정한 주제 또는 방향에 초점을 맞춘다. 
+- 기존 연구는 두 가지 중요한 파트로 구성된다. 
+  - 첫 번째 파트
+    - 협업 필터링(“Collaborative filtering beyond the user-item matrix: A survey of the state of the art and future challenges,”)
+    - 크로스 도메인 추천(“Cross domain recommender systems: A systematic literature review,”)
+    - 설명가능한 추천(“Tem: Treeenhanced embedding model for explainable recommendation,”)
+    - 지식 그래프로 표시된 추천(“A survey on knowledge graph-based recommender systems,”)
+    - 시퀀스 추천(“Deep learning for sequential recommendation: Algorithms, influential factors, and evaluations,”), (“Sequence-awarerecommender systems,”)
+    - 세션 기반의 추천(“A survey on session-based recommender systems,”) 
+  - 에서 부가 정보 활용과 같은 특정한 주제 또는 방향에 초점을 맞춘다. 
+  - 다른 파트는 추천 방법을 요악한 딥러닝의 분류를 따른다.
+    - 예를 들어 (“Deep learning based recommender system: A survey and new perspectives,”)는 MLP 기반, 오토인코더 기반, RNN 기반, 어텐션 기반(?) 등으로 추천 방법에 대한 논의를 정리했다.
+    - 또한 비슷한 연구는 (“A review on deep learning for recommender systems: challenges and remedies,”), (“Recommendation system based on deep learning methods: a systematic review and new directions,”)로 발견할 수 있다. 
+    - 이들의 연구는 주요하게 추천에서 다양한 딥러닝 방법을 사용하는 기술적인 다름을 비교한다.
