@@ -70,6 +70,8 @@
 - 로컬에서 docker 컨테이너로 파일 옮기는 법
   - docker ps (옮기려는 로컬 파일 위치) (컨테이터 이름):(컨테이너에서 저장시키고 싶은 위치) 
 
+- docker log 확인
+  - docker log [container name]
 
 ## 2. jupyterhub 설치
 - docker run -p 8000:8000 -d --name jupyterhub jupyterhub/jupyterhub jupyterhub --ip 0.0.0.0 --port 8000
