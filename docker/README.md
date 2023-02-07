@@ -73,6 +73,13 @@
 - docker log 확인
   - docker log [container name]
 
+### docker error
+- Error response from daemon: Get "https://index.docker.io/v1/search?q=miniconda&n=25": proxyconnect tcp: dial tcp: lookup proxy.example.com: no such host
+  - docker image, pull 다 사용 안됨
+  - 해결 방법
+    ![image](https://user-images.githubusercontent.com/49123169/217153295-41ada63a-25cb-497e-9a59-47bd79147a9e.png)
+
+
 ## 2. jupyterhub 설치
 - docker run -p 8000:8000 -d --name jupyterhub jupyterhub/jupyterhub jupyterhub --ip 0.0.0.0 --port 8000
 - 이후 jupyterhub에 들어가
