@@ -288,6 +288,8 @@ volumes:
 ~~~
 
 - 이후 포트와 아이디 적기
+
+~~~
 DB_NAME=mlflow
 DB_USER=mlflow
 DB_PW=mlflow123
@@ -299,4 +301,10 @@ AWS_SECRET_ACCESS_KEY=mlflow123
 AWS_REGION=localhost
 
 MLFLOW_PORT=5000
+~~~
 
+5. docker build -t mlflow-tracker .
+
+6. docker-compose up -d
+
+7. mlflow, minio 작동됨(ip와 포트로 접속 가능)
