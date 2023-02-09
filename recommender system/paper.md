@@ -71,3 +71,9 @@
 - 비록 이 조정된 모델들은 공식적으로 제안되거나 발표되지 않을 수 있지만 해당 모델들은 큰 노력 없이 얻을 수 있으며 실제 애플리케이션에서 탐색할 가치가 있다. 이러한 설계 유연성은 서로 다른 계층이 서로 다른 목표를 위해 설계되는 뉴럴 추천 모델의 계층별 아키텍처에 기인할 수 있다.
 - 편의를 위해, 우리는 또한 관련된 뉴럴 추천 모델을 추천 모델링 1의 분류법으로 요약한다. (모델링 1: https://github.com/ImcRS/AWS-recommendation-papers) 우리는 이 연구가 실무자들이 그들의 목적에 맞는 모델을 이해하고 더 나은 모델을 설계하는데 도움이 되는 명확한 로드맵을 제공하기를 희망한다.
 
+## 2. 협업 필터링 모델
+- 협업필터링 개념은 타겟 고객의 행동을 예측하기 위해 모든 고객의 협업 행동을 활용한다는 생각에서 비롯되었다. 초기 접근법은 메모리 기반한 모델로서 고객(유저 베이스 CF) 또는 아이템(아이템 베이스 CF)의 행동 유사성을 직접 계산한다.
+- 나중에, MF(행렬인수분해) 기반 모델은 고객 아이템 상호 작용 행렬을 인코딩하는 잠재 공간(latent space)을 집합적으로 찾음으로써 널리 퍼진다.
+  - Y. Koren, R. Bell, and C. Volinsky, “Matrix factorization techniques for recommender systems,” Computer, no. 8, pp. 30–37, 2009.
+  - S. Rendle, C. Freudenthaler, Z. Gantner, and L. Schmidt-Thieme, “Bpr: Bayesian personalized ranking from implicit feedback,” in UAI, 2009, pp. 452–461.
+- 
