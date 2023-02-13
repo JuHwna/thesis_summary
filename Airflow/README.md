@@ -27,3 +27,8 @@
 - 클릭하면 예시로 되어 있는 db 정보들이 뜨는데 무시하고 + 버튼을 누른다.
 
 2. 여러 정보들을 입력하는 창이 뜨는데 connection type을 우선적으로 맞추어준다. 드롭박스를 누르면 연결하려는 DB에 맞는 것을 클릭해야 하는데 Oracle, MySQL, JDBC Connection이 초기에는 없어서 설치해줘야 나타난다. 설치하는 방법은 찾아서 잘 설치하면 된다!
+
+
+
+## 참고자료
+> https://www.slideshare.net/YoungHeonKim1/airflow-workflow
