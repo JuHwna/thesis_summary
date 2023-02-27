@@ -7,3 +7,16 @@
 - https://hub.docker.com/r/nvidia/cuda
 - https://mintpsyco.tistory.com/m/32
 - https://velog.io/@moey920/Kubeflow-%EB%85%B8%ED%8A%B8%EB%B6%81-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+
+
+
+
+## Minikube로 설치하는 방법
+1. https://mintpsyco.tistory.com/m/32 or https://sidepunch.tistory.com/entry/Kubeflow-%EC%84%A4%EC%B9%98-Ubuntu-2104-minikube
+
+2. https://github.com/kubeflow/manifests 나온 순서대로 차례대로 설치
+- while ! kustomize build example | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 10; done 이거로 설치 시 뭔가 오류 발생
+
+3. 노트북 생성 시 오류 발생하면
+- https://otzslayer.github.io/kubeflow/2022/06/11/could-not-find-csrf-cookie-xsrf-token-in-the-request.html 해당 사이트 처럼 수정
+
