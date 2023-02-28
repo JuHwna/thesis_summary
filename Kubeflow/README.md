@@ -25,3 +25,32 @@
 - https://velog.io/@seokbin/Kubeflow-V1.4-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%B4%88%EA%B8%B0-%EC%84%A4%EC%A0%95User-%EC%B6%94%EA%B0%80-CORS
 
 
+5. gpu 설치 방법
+> https://github.com/NVIDIA/k8s-device-plugin
+(1) Install the nvidia-container-toolkit
+- distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+- curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add -
+- curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | sudo tee /etc/apt/sources.list.d/libnvidia-container.list
+- sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+
+(2) Configure docker
+- When running kubernetes with docker, edit the config file which is usually present at /etc/docker/daemon.json to set up nvidia-container-runtime as the default low-level runtime:
+
+~~~
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+
+~~~
+(3) sudo systemctl restart docker
+
+(4)
+- minikube addons enable nvidia-gpu-device-plugin
+- minikube addons enable nvidia-driver-installer
+
