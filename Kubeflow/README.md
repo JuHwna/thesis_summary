@@ -27,6 +27,7 @@
 
 5. gpu 설치 방법
 > https://github.com/NVIDIA/k8s-device-plugin
+> https://minikube.sigs.k8s.io/docs/tutorials/nvidia_gpu/
 (1) Install the nvidia-container-toolkit
 - distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
 - curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo apt-key add -
