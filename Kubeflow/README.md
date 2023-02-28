@@ -54,3 +54,6 @@
 - minikube addons enable nvidia-gpu-device-plugin
 - minikube addons enable nvidia-driver-installer
 
+
+(5) kubectl get nodes "-o=custom-columns=NAME:.metadata.name,GPU:.status.allocatable.nvidia\.com/gpu" 
+- name과 gpu에 다 뜨면 
