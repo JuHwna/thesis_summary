@@ -20,6 +20,7 @@
   - 해당 코드 입력 시 airflow 웹페이지가 실행된다.
   - airflow 웹페이지에 들어가는 방법은 설정해놓은 포트를 통해 들어가면 되며 내부의 경우, 전체적으로 관리할 수 있는 페이지로 들어가지고 외부는 admin이라는 계정이지만 사이트 형태가 다르게 켜진다.
 
+→ 이후 접속 시 docker exec -it airflow airflow standalone치면 web ui 켜짐
 
 # 사용 방법
 - DAGs라는 곳에서 배치를 돌릴 수 있는데 해당 부분에 등록하는 방법은 좀 복잡하다.
@@ -28,6 +29,11 @@
 
 2. 여러 정보들을 입력하는 창이 뜨는데 connection type을 우선적으로 맞추어준다. 드롭박스를 누르면 연결하려는 DB에 맞는 것을 클릭해야 하는데 Oracle, MySQL, JDBC Connection이 초기에는 없어서 설치해줘야 나타난다. 설치하는 방법은 찾아서 잘 설치하면 된다!
 
+### mysql connection 설치
+(1) apt-get update
+(2) apt-get install libmysqlclient-dev -y
+(3) pip install mysqlclinet
+(4) pip install **apache-airflow-providers-mysql**
 
 
 ## 참고자료
