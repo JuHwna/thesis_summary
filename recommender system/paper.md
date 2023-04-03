@@ -76,4 +76,9 @@
 - 나중에, MF(행렬인수분해) 기반 모델은 고객 아이템 상호 작용 행렬을 인코딩하는 잠재 공간(latent space)을 집합적으로 찾음으로써 널리 퍼진다.
   - Y. Koren, R. Bell, and C. Volinsky, “Matrix factorization techniques for recommender systems,” Computer, no. 8, pp. 30–37, 2009.
   - S. Rendle, C. Freudenthaler, Z. Gantner, and L. Schmidt-Thieme, “Bpr: Bayesian personalized ranking from implicit feedback,” in UAI, 2009, pp. 452–461.
-- 
+- 뉴럴 네트워크의 표현적이고 복잡한 모델링 능력을 고려할 때, 뉴럴 협업 필터링의 현재 솔루션은 두 가지 범주로 요약될 수 있다.
+  - 사용자 및 아이템의 표현 모델링
+  - 표현이 주어진 사용자-아이템 상호 작용 모델링
+
+### 2.1 표현 학습
+- CF에서 U는 유저, V는 아이템을 나타내고 R∈IR<sup>M×N</sup>
