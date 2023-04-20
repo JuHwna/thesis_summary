@@ -81,4 +81,15 @@
   - 표현이 주어진 사용자-아이템 상호 작용 모델링
 
 ### 2.1 표현 학습
-- CF에서 U는 유저, V는 아이템을 나타내고 R∈IR<sup>M×N</sup> 는 유저와 아이템의 상호 행동 
+- CF에서 U는 유저, V는 아이템을 나타내고 R∈IR<sup>M×N</sup> 는 유저와 아이템의 상호 행동 행렬입니다. 일반적인 목표는 유저 임베딩 행렬 P와 아이템 임베딩 행렬 Q를 학습하는 것이며 여기서 p<sub>u</sub>, q<sub>i</sub>는 각각 유저 u와 아이템 i의 표현 파라미터로 나타남
+- 실제, 대규모 아이템 데이터에 비해 각 유저들의 행동은 제한적이기 때문에 정확한 유저 및 아이템 임베딩 학습을 위한 유저-아이템 상호작용 행동의 희소성이 CF의 핵심 과제임. 다른 종류의 표현 학습 모델은 입력 데이터가 주어진 표현 모델링 기법에 따라 달라짐
+- 우리는 이 섹션에서 세 가지 분류로 나눈다.
+  - history behavior aggregation enhanced models : 히스토리 동작 집계 강화 모델?
+  - autoencoder based models : 오토인코더 기반 모델
+  - graph learning approaches : 그래프 학습 접근법
+- 설명을 쉽게 하기 위해 표1에 일반적인 표현 학습 모델을 나열함
+
+|Category|Modeling Summarization|Models|
+|--------|----------------------|------|
+|Classical Matrix Factorization|User UID(Free Embed), Item IID(Free Embed)|BPR, MF et al.|
+||User Interacted items(Free Embed+|
