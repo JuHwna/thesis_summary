@@ -88,6 +88,7 @@
   - autoencoder based models : 오토인코더 기반 모델
   - graph learning approaches : 그래프 학습 접근법
 - 설명을 쉽게 하기 위해 표1에 일반적인 표현 학습 모델을 나열함
+- 표1 : CF의 표현 학습 접근법 요약
 
 |Category|Modeling Summarization|Models|
 |--------|----------------------|------|
@@ -100,3 +101,9 @@
 ||User Interacted Items (Non-linear Encoder), Item Interacted users (Non-linear Encoder)|REAP, CE-VNCF,SW-DAE|
 |Graph Learning|User UID+Graph(GNN), Item IID+Graph(GNN)|GC-MC, NGCF, SpectralCF, NIA-GCN, BGCF, DGCF et al|
 ||User UID+Graph(Simplified GNN), Item IID+Graph(Simplified GNN)|LR-GCCF, LightGCN, DHCF et al|
+
+#### 2.1.1. 히스토리 행동 관심도 집계 모델
+- 원 핫 유저 id(UID)와 원핫 아이템 id(IID)를 입력으로 사용하여 전통적인 잠재 요인 모델은 각 UID u와 IID i를 p<sub>u</sub>와 q<sub>i</sub>의 자유 임베딩 벡터와 연결한다. 자유 임베딩으로 유저를 모델링하는 대신에 연구자는 더 나은 유저 표현 모델링을 위해 유저의 과거 행동을 차용할 것을 제안했음
+- 예를 들어 FISM(Factored Item Similarity Model)은 상호작용된 아이템 임베딩을 유저 표현 벡터로 풀링하고 SVD++는 최종 유저 표현으로 상호작용 히스토리 임베딩(즉, FISM 유저 표현)과 함께 UID 임베딩 p<sub>u</sub>를 추가함. 이 모델들은 간단한 선형 행렬 분해에 의존했으며 상호작용 히스토리 집계에 휴리스틱 또는 동일한 가중치를 사용했다.
+- 그러나 다른 히스터리적(기록) 아이템들이 유저의 선호도를 모델링하는데 다르게 기여해야 한다. 그러므로 몇몇 연구자들은 
+
