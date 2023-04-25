@@ -92,5 +92,11 @@
 |Category|Modeling Summarization|Models|
 |--------|----------------------|------|
 |Classical Matrix Factorization|User UID(Free Embed), Item IID(Free Embed)|BPR, MF et al.|
-||User Interacted items(Free Embed+Heuristic Agg), ItemIID(Free Embed)|FISM,PMLAM,pQCF,FAWMF|
-||User Interacted items+UID|
+||User Interacted items(Free Embed+Heuristic Agg), Item IID(Free Embed)|FISM,PMLAM,pQCF,FAWMF|
+||User Interacted items+UID(Free Embed+Heuristic Agg), Item IID(Free Embed)|SVD++|
+|History Attention|User Interacted items(Free Embed+Heuristic Agg), Item IID(Free Embed)|NAIS|
+||User Interacted items+UID(Free Embed+Heuristic Agg), Item IID(Free Embed)|ACF|
+|Autoencoder Models|Item Interacted Items (Non-linear Encoder)|AutoRec, CDAE, Mult-VAE et al.|
+||User Interacted Items (Non-linear Encoder), Item Interacted users (Non-linear Encoder)|REAP, CE-VNCF,SW-DAE|
+|Graph Learning|User UID+Graph(GNN), Item IID+Graph(GNN)|GC-MC, NGCF, SpectralCF, NIA-GCN, BGCF, DGCF et al|
+||User UID+Graph(Simplified GNN), Item IID+Graph(Simplified GNN)|LR-GCCF, LightGCN, DHCF et al|
