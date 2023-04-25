@@ -92,4 +92,5 @@
 |Category|Modeling Summarization|Models|
 |--------|----------------------|------|
 |Classical Matrix Factorization|User UID(Free Embed), Item IID(Free Embed)|BPR, MF et al.|
-||User Interacted items(Free Embed+|
+||User Interacted items(Free Embed+Heuristic Agg), ItemIID(Free Embed)|FISM,PMLAM,pQCF,FAWMF|
+||User Interacted items+UID|
