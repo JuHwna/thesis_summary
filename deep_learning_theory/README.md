@@ -19,7 +19,7 @@
   - $\theta$에 대해 임의의 초기값 즉 시작점을 잡음
   - 그리고 J가 최소가 될 때까지 $\theta$값 갱신을 반복하여 최솟값에 도달했을 때 해당하는 $\theta$를 찾아냄
 - Gradient descent algorithm 공식
-  - repeat until convergence{$\theta_j:=\theta_j-\alpha\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1)$ (for j=1 and i=0)}
+  - repeat until convergence $\theta_j:=\theta_j-\alpha\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1)$ (for j=1 and i=0)
   - := : 대입 연산자
     - $\theta$값을 갱신한다는 의미
   - $\alpha$ 뒤에 곱해져 있는 것 : 비용 함수 J의 미분값
@@ -63,3 +63,14 @@
 3) 경사 하강 알고리즘은 갱신 직전 값과 갱신 값이 같을 때 종료 된다.
 
 ### 단단한 머신러닝에서의 경사하강법
+- 경사하강법 
+  - 일종의 자주 사용되는 일차 최적화 방법
+  - 무제약 최적화 문제에서 해를 구하는 가장 간단하고 전형적인 방법 중 하나
+- 무제약 최적화 문제 $min_x f(x)$를 살펴보면, 여기서는 $f(x)$는 비분 가능한 연속 함수
+  - 만약 하나의 수열 $x^0,x^1,x^2,...$을 만들어 다음을 만족한다면 국소 극소점에 수렴할 때까지 계속해서 해당 과정을 반복함
+  - $f(x^{t+1}) < f(x^t), t=0,1,2,....$
+  - 위의 식을 만족하고 싶다면 테일러 전개에 기반해 다음을 얻음
+    - $f(x+ \triangle x) \cong f(x)+\triangle x^T\nabla f(x)$
+    - 따라서 $f(x+ \triangle x) < f(x)$을 만족하려면 다음을 선택해야 함
+      - $\triangle x = - \gamma \nabla f(x)$
+      - 여기서 보폭 $\gamma$는 하나의 작은 상수 => 경사하강법
