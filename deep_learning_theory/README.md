@@ -104,3 +104,42 @@
 
 
 # Attention
+
+
+
+
+# few-shot learning
+- 이해 과정
+  - meta learning : 구분하는 방법을 배우는 학습 시도
+    - learn to learn 이라고도 표현
+- few-shot learning
+  - meta learning의 한 종류
+  - 배우는 법을 배우려면 많은 데이터가 필요한데 few shot learning은 구분하려는 문제의 데이터는 training set에 없어도 된다.
+  - few shot learning을 위해 필요한 것들 
+     1. Training set : 구분하는 법을 배움
+     2. Query image : 어떤 클래스에 속하느냐의 문제를 푸는 것이 아니라 어떤 클래스와 같은 클래스냐의 문제를 푼다고 생각하면 됨
+     3. Support set : Query image가 Support set 중 어느 것과 같은 종류인지를 맞추는데 도움을 줌
+
+- few shot learning의 다른 점
+  - Supervised learning의 경우
+    - Test image(Query image)의 클래스가 Training set에 존재
+      - ex) training set에 강아지 사진 존재, test image가 강아지 존재
+  - few shot learning
+    - training set에 없는 클래스를 맞추는 문제
+      - ex) training set에 토끼 사진 없음, test image가 토끼 사진
+    - Support set의 클래스 개수와 샘플 수를 기준으로 k-way n-shot이라는 표현을 씀
+      - k-way : Support set이 k개의 클래스로 이루어짐
+        - Query image가 k개의 클래스 중 어떤 것과 같은 것인지 묻는 문제가 되므로 k가 클수록 모델의 정확도는 낮아짐
+      - n-shot : 각 클래스가 가진 sample의 개수로 비교해볼 사진이 많으면 많을수록 어떤 클래스에 속하는지 알기 쉽기 때문에 n이 클수록 모델의 정확도는 높아지게 됨
+        - n이 1이 되면 one-shot learning이라고 부르게 됨
+
+  - Transfer learning과 다른 점
+    - Transfer learning
+      - vision 분야에서 다른 도메인으로 학습된 모델의 layer의 일부를 얼리고 일부를 다른 도메인의 이미지로 fine-tuning하는 과정
+      - 이 때 새로운 도메인의 경우 많은 라벨링된 데이터가 있을 수도 있음
+    - few shot learning
+      - 꼭 일부를 얼리고 fine-tuning하는 것을 의미하지는 않으며 (fine-tuning을 안해도 상관 없음) 말 그래도 새로운 도메인이 few(적게) 있는 경우를 지칭함
+
+
+### 학습 방법
+- few shot learning의 기본 학습 방법 : 유사성을 학습하는 것
