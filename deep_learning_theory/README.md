@@ -149,3 +149,12 @@
   - 많은 training set을 통해 각 사진별로 중요한 특징들을 잘 추출해서 "같다"와 "다르다"를 학습해야 함
   - 이후에 Query 이미지에 대해 Support set의 이미지들과 유사성을 구하고 가장 유사한 이미지를 가진 class로 분류할 수 있게 됨
  
+### Dataset 구성
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/027ebed6-1be3-437f-9c64-a7d0d291ed5d)
+
+- 위의 그림과 같이 Positive set, Negative set으로 구성하여 학습이 진행됨
+  - 이 때 feature extraction을 잘 학습할 수 있는 모델을 디장니해야하는데 일반적인 Conv-Relu-Pool 구조도 충분히 적합함
+- 기초 Few shot learning에서는 **샴 네트워크(Siamese Network)** 사용
+  - 같은 CNN 모델을 사용하여 hidden representation을 구한 뒤 이 차이를 이용하는 형식
+  - 이후 Positive pair에 대해서 한 번, Negative pair에 대해서 한 번 번걸아가며 학습을 진행
+  - Prediction에서는 위에서 설명한 것과 같이 Support set의 이미지의 representation과 Query image의 representation 간의 차이를 샴 네트워크를 이용해 트레이닝에서의 방법과 같이 계산하여 유사성을 구할 수 있게 됨
