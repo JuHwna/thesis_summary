@@ -158,3 +158,8 @@
   - 같은 CNN 모델을 사용하여 hidden representation을 구한 뒤 이 차이를 이용하는 형식
   - 이후 Positive pair에 대해서 한 번, Negative pair에 대해서 한 번 번걸아가며 학습을 진행
   - Prediction에서는 위에서 설명한 것과 같이 Support set의 이미지의 representation과 Query image의 representation 간의 차이를 샴 네트워크를 이용해 트레이닝에서의 방법과 같이 계산하여 유사성을 구할 수 있게 됨
+
+
+### Few-shot Learning의 대표적인 두 접근 방법
+- Data-Driven Approach : Support Set으로 주어진 데이터에 Transformation을 적용하거나  GAN을 이용해 모델을 학습시킬 충분한 양의 데이터를 생성하는 방법
+- Model-based Approach
