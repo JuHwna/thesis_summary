@@ -146,3 +146,6 @@
   - 두 개의 사진이 주어졌을 때 각 사진을 잘 분석해서 두 사진이 유사한지 다른지를 판단할 수 있다면 Query image가 주어졌을 때 Support set의 사진들과 비교하여 어떤 클래스에 속하는지 알아낼 수 있음.
     - Learn a similarity function : sim(x,x`)
     - Ideally, sim(x1,x2)=1, sim(x1,x3)=0, and sim(x2,x3)=0
+  - 많은 training set을 통해 각 사진별로 중요한 특징들을 잘 추출해서 "같다"와 "다르다"를 학습해야 함
+  - 이후에 Query 이미지에 대해 Support set의 이미지들과 유사성을 구하고 가장 유사한 이미지를 가진 class로 분류할 수 있게 됨
+ 
