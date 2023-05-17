@@ -162,4 +162,44 @@
 
 ### Few-shot Learning의 대표적인 두 접근 방법
 - Data-Driven Approach : Support Set으로 주어진 데이터에 Transformation을 적용하거나  GAN을 이용해 모델을 학습시킬 충분한 양의 데이터를 생성하는 방법
-- Model-based Approach
+  - 장점 : 그 방법이 간단하고 직관적
+  - 단점 : Support set의 데이터가 데이터의 모집단을 보장할 수 없는 한계
+- Model-based Approach : 모델이 같은 클래스의 이미지와 서로 다른 클래스의 이미지를 구분할 수 있게 하도록 Feature vector 간의 Similarity를 학습하게 하거나 적은 양의 데이터에 모델이 Overfitting되지 않도록 Regularization 등을 도입하는 방법
+
+
+### Model-based Approach
+- Metric-based Approach :  Distance나 Similarity와 같은 Metric을 이용
+- Graph Neural Network(GNN)를 활용하는 방법 등도 존재
+
+### Metric-based Approach
+- 이미지 간의 Similarity나 Distance를 학습해 Query Data가 주어졌을 때 가장 Similarity가 높은 Supoort Set의 클래스로 예측하는 방법
+- 모델에 Similarity를 학습시키기 위해 이미 레이블링이 되어 있는 방대한 양의 데이터를 활용할 수 있음
+  - Novel Class(Target Domain) : 실제로 풀어야할 문제에서 예측할 클래스
+  - Base Class(Source Domain) : 실제 예측을 하기 전에 방대한 양으로 활용할 데이터의 클래스
+    - 모델이 적은 양의 Novel Class 데이터를 잘 활용했는지 정당하게 평가하기 위해 Novel Class와 Base Class는 겹치지 않아야 함
+- 해당 방법에서 풀어야할 문제
+  - 방대한 양의 Base Class 데이터를 이용해 모델을 미리 학습해놨다가 Novel Class로 주어진 Support Set을 적절하게 활용해 Query Set에서 Novel Class를 예측하는 문제로 바뀜
+- 방대한 양의 Base Class 데이터를 활용해 Novel Class에 적용하는 방법
+   1. Transfer Learning
+      - Base Class 데이터셋을 이용해 학습한 후, Novel Class와 Support Set에 재학습하는 방법
+      - 일반적으로 사용되는 Fine-Tuning도 여기에 속함
+   2. Meta-Learning
+      - 최근에 각광 받고 있는 접근법
+      - Novel Class에서 Support Sset을 이용하여 Query Set 예측하는 것과 같이, Base Class에서도 특정 클래스 샘플들을 뽑아 임의로 Support Set과 Query Set으로 구성해 가상의 Episode를 설정하여 학습을 진행함
+      - 이렇게 함으로써 실제 모델을 평가할 Few-shot 세팅을 데이터가 충분히 많은 Base Class 데이터셋에서 실험해볼 수 있음
+      - 이러한 방법을 Episodic Training으로 부름
+
+- Episodic Training
+  - 실제 풀어야할 문제를 Support Set과 Query Set으로 나누듯이, Base Class을 이용해 학습할 때도 특정 Class를 선별하여 Support set과 Query Set을 뽑음
+    - 이렇게 묶인 하나의 작업을 하나의 Episode 또는 Task라고 부름
+  - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0849c2a4-043d-4f90-a871-9524f6b431f6)
+  - 구체적인 절차
+     1. Base Class(Source Domain)에서 N-Way에 해당하는 클래스를 랜덤으로 뽑음
+     2. 해당하는 클래스당 K-shot개의 이미지, 레이블 쌍을 가져와 Support Set을 지정하고 다시 해당하는 클래스로 이루어진 Query Set을 정함
+     3. 주어진 Support Set을 이용하여 Query Set을 평가한 후, 계산된 Loss를 이용해 모델을 업데이트해줌
+     4. 1~3의 과정을 충분히 반복해 모델이 학습된 뒤, Novel Class(Target Domain)의 Support Set을 활용해 Query Set에 테스트함
+  - Learning-to-Learn이라고 하여 학습 자체를 학습하는 방법을 제안함
+    - 그런데 Meta-learning 방식이 제대로 된 검증과 정당하고 철저한 비교 실험이 부족함
+    - 그래서 간단한 fine-tuning 기반 방법을 이요해 더 나은 성능을 얻을 수 있다고 말하고 있음
+
+### Learning Similariy for Few-Shot Learning
