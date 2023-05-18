@@ -203,3 +203,12 @@
     - 그래서 간단한 fine-tuning 기반 방법을 이요해 더 나은 성능을 얻을 수 있다고 말하고 있음
 
 ### Learning Similariy for Few-Shot Learning
+- Query Set이 주어질 때, 해당 이미지가 Support Set의 어떤 클래스에 해당하는지 예측하는 방법
+  - 딥러닝 모델을 통해 각각의 이미지로부터 Feature Vector를 추출하여, 가장 차이가 작은 Feature Vector의 클래스로 할당하는 방법
+- Similarity 기반 Few-shot Learning 방법
+  - 위의 아이디어에 착안해 동일한 클래스의 Feature Vector 간에 Similarity가 1이 되도록 모델을 학습시킴
+  - 같은 클래스의 Feature Vector간의 Similarity는 1이 되도록, 서로 다른 클래스라면 Similarity가 0이 되도록 Loss Function을 설정하여 모델을 학습시킬 수 있음
+  - Feature Vector간의 Similarity 계산
+    - Similarity-Metric을 이용하여 다음과 같이 모델 구성할 수 있음
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a63a1472-27c1-4e39-bd62-081c6f8a965c)
+    - 위 수식에서 $$
