@@ -106,6 +106,9 @@
 # Attention
 
 
+# Transformer
+- 2017년 구글이 제안한 시퀀스-투-시퀀스 모델(sequence-to-sequence)
+
 
 
 # few-shot learning
