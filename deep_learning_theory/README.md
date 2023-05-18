@@ -211,4 +211,14 @@
   - Feature Vector간의 Similarity 계산
     - Similarity-Metric을 이용하여 다음과 같이 모델 구성할 수 있음
     - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a63a1472-27c1-4e39-bd62-081c6f8a965c)
-    - 위 수식에서 $$
+      - $hat{x}$ : Query Set의 이미지
+      - $x_i$, $y_i$ : Support Set에 속하는 이미지와 레이블을 의미함
+      - 함수 f와 g: 각각의 이미지에서 Feature Vector를 추출하는 Feature Extractor 또는 Embedding 모듈
+      - a : Similarity 함수
+      - 위의 수식은 각각의 이미지로부터 Feature Vector를 추출하고 이에 대한 Similarity를 전부 계산한 뒤 해당 Support Set의 레이블에 해당하는 점수만 남겨두었다고 이해할 수 있음
+- 위와 같이 Similarity 기반으로 모델을 구성하여 Meta-laerning 방식을 적용하면 다음과 같은 절차를 따름
+   1. Base Class(Source Domain)에서 Support Set, Query Set을 포함한 하나의 Episode 선정
+   2. 각각의 이미지로부터 Feature Vector를 추출한 후, Support Set과 Query Set를 쌍으로 묶어 모든 경우의 수에 따라 Similarity 계산
+   3. 이렇게 계산한 Matrix를 Support Set의 one-hot encoding Ground-Truth(GT)와 매칭시켜 각 레이블에 따른 점수를 계산함
+   4. 최종적으로 계산한 점수와 Query Set의 GT를 비교하여 Loss 계산
+   5. 1~4의 ㅂ아식을 반복하여 모델을 학습한 후, Novel Class(Target Domain)에서 Support Set에 대한 Query Set의 Similarity를 계싼해 클래스를 예측함
