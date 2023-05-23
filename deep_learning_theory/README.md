@@ -311,4 +311,16 @@
 
 ## 특이값분해의 정의
 - 특이값 분해(SVD) : 임의의 $m \times n$ 차원의 행렬 A에 대하여 다음과 같이 행렬을 분해할 수 있다는 행렬 분해 방법 중 하나
-  - $A=U\sumV^T$
+  - $A=U \sum_{} V^T$
+  - 네 행렬($A,U, \sum_{}, V^T$)의 크기(혹은 차원)와 성질은 다음과 같음
+    - $ A : m \times n$ rectangular matrix
+    - $ U : m \times m$ orthogonal matrix
+      - orthogonal matrix의 성질
+        - $U$가 orthogonal matrix라고 한다면, $UU^T=U^TU=I$
+        - 이에 따라 $U^{-1}=U^T$라는 사실도 부가적으로 확인됨
+    - $ \sum_{} : m \times n$ diagonal matrix
+    - $ V : n \times n$ diagonal matrix
+      - diagonal matrix의 성질
+        - $\sum_{}$ 가 diagonal matrix라고 한다면 $\sum_{}$의 대각성분을 제외한 나머지 원소의 값은 모두 0
+
+## 특이값 분해의 가하하적 의미
