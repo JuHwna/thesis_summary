@@ -38,3 +38,13 @@
 
 ## 참고자료
 > https://www.slideshare.net/YoungHeonKim1/airflow-workflow
+
+
+
+## airflow backgroud
+- airflow scheduler -D
+- airflow webserver -p 8080 -D
+
+- 안 되는 에러 발생 시
+  - airflow 폴더 안에 pid 파일로 인해 생기는 에러이다. 이거 때문에 백그라운드로 전환이 안 되는 상태
+  - 해당 pid 파일 제거 시 정상적으로 작동 된다.
