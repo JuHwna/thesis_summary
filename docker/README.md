@@ -73,6 +73,14 @@
 - docker log 확인
   - docker log [container name]
 
+- docker 작동 여부 확인 방법
+  - sudo systemctl status docker
+
+### docker error
+- docker ps 입력 시 해당 오류 발생
+  - permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
+- 해결 방법 : sudo chmod 666 /var/run/docker.sock
+
 ### docker error
 - Error response from daemon: Get "https://index.docker.io/v1/search?q=miniconda&n=25": proxyconnect tcp: dial tcp: lookup proxy.example.com: no such host
   - docker image, pull 다 사용 안됨
