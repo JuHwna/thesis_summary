@@ -32,6 +32,24 @@
       - PuzzleMix
         - cutmix를 개량한 방법
         - 두 이미지에서 중요한 feature는 보존하면서 섞도록 함
+  - 2) Deep Learning Approach
+    - Adversarial Training
+      - Adversariel attack이란 DNN이 잘못된 결과를 산출하도록 의도적으로 조작시킨 입력값(adversarial example)을 생성하여 Training model에 제시하는 것을 말함
+      - Adversarial Training : Adversarial example을 여러 개 제작하여 모델에 제시한 다음 어떤 상황에서 모델이 오분류를 일으키는지 확인하고 모델을 수정하여 전체적인 성능을 높이는 학습 방법
+    - GAN Data augmentation
+      - GAN(Generative Adversariel Networks) 모델을 이용해 기존 데이터와 유사한 샘플을 생성하여 데이터 수를 늘림
+  - 3) Meta Learning
+    - Autoaugmentation
+      - 수많은 Data Augmentation 방법 중 해당 데이터셋에 적합한 기법을 제시하는 모델
+      - ex) 구글 사례
+        - 자주 사용되는 16가지 Data Augmentation 기법들 중 최적의 조합을 찾기 위해 PPO(Proximal Policy Optimization)로 학습하여 AutoAugmentation을 시행함
+      - 계산량이 매우 많고 탐색 공간이 커 시간이 매우 오래 걸리고 사용할 수 있는 환경도 제한적임
+        - 해당 문제 중 계산 속도를 개선하기 위한 여러 방법이 제시됨
+        - Population Based Augmentation, Fast AutoAugment, Faster AutoAugment 등
+    - RandAugmentation
+      - 이전의 기법들이 적합한 Augmentation 기법을 찾는 모델이라면 해당 기법은 특정 모델을 찾는 것이 아님
+      - batch마다 적용할 Augmentation 방법을 랜덤으로 추출하여 적용하는 기법
+      - 성능은 다른 모델과 큰 차이가 없으나 코드가 단순하다는 장점이 있음
 
 ## 2. Pretraining, Transfer Learning, Fine-Tuning
 - 학습된 뉴럴넷을 재활용하는 방법
