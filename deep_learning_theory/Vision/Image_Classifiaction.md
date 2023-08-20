@@ -17,4 +17,32 @@
         - 클래스 간 구별(Intra-class variation) : 대상이 속하는 레이블(클래스)의 범위가 너무 포괄적이어서 그 대상을 특정 짓지 못할 수 있음
 - 이미지 분류 방법
   - 1) 데이터 기반 방법(Data-Driven Approach)
-    - 
+    - 1-1. Nearest Neighbor Classifier
+      - Nearest Neighbor(NN)
+        - 컨볼루션 신경망 방법과는 아무 상관이 없고 실제 문제를 풀 때 자주 사용되지는 않지만 이미지 분류 문제에 대한 기본적인 접근 방법을 알 수 있도록 함
+        - 예측 단계에서는 투입된 이미지와 가장 가까운 데이터의 레이블을 통해 예측하는 방법
+        - 이미지와 이미지의 가까운 정도를 측정하는 지표
+          - L1 distance
+            - $$d1(I1,I2)=\sum(p|Ip1-Ip2)$$
+          - L2 distance
+            - $$d2(I1,I2)=\sqrt\sum(p(Ip1-Ip2)2)$$
+          - 두 지표의 차이
+            - L1과 L2는 p-norm 계열의 distance measure임
+            - 두 지표의 큰 차이점 : L2 distance는 L1 distance를 사용하는 것보다 차이가 큰 것에 더 관대하지 않다는 것
+              - L1이 아닌 L2 distance를 쓴다는 것은 여러 개의 dimension에서 적당한 차이를 보이는 것보다 하나의 dimension에서 큰 차이를 보이는 것에 더 페널티를 많이준다는 의미임
+        - 단점
+          - 단 하나의 label만 prediction에서 고려하기 때문에 안정성이 떨어지는 결과를 보여줌
+          - 이상치(outlier)를 중심으로 섬과 같은 지역(decision boundary)가 생긴다는 것을 알 수 있음
+            - 이상치에 민감하기 때문에 트레이닝 데이터에 국한된 규칙을 배울 가능성이 높음
+             
+    - 1-2. K-Nearest Neighbor Classifier
+      - NN을 보완하기 위해 K-nearest neighbor(KNN)를 활용할 수 있음
+        - 예측 단계에서 인풋과 가까운 순으로 총 K개의 데이터의 레이블을 구한 후, 가장 빈번하게 나오는 레이블로 예측하는 방법
+        - Voting 방법으로 볼 수 있음 -> 여러 개로부터 가장 빈번하게 나오는 것을 예측 결과로 하는 것
+        - 학습 데이터셋에서 가장 가까운 하나의 이미지만을 찾는 것이 아니라 가장 가까운 k개의 이미지를 찾아서 테스트 이미지의 라벨에 투표하는 것
+          - 직관적으로 k값이 커질수록 분류기는 이상점(outlier)에 더 강인하고 분류 경계가 부드러워지는 효과가 있음
+          - 처음 보는 데이터(unseen data)에 대한 성능(generalization)이 높음
+    - 1-3. Bayesian Classifier
+      - 베이즈 정리를 이용하여 입력 데이터가 특정 카테고리에 속하는지 분류함
+  - 2) 규칙 기반 방법(Rule-Driven Approach)
+    -
