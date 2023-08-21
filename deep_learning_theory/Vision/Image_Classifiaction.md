@@ -125,4 +125,14 @@
     - CNN 모델의 고질적인 문제 : Black box
       - 특정 layer는 이미지의 어떤 부분을 검출하는지, 모델이 왜 잘 작동하는지 알 수 없다는 점
     - ZFNet은 feature map을 시각화하여 블랙박스를 들여다보고 모델의 성능을 개선하는 것을 목표로 고안됨
-      - 위 그림과 같이 n-1번째 
+      - 위 그림과 같이 n-1번째 pooled maps이 "Convolution > ReLU activation > Max Pooling"을 통과하여 n번째 Pooled Maps을 생성하였다고 해보면 n번째 Pooled Maps에 해당 구조의 역과정을 수행하여 n-1번째 pooled maps을 복원해보고자 함
+      1. Max unpooling
+        - max pooling을 할 때 위치 정보를 같이 기억함
+        - max pooling의 역과정을 수행할 때 max 값이 위치했던 영역에 max 값을 집어넣고 나머지 영역은 0으로 채움
+      2. ReLU
+        - ReLU를 통과하면 양수는 그대로 값이 보존되지만 음수 값은 모두 0으로 변경됨
+        - 음수 값이 모두 소실되기 때문에 ReLU의 역과정은(양수->양수, 0->0)이 됨
+      3. Transposed Convolution
+        - Convolution의 역과정으로 Transposed Convolution을 시행함
+    - AlexNet의 각 layer를 시각화한 결과
+      - Layer 1이나 2를 시각화한 결과
