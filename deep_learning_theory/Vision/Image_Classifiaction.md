@@ -96,4 +96,33 @@
         - C3의 feature map과 연결된 S2의 feature map의 생김새
         - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/dbe25638-b657-467a-a5a2-123b204bc232)
           - 모든 feature map을 연결하지 않아 Connection을 줄일 수 있고 서로 다른 입력값을 취하도록 해서 C3의 각 feature map이 서로 다른 feature를 추출하기 위해 그렇게 했다고 설명함
-
+    - 특징
+      - Filter size : 5 x 5
+      - strid : 1
+      - Pooling : 2x2 average pooling
+      - Activation function:
+        - 대부분의 unit이 sigmoid를 사용
+        - F6에서는 tanh를 사용
+        - 최종적인 output layer인 F7에서는 RBF(Euclidian Radia basis function unit)을 사용
+      - loss function : MSE
+  - AlexNet
+    - 2012년 Alex Krizhevsky, llya Sutskever,Geoffrey Hinton에 의해 제시된 CNN architecture로 기본적인 구조는 LeNet과 비슷하나 GPU 2대를 이용하여 빠른 연산이 가능해지면서 병렬적인 구조를 가지게 됨
+    - 특징
+      - Activation function
+        - 처음으로 ReLU 사용
+        - ReLU 사용 시, 기존에 사용하던 Tanh, Sigmoid function에 비해 6배 빠르게 원하는 수준 이하의 error rate에 도달할 수 있음
+      - Over-fitting 방지를 위해 도입한 방법
+        1. Data Augmentation : 데이터셋 이미지를 좌우 반전을 시키거나(flip augmentation), 이미지를 잘라서(Crop augmentation) 데이터 수를 늘림. 또 RGB 값을 조정하여 (jittering) 데이터 수를 늘림
+        2. Dropout rate: 0.5
+        3. Norm layer 사용 : 원시적인 형태의 batch normalization, 지금은 쓰이지 않음
+      - Batch size: 128
+      - SGD momentum : 0.9
+      - Learning rate : 1e-2, validation accuracy에 따라 manual하게 낮춤
+      - L2 weigh decay : 5e-4
+      - 7 CNN ensemble : error 18.2% -> 15.4%
+  - ZFNet
+    - AlexNet에 이어 ILSVRC 2013에서 우수한 구조이며 역시 CNN 기반 모델
+    - CNN 모델의 고질적인 문제 : Black box
+      - 특정 layer는 이미지의 어떤 부분을 검출하는지, 모델이 왜 잘 작동하는지 알 수 없다는 점
+    - ZFNet은 feature map을 시각화하여 블랙박스를 들여다보고 모델의 성능을 개선하는 것을 목표로 고안됨
+      - 위 그림과 같이 n-1번째 
