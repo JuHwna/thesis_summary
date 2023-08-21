@@ -91,4 +91,9 @@
         - CNN은 classifier 뿐 아니라 feature를 추출하는 단계 역시 학습이 진행되고 Weight sharing과 local connectivity에 의해 파라미터 수를 줄일 수 있으며 이미지의 공간적인 Topology를 반영할 수 있음
     - 구조
     - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/7f72aa34-260d-410c-adf3-a3639b2eb2ae)
-      - 
+      - 주목할 점
+        - C3 layer -> 모든 S2 feature map이 C3의 feature map에 연결되지 않았음
+        - C3의 feature map과 연결된 S2의 feature map의 생김새
+        - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/dbe25638-b657-467a-a5a2-123b204bc232)
+          - 모든 feature map을 연결하지 않아 Connection을 줄일 수 있고 서로 다른 입력값을 취하도록 해서 C3의 각 feature map이 서로 다른 feature를 추출하기 위해 그렇게 했다고 설명함
+
