@@ -74,4 +74,10 @@
 
 ## 2. 이미지 분류 모델들
 - Image Classification 아키텍처를 모델에 사용된 Layer수로 구분함
-- 
+- 1) LeNet, AlexNet, ZFNET(레이어 8개 이하)
+  - LeNet-5
+    - CNN을 처음 개발한 Yann LeCun의 연구팀이 1998년에 제시한 단순한 CNN임
+    - 등장 배경
+      - LeNet 이전의 패턴인식에서 이용되는 모델은 Hand-designed feature extractor로 특징을 추출하고 FC multi layer networks를 분류기로 이용했음
+        - 해당 방법의 문제점 존재
+          - Hand designed feature extractor
