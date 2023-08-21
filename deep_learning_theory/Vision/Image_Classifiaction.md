@@ -135,4 +135,18 @@
       3. Transposed Convolution
         - Convolution의 역과정으로 Transposed Convolution을 시행함
     - AlexNet의 각 layer를 시각화한 결과
-      - Layer 1이나 2를 시각화한 결과
+      - Layer 1이나 2를 시각화한 결과, 이미지의 모서리, 경계, 색과 같은 low level feature를 잡아냄
+      - Layer 3에서는 전반적인 패턴, 사물과 객체의 경계를 잡아내고 있음
+      - Layer 5에서는 사물이나 개체의 전부를 보여주며 각각 다른 위치나 자세를 취하고 있는 모습을 잡아냄
+     
+    - AlexNet을 수정하여 ZFNet으로
+      - feature map을 시각화할 수 있으니 어떤 식으로 CNN 구조를 수정하면 성능이 좋아질지 어느 정도 예측할 수 있게 되었음
+    - 구조
+      - AlexNet
+        - Layer 1 : 11x11 Filter, Stride 4
+        - Layer 2 : 5x5 Filter, Stride 1
+      - ZFNet
+        - Layer 1 : 7x7 Filter, Stride 2
+        - Layer 2 : 3x3 Filter, Stride 2
+- 2) VGG, GoogleNet(레이어 22개 이하)
+     
