@@ -80,4 +80,15 @@
     - 등장 배경
       - LeNet 이전의 패턴인식에서 이용되는 모델은 Hand-designed feature extractor로 특징을 추출하고 FC multi layer networks를 분류기로 이용했음
         - 해당 방법의 문제점 존재
-          - Hand designed feature extractor
+          - Hand designed feature extractor는 관련있는 정보만 수집하고 모관한 정보는 제거함
+            - feature extractor에 의해 추출된 정보만 가지고 classifier의 학습이 진행되므로 학습에 제한이 있었음
+            - LeCun은 feature extractor 그 자체에서 학습이 이루어져야 한다고 생각함
+          - 이미지를 FC로 전환해 학습하는 방식은 너무 많은 parameter를 포함함
+          - 입력값의 Topology가 완전히 무시됨
+            - 이미지는 기본적으로 2D 구조를 가지고 있는데 이는 공간적으로 매우 큰 상관관계가 있음
+            - FC는 이미지를 일렬로 펼치기 때문에 이런 공간적인 관계를 완전히 무시하게 됨
+      - 위의 문제의 해결점으로 CNN을 제시함
+        - CNN은 classifier 뿐 아니라 feature를 추출하는 단계 역시 학습이 진행되고 Weight sharing과 local connectivity에 의해 파라미터 수를 줄일 수 있으며 이미지의 공간적인 Topology를 반영할 수 있음
+    - 구조
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/7f72aa34-260d-410c-adf3-a3639b2eb2ae)
+      - 
