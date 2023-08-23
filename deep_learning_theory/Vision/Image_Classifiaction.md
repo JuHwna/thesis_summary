@@ -149,4 +149,36 @@
         - Layer 1 : 7x7 Filter, Stride 2
         - Layer 2 : 3x3 Filter, Stride 2
 - 2) VGG, GoogleNet(레이어 22개 이하)
-     
+  - 두 논문 모두 논문 제목에서부터 본인들이 layer를 깊게 쌓았음을 강조
+    - 더 네트워크를 깊게 만들었음은 이전 모델들과 핵심적인 차이점이자 좋은 성능을 내는 이유이기도 함
+  - VGG-16/VGG-19
+    - VGGNet : 네트워크를 16~19층까지 쌓아 VGG를 기점으로 네트워크의 구조가 많이 깊어지게 됨
+    - 특징
+      - 3X3의 보다 작은 필터를 사용함(VGG 이전에는 5X5를 주로 사용함)
+        - 작은 필터가 주는 효과
+          - 필터의 사이즈를 줄이면서보다 깊게 쌓았을 때 더 효율적인 receptive field를 가지게 됨
+          - 더 넓은 필터를 쓰고 얇은 층을 쌓는 것이나 작은 필터를 쓰고 깊게 쌓는 것이나 receptive field가 같다는 의미
+        - layer가 깊어지면서 다수의 activate function을 통과하므로 더 많은 non-linearity를 줄 수 있게 됨
+        - 층 당 더 적은 수의 파라미터를 사용하게 됨
+          - ex) 10×10 image에 7×7 filter 적용하여 4×4 feature map 생성 → parameter 개수: 49개
+          - ex) 10×10 image에 3×3 filter 3번 적용하여 4×4 feature map 생성 → parameter 개수: 9개씩 3번 총 27개
+      - padding을 이용해 이미지 사이즈를 유지하게 됨
+        - padding이 주는 효과
+          - 이전에는 Convolution 연산의 특징상 layer가 깊어지게 되면 가장자리 부분이 주는 영향력이 점점 줄어들게 되고 이미지 사이즈를 유지할 수 없었음
+          - VGG부터는 padding을 도입하여서 Network가 깊어져도 이미지 사이즈를 유지할 수 있게 됨
+  - GoogleNet(inception - v1)
+    - 22층의 구조임
+    - 특징
+      - 22 layers
+      - 효과적인 inception module
+      - FC layer 없음(output layer에서만 한 번 나옴)
+      - 오직 500만개의 파라미터 사용
+    - Inception module
+      - Googlenet은 inception module이 여러차례 반복되는 형태로 이루어짐
+      - inception module의 기본적인 아이디어 : 뭐가 optimal인지 모르지만 다해서 넣어보자, 그럼 optimal을 뽑아내도록 학습하겠지
+      - 초창기
+        - naive inception module : 1x1 convolution, 3x3 convolution, 5x5 convolution 그리고 3x3 max pooling 4가지를 병렬적으로 처리하고 output을 concat함
+        - 이는 실제로는 잘 작동하지 않음 -> 여러가지 convolution 및 pooling의 output을 하나로 concat하는 것은 dimension을 상당히 늘릴 수 밖에 없었고 너무나도 비효율적이었음
+      - 그 다음 단계
+        - inception module 안에 1x1 convolution 층을 추가함
+        - Convolution 연산은 연산량이 많으므로 Convolution 연산 전에 dimension을 줄여주고 max pooling은 Convolution에 비해 간단하니 연산 이후에 dimension을 줄여 모든 output을 concat함
