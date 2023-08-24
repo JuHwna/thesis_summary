@@ -190,3 +190,18 @@
         - Dimension이 깊은 network에 대해 각 포인트마다 중요하다고 생각되는 정보를 뽑아내는 역할을 한다고 볼 수 있음
       - inception에서는 channel 수를 줄여 계산상에서의 이점을 보도록 도와주고 비선형성을 증가시켜 더 복잡한 함수도 approximation할 수 있도록 도와주는 역할을 함
     - Inception의 Auxilary classifier
+      - Auxilary classifier : 중간중간에 output을 내는 구조
+      - GoogleNet에서 처음 도입한 방법
+      - 중간중간에 Output을 먼저 만들고 이를 Back propagation시 반영해 Layer가 깊어짐에 따라 발생할 수 있는 Gradient vanishing/ explosion을 방지함
+      - 초창기 모델인 GoogleNet(Inception-v1)의 경우, Auxilary classifier를 2개 씀
+        - Inception-v2,v3부터는 Auxilary classifier를 1개 씀
+        - Inception-v4부터는 Auxilary classifier를 아예 안 씀
+          - Auxilary classifier를 사용하지 않는 이유
+            - 문제가 존재
+              - 초반 Layer에서 output을 내고 이걸 Backpropagation에 반영하면 당연하게도 초반 Layer에서 잘 classification을 잘 학습시킬 수 있는 방향이 어느정도 반영되어 학습이 진행될 것임.
+              - 이에따라 최종 Classification layer에서 optimal한 feature가 뽑히지 않는 문제가 있음
+- 3)ResNet,ResNet의 확장(레이어 152개 이하)
+  - CNN을 연구하면서 20층 이상부터 성능이 낮아지는 현상인 Degradation 문제가 발생함
+  - ResNet은 Residual Learning이라는 개념을 통해 모델의 층이 깊어져도 학습이 잘 되도록 구현함
+  - 매주 깊은 네트워크의 문제점
+    - 
