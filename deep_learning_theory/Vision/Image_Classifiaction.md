@@ -182,3 +182,11 @@
       - 그 다음 단계
         - inception module 안에 1x1 convolution 층을 추가함
         - Convolution 연산은 연산량이 많으므로 Convolution 연산 전에 dimension을 줄여주고 max pooling은 Convolution에 비해 간단하니 연산 이후에 dimension을 줄여 모든 output을 concat함
+        - 위의 방식을 통해 inception은 계산상의 어려움 없이 layer를 늘릴 수 있게 됨
+        - 병렬적으로 수행된 연산들은 inception module을 나오면서 concat되어 다음 layer로 넘어감
+    - 1x1 Convolution의 역할
+      - Network in Network(Lin et al)에서 소개된 개념
+        - inception에서는 bottleneck layer라고도 부름
+        - Dimension이 깊은 network에 대해 각 포인트마다 중요하다고 생각되는 정보를 뽑아내는 역할을 한다고 볼 수 있음
+      - inception에서는 channel 수를 줄여 계산상에서의 이점을 보도록 도와주고 비선형성을 증가시켜 더 복잡한 함수도 approximation할 수 있도록 도와주는 역할을 함
+    - Inception의 Auxilary classifier
