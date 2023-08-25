@@ -139,3 +139,22 @@
     - 이때문에 Global Optimum 근처에서 이동량 감소면 좋은 경우임
     - 하지만 Global Optimum 근처까지 도달하지 못했는데도 이동량이 줄어들면 큰 단점이 됨
 - RMSProp
+  - Adagrad의 단점을 개선한 옵티마이저
+  - 과거 Gradient의 값들과 현재 Gradient값들의 비율을 하이퍼파라미터로 조절함
+  - 식
+    - $$\theta_t =\theta_{t-1} - \frac{\eta}{\sqrt v_t} g_{t-1}$$
+    - $$v_t = \beta_2 v_{t-1}+(1-\beta_2)(g_{t-1})^2 $$
+    - $$v_1=(g_0)^2$$
+- Adam
+  - RMSProp+Momentum
+  - Adaptive Learning rate와 Momentum개념이 합쳐진 옵티마이저
+    - 두 가지가 합쳐졌기에 하이퍼 파라미터는 두 개를 가짐
+  - 식
+    - $$m_0 =0, v_0 = 0$$
+    - $$m_{t+1} \gets \beta_1m_t+(1-\beta_1)\nabla_\theta L(\theta)$$ -> momentum
+    - $$v_{t+1} \gets \beta_2v_t+(1-\beta_2)\nabla_\theta L(\theta)^2$$ -> RMS Prop
+    - $$\theta_j \gets \theta_j - \frac{\epsilon}{\sqrt v_{t+1}+1e^{-5}} m_{t+1}$$ -> RMS Prop+Momentum
+### 6) 딥러닝 테크닉
+- 딥러닝의 성능과 학습을 위해 개발된 방법들
+- 기울기 사라짐(Gradient Vani
+      
