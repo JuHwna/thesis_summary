@@ -216,4 +216,35 @@
     - 새로운 Optimizer을 만들거나 깊어지더라도 쉽게 Optimization을 할 수 있는 새로운 architecture를 만들어 문제를 해결할 수 있음
   - 하지만 새로운 optimizer를 만든 것은 매우 어렵기 때문에 새로운 Network를 만드는데 집중
 - Residual block
-  
+  - H(x)를 기존의 네트워크라고 할 때, H(x)를 복잡한 함수에 근사시키는 것보다 F(x)=H(x)-x일 때, H(x)=F(x)+x이고, F(x)+x를 근사시키는 것이 더 쉬울 것이라는 아이디어에서 출발함
+  - F(x)의 정의 : Output에서 자기자신을 빼는 것 -> Residual learning이라는 이름을 갖게 됨
+  - skip connection : x가 F(x)를 통과하고 나서 다시 x를 더해줌
+  - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/8e6bc87d-16b3-4459-9353-c9acbbd87102)
+    - x : 입력값
+    - F(x) : CNN Layer -> ReLU -> CNN Layer을 통과한 출력값
+    - H(x) : CNN Layer -> ReLU -> CNN Layer -> ReLU를 통과한 출력값
+  - 기존 신경망
+    - H(x)가 정답값 y에 정확히 매핑이 되는 함수를 찾는 것을 목적으로 했음
+    - 신경망은 학습을 하면서 H(x)-y의 값을 최소화시키면서 결국 H(x)=y가 되는 함수를 찾았음
+    - 위 그림에서 H(x)는 Identitiy를 매핑해주는 함수이기 때문에 H(x)-x를 최소화하면서 H(x)=x가 되는 것을 목표로 함
+      - H(x)-x=0
+  - ResNet
+    - H(x)-x=F(x)로 두어 F(x)를 최소화 시키려고 함
+      - F(x)=0이라는 목표를 두고 학습을 진행함
+    - 이렇게 학습을 진행하면 F(x)=0이라는 목표값이 주어지기 때문에 학습이 더 쉬워짐
+    - **Skip Connection** : H(x)=F(x)+x가 되는데 이 때 입력값인 x를 사용하기 위해 쓰는 것
+      - 입력값이 일정 층들을 건너뛰어 출력에 더할 수 있게 하는 역할을 함
+    - 일반적인 CNN에서 나타나는 "main path"와 Skip Connection에 의해 연결되는 short cut을 가지게 됨
+- Deeper bottleneck architecture
+  - 50층 이상의 깊은 모델에서는 Inception에서와 마찬가지로, 연산상의 이점을 위해 bottleneck layer (1x1 convolution)을 이용했음
+  - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/f972a9fc-30b4-4c8a-992b-9243ee0c1594)
+    - 기존의 Residual Block : 한 블록에 Convolution layer(3x3) 2개가 있는 구조
+    - Bottleneck : 오른쪽 그림의 구조로 바뀜
+      - 층이 하나가 더 생겼지만 Convolution Layer(1x1) 2개를 사용하기 때문에 파라미터 수가 감소하여 연산량이 줄어듬
+      - layer가 많아짐에 따라 Activation Function이 증가하여 더 많은 non-linearity가 들어갔음
+        - inputㅇㄹ 기존보다 다양하게 가공할 수 있게 됨
+  - ResNet은 Skip Connection을 이용한 Shortcut과 Bottleneck 구조를 이용하여 더 깊게 층을 쌓을 수 있었음
+- ResNet이 잘 되는 이유
+  - Skip Connection을 통해 엄청나게 깊은 네트워크를 만들어주고 Optimal depth에서의 값을 바로 Output으로 보내버릴 수 있음
+    - Main path에서 optimal depth 이후의 weight와 bias가 전부 0에 수렴하도록 학습된다면 optimal depth에서의 output이 바로 classification으로 넘어갈 수 있음
+    - optimal depth 이후의 block은 모두 빈깡통임
