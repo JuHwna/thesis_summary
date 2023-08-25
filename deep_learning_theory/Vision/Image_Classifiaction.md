@@ -248,3 +248,25 @@
   - Skip Connection을 통해 엄청나게 깊은 네트워크를 만들어주고 Optimal depth에서의 값을 바로 Output으로 보내버릴 수 있음
     - Main path에서 optimal depth 이후의 weight와 bias가 전부 0에 수렴하도록 학습된다면 optimal depth에서의 output이 바로 classification으로 넘어갈 수 있음
     - optimal depth 이후의 block은 모두 빈깡통임
+
+### 4) ResNet의 확장
+#### Identity Mappings in Deep Residual Networks
+- 해당 논문은 Residual이 왜 깊은 모델임에도 성능이 잘 나오는지를 설명 + 추가적인 아키텍처를 더하여 성능을 높임
+
+
+#### Wide Residual Networks
+
+
+#### ResNeXt
+
+#### Deep Networks with Stochastic Depth
+
+#### SeNet
+
+#### DenseNet
+
+
+## 4. Vision Transformer
+
+
+## 5. CoAtNet(Convolution+Transformer)
