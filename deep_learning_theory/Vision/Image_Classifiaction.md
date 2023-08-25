@@ -17,33 +17,34 @@
         - 클래스 간 구별(Intra-class variation) : 대상이 속하는 레이블(클래스)의 범위가 너무 포괄적이어서 그 대상을 특정 짓지 못할 수 있음
 ### 이미지 분류 방법
 #### 1) 데이터 기반 방법(Data-Driven Approach)
-- 1-1. Nearest Neighbor Classifier
-  - Nearest Neighbor(NN)
-    - 컨볼루션 신경망 방법과는 아무 상관이 없고 실제 문제를 풀 때 자주 사용되지는 않지만 이미지 분류 문제에 대한 기본적인 접근 방법을 알 수 있도록 함
-    - 예측 단계에서는 투입된 이미지와 가장 가까운 데이터의 레이블을 통해 예측하는 방법
-    - 이미지와 이미지의 가까운 정도를 측정하는 지표
-      - L1 distance
-        - $$d1(I1,I2)=\sum(p|Ip1-Ip2)$$
-      - L2 distance
-        - $$d2(I1,I2)=\sqrt\sum(p(Ip1-Ip2)2)$$
-      - 두 지표의 차이
-        - L1과 L2는 p-norm 계열의 distance measure임
-        - 두 지표의 큰 차이점 : L2 distance는 L1 distance를 사용하는 것보다 차이가 큰 것에 더 관대하지 않다는 것
-          - L1이 아닌 L2 distance를 쓴다는 것은 여러 개의 dimension에서 적당한 차이를 보이는 것보다 하나의 dimension에서 큰 차이를 보이는 것에 더 페널티를 많이준다는 의미임
-    - 단점
-      - 단 하나의 label만 prediction에서 고려하기 때문에 안정성이 떨어지는 결과를 보여줌
-      - 이상치(outlier)를 중심으로 섬과 같은 지역(decision boundary)가 생긴다는 것을 알 수 있음
-        - 이상치에 민감하기 때문에 트레이닝 데이터에 국한된 규칙을 배울 가능성이 높음
+##### 1-1. Nearest Neighbor Classifier
+- Nearest Neighbor(NN)
+  - 컨볼루션 신경망 방법과는 아무 상관이 없고 실제 문제를 풀 때 자주 사용되지는 않지만 이미지 분류 문제에 대한 기본적인 접근 방법을 알 수 있도록 함
+  - 예측 단계에서는 투입된 이미지와 가장 가까운 데이터의 레이블을 통해 예측하는 방법
+  - 이미지와 이미지의 가까운 정도를 측정하는 지표
+    - L1 distance
+      - $$d1(I1,I2)=\sum(p|Ip1-Ip2)$$
+    - L2 distance
+      - $$d2(I1,I2)=\sqrt\sum(p(Ip1-Ip2)2)$$
+    - 두 지표의 차이
+      - L1과 L2는 p-norm 계열의 distance measure임
+      - 두 지표의 큰 차이점 : L2 distance는 L1 distance를 사용하는 것보다 차이가 큰 것에 더 관대하지 않다는 것
+        - L1이 아닌 L2 distance를 쓴다는 것은 여러 개의 dimension에서 적당한 차이를 보이는 것보다 하나의 dimension에서 큰 차이를 보이는 것에 더 페널티를 많이준다는 의미임
+  - 단점
+    - 단 하나의 label만 prediction에서 고려하기 때문에 안정성이 떨어지는 결과를 보여줌
+    - 이상치(outlier)를 중심으로 섬과 같은 지역(decision boundary)가 생긴다는 것을 알 수 있음
+      - 이상치에 민감하기 때문에 트레이닝 데이터에 국한된 규칙을 배울 가능성이 높음
          
-- 1-2. K-Nearest Neighbor Classifier
-  - NN을 보완하기 위해 K-nearest neighbor(KNN)를 활용할 수 있음
-    - 예측 단계에서 인풋과 가까운 순으로 총 K개의 데이터의 레이블을 구한 후, 가장 빈번하게 나오는 레이블로 예측하는 방법
-    - Voting 방법으로 볼 수 있음 -> 여러 개로부터 가장 빈번하게 나오는 것을 예측 결과로 하는 것
-    - 학습 데이터셋에서 가장 가까운 하나의 이미지만을 찾는 것이 아니라 가장 가까운 k개의 이미지를 찾아서 테스트 이미지의 라벨에 투표하는 것
-      - 직관적으로 k값이 커질수록 분류기는 이상점(outlier)에 더 강인하고 분류 경계가 부드러워지는 효과가 있음
-      - 처음 보는 데이터(unseen data)에 대한 성능(generalization)이 높음
-- 1-3. Bayesian Classifier
-  - 베이즈 정리를 이용하여 입력 데이터가 특정 카테고리에 속하는지 분류함
+##### 1-2. K-Nearest Neighbor Classifier
+- NN을 보완하기 위해 K-nearest neighbor(KNN)를 활용할 수 있음
+  - 예측 단계에서 인풋과 가까운 순으로 총 K개의 데이터의 레이블을 구한 후, 가장 빈번하게 나오는 레이블로 예측하는 방법
+  - Voting 방법으로 볼 수 있음 -> 여러 개로부터 가장 빈번하게 나오는 것을 예측 결과로 하는 것
+  - 학습 데이터셋에서 가장 가까운 하나의 이미지만을 찾는 것이 아니라 가장 가까운 k개의 이미지를 찾아서 테스트 이미지의 라벨에 투표하는 것
+    - 직관적으로 k값이 커질수록 분류기는 이상점(outlier)에 더 강인하고 분류 경계가 부드러워지는 효과가 있음
+    - 처음 보는 데이터(unseen data)에 대한 성능(generalization)이 높음
+##### 1-3. Bayesian Classifier
+- 베이즈 정리를 이용하여 입력 데이터가 특정 카테고리에 속하는지 분류함
+  
 #### 2) 규칙 기반 방법(Rule-Driven Approach)
 - 정의 : 주어진 입력에 대해서 결과값을 도출하는 방법 => if-then 방식
   - 귀납적 사고 방식 : 예제에 대해 가설을 세우고 결과를 도출함
@@ -54,21 +55,21 @@
   3. 어떤 확률론적 요소(stochastic element)도 존재하지 않음
   4. 우리가 관측하는 정보가 시스템에 있는 모든 정보
   - 완벽한 세계 : 위의 네 가지 가정을 만족하는 곳 -> 규칙 기반 학습은 완벽한 세계에서 타당할 수 ㅣㅇㅆ음
-- 2-1. Find-S 알고리즘
-  - 정의 : 가장 구체적인 가설에서 시작하여 점점 General한 가설을 찾아내는 방법
-  - 가장 중요한 점 : 예제 중 positive training example만 선별한다는 것
-    - 특정 예제로부터 도출된 결과를 다른 예제들에 반복하여 적용하여 변경된 부분만 don't care condition으로 설정하고 최종적인 가설을 만들어냄
-  - 단점 : 현실세계에서 사용하기에 한계가 존재함
-    - 실제 세상에서는 고려해야할 부분이 많음
-    - 최종적으로 하나의 일반화된 가설을 도출하기 때문에 가설의 집합이 존재하는 경우을 고려하지 않음
-- 2-2. Candidate Algorithm
-  - 예제에 일치하는 모든 가설의 집합(version space)를 도출하는 알고리즘
-    - 하나의 일반적인 가설을 도출하는 Find-S 알고리즘에서 발전된 형태
-  - 구조
-    - G : 매우 General한 가설에서 시작(negative 예제), S : 매우 Specific한 가설에서 시작(Positive 예제)
-    - Version Space : 각자 조건을 더하거나 빼다보면 G와 S가 결국 만나게 되어 모든 가설의 집합이 됨
-  - 단점
-    - 어떤 가설이 정확한지 알 수 없어 현실 세계에서는 사용할 수 없음
+##### 2-1. Find-S 알고리즘
+- 정의 : 가장 구체적인 가설에서 시작하여 점점 General한 가설을 찾아내는 방법
+- 가장 중요한 점 : 예제 중 positive training example만 선별한다는 것
+  - 특정 예제로부터 도출된 결과를 다른 예제들에 반복하여 적용하여 변경된 부분만 don't care condition으로 설정하고 최종적인 가설을 만들어냄
+- 단점 : 현실세계에서 사용하기에 한계가 존재함
+  - 실제 세상에서는 고려해야할 부분이 많음
+  - 최종적으로 하나의 일반화된 가설을 도출하기 때문에 가설의 집합이 존재하는 경우을 고려하지 않음
+##### 2-2. Candidate Algorithm
+- 예제에 일치하는 모든 가설의 집합(version space)를 도출하는 알고리즘
+  - 하나의 일반적인 가설을 도출하는 Find-S 알고리즘에서 발전된 형태
+- 구조
+  - G : 매우 General한 가설에서 시작(negative 예제), S : 매우 Specific한 가설에서 시작(Positive 예제)
+  - Version Space : 각자 조건을 더하거나 빼다보면 G와 S가 결국 만나게 되어 모든 가설의 집합이 됨
+- 단점
+  - 어떤 가설이 정확한지 알 수 없어 현실 세계에서는 사용할 수 없음
 #### 결론
   - 규칙 기반 학습보다는 **데이터 기반 학습**을 통해 인공지능을 학습시킴
 
@@ -200,8 +201,19 @@
         - 문제가 존재
           - 초반 Layer에서 output을 내고 이걸 Backpropagation에 반영하면 당연하게도 초반 Layer에서 잘 classification을 잘 학습시킬 수 있는 방향이 어느정도 반영되어 학습이 진행될 것임.
           - 이에 따라 최종 Classification layer에서 optimal한 feature가 뽑히지 않는 문제가 있음
+
+
 ### 3)ResNet,ResNet의 확장(레이어 152개 이하)
 - CNN을 연구하면서 20층 이상부터 성능이 낮아지는 현상인 Degradation 문제가 발생함
 - ResNet은 Residual Learning이라는 개념을 통해 모델의 층이 깊어져도 학습이 잘 되도록 구현함
 - 매주 깊은 네트워크의 문제점
-  - 
+  - plain convolutional neural network에서 layer를 무작정 늘렸을 때 성능이 오히려 떨어짐
+    - Training에서도 Test에서도 성능이 좋지 않았기 때문에 overfitting 때문이 아님
+    - Gradient vanishing/ explosing이 발생
+    - 또는 Degradation Problem이 발생
+      - layer가 어느정도 이상으로 깊어지면 오히려 성능이 안 좋아지는 현상
+  - 해당 현상의 원인을 optimization이라고 추측해서
+    - 새로운 Optimizer을 만들거나 깊어지더라도 쉽게 Optimization을 할 수 있는 새로운 architecture를 만들어 문제를 해결할 수 있음
+  - 하지만 새로운 optimizer를 만든 것은 매우 어렵기 때문에 새로운 Network를 만드는데 집중
+- Residual block
+  
