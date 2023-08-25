@@ -186,4 +186,12 @@
           - 로스 펑션에 추가적인 패널티 텀을 붙여서 로스펑션을 수정하여 학습하는 방법임
           - 식
             - Cost Function = Loss + L2 Weight Penalty
-            - 
+            - $$= \displaystyle\sum_{i=1}^{M} (y_i-\displaystyle\sum_{j=1}^{N}x_{ij}w_j)^2 + \lambda \displaystyle\sum_{j=1}^{N}w_j^2$$
+            - = Squared Error + L2 Regularization Term
+          - L2를 기준으로 설명하면
+            - 해당 식의 앞은 label과 Prediction과의 Error를 최소화되도록 학습이 진행되고 뒤의 식은 가중치의 L2 norm을 최소화하라는 것
+            - 모순적인 요구조건이 두 가지로 섞여 있음
+            - 일반적으로 가중치의 L2 norm을 최소화하면 Error는 상승하고, Error를 최소화하면 L2 norm의 값은 상승하게 됨
+              - 두 가지 요구사항 가중치의 L2 norm과 Error를 합쳤을 때 최소화하는 적당한 가중치를 찾으라는 요구조건임
+              - 해당 요구조건을 만족시키면 뉴럴넷은 Training data에 최적화된 가중치가 아니라 모든 퍼셉트론의 가중치가 일정 수준 이상을 가지는 균형적인 가중치로 학습이 됨
+        - (3) Dropout
