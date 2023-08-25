@@ -97,4 +97,45 @@
   - 전체가 아니라 배치(batch)단위로 가중치 업데이트하자는 아이디어
     - 배치 : 전체 데이터를 동일한 숫자로 나눈 것
     - ex) 1000개의 데이터셋을 200개 1배치로 묶으면 1 epoch당 총 5번의 업데이트가 일어남
-  
+- GD,SGD의 개선
+  - 2가지 방법을 사용해서 옵티마이저의 성능을 개선시킴
+  - (1) 과거의 진행방향을 참고하는 관성(Momentum)을 사용함 (ex) Momentum, NAG
+  - (2) 이제까지 계산된 Gradient에 따라 다른 학습률(Adaptive Learning Rate)을 가지도록 함 (ex) Adagrad, RMSProp
+  - (3) 관성(Momentum)과 스텝사이즈 변화(Adaptive Learning Rate) 두 가지를 다 고려함 (ex)Adam
+
+- Momentum
+  - 물리의 관성 개념을 옵티마이저에 적용했음
+  - step에서의 gradient와 이제까지의(과거) 이동한 gradient의 exponential average를 더해줌
+    - 과거의 gradient의 파라미터(y)로 조절하여 더해줌
+    - Gradient Descent 식
+      - $$X_1=X_0-\alpha*f(x_0)$$
+      - $$x_2=x_1-\alpha*f(x_1)$$
+    - Momentum
+      - $$X_1=X_0-\alpha*f(x_0)$$
+      - $$x_2=x_1-\alpha*f(x_1)+momentum$$
+  - 장점(SGD가 가지지 못했던 장점을 가질 수 있음)
+    - (1) 관성이 붙어 Local optimum을 벗어날 수도 있음
+    - (2) 궤적이 크게 변동하지 않아 SGD보다 안정적으로 Gradient가 하강됨
+  - 단점
+    - 가중치의 이동량을 계산하기 위해 Momentum과 Gradient 두 가지를 한 번에 업데이트해야함
+      - 즉, 업데이트가 과도하게 계산될 수 있음
+- Nesterov Accelerated Gradient(NAG)
+  - 업데이트가 과도하게 계산되는 것을 줄이기 위해 Momentum과 Gradient의 순서를 분할함
+    - 현재 위치에서 t시점으로 Momentum만 계산하여 이동하고 이동한 곳을 기준으로 Gradient를 계산하여 두 번째로 이동함
+    - 식 : $$X_{n+1}=X_n-\alpha\beta a_n-\alpha\nabla f(x_n-\alpha\beta a_n)$$
+  - 한 번에 먼 이동이 아니라 순서를 나누어 이동하므로 Momentum보다 부드러운 궤적을 가지게 되고 모멘텀과 같이 과도한 업데이트가 일어나지 않음
+
+- Adagrad
+  - 기존에 상수였던 학습률(learing rate)를 선택적으로 조절하는 옵티마지어임
+  - SGD with Momentum
+    - $$v_{t+1} \gets \rho v_t+\nabla_\theta L(\theta)$$
+    - $$\theta_j \gets \theta_j - \epsilon v_{t+1}$$
+  - AdaGrad
+    - $$g_0 =0$$
+    - $$g_{t+1} \gets g_t + \nabla_\theta L(\theta)^2$$
+    - $$\theta_j \gets \theta_j - \epsilon*\frac{\nabla_\theta L(\theta)^2}{\sqrt g_{t+1}+1e^{-5}}$$
+  - 현 시점까지의 계산되었던 모든 Gradient의 제곱합에 반비례하는 학습률을 가짐
+    - 학습이 진행될수록 이동량이 줄어들게 됨
+    - 이때문에 Global Optimum 근처에서 이동량 감소면 좋은 경우임
+    - 하지만 Global Optimum 근처까지 도달하지 못했는데도 이동량이 줄어들면 큰 단점이 됨
+- RMSProp
