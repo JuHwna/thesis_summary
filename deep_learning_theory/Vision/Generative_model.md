@@ -20,5 +20,8 @@
     - model의 distribution이 실제 데이터, 즉 $$p_{data}$$와 가장 가깝도록 만드는 것
     - 녹색으로 표현된 model distribution, $p_{\theta}$와 $p_{data}$ 사이의 거리, d가 최소화되는 문제로 정의할 수 있음
 - 생성 모델을 이용해 해결하는 문제
-  - Density estimation
-    - 주어진 datapoint x에 대해서 model
+  - Density estimation : 주어진 datapoint x에 대해서 model에 의해 할당되는 확률 $p_{\theta}(x)$을 구할 수 있을까?
+    - 좋은 생성 모델이라면 : density estimation을 목표로 한다면 개라는 이미지에 대해서는 높은 $p_{}$
+  - Sampling : training에는 존재하지 않지만 training과 가장 비슷한 분포를 나타내는 model distribution으로 이미지를 만들어낼 수 있을까?
+  - Unsupervised representation learning : 특정 datapoint x에서 의미있는 feature representation을 학습할 수 있을까?
+    
