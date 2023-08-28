@@ -17,7 +17,7 @@
   - 실제 세계의 데이터로부터 비슷한 Fake Data를 생성할 수 있음
     - Time-series data 등은 생성 모델에서 시뮬레이션이나 Planning에 사용 가능함
   - ex) 강아지 이미지를 만들애는 Generative model을 구축한다고 가정
-    - model의 distribution이 실제 데이터, 즉 $$p_{data}$$와 가장 가깝도록 만드는 것
+    - model의 distribution이 실제 데이터, 즉 $p_{data}$와 가장 가깝도록 만드는 것
     - 녹색으로 표현된 model distribution, $p_{\theta}$와 $p_{data}$ 사이의 거리, d가 최소화되는 문제로 정의할 수 있음
 - 생성 모델을 이용해 해결하는 문제
   - Density estimation : 주어진 datapoint x에 대해서 model에 의해 할당되는 확률 $p_{\theta}(x)$을 구할 수 있을까?
@@ -63,3 +63,10 @@
   - 텍스트 설명을 가지고 이미지를 생성함
 - 사진으로부터 3D 모델 생성
   - 2D 이미지로부터 3D 이미지를 생성함
+
+## 2. 생성 모델을 위한 사전지식
+### 1) 생성 모델의 역사
+#### 초창기 생성 모델 아이디어
+- Boltzman machine
+  - 입력층 1개, 은닉층 1개 그리고 모든 node들을 잇는 edge로 구성되어 있음
+  - RBM과는 다르게 같은 layer 안에서도 연결이 있는 모델임
