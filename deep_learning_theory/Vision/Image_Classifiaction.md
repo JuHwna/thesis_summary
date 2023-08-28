@@ -266,7 +266,51 @@
 #### DenseNet
 
 
+
+
+
+
 ## 4. Vision Transformer
+- NLP 분야에서의 트랜스포머를 컴퓨터 비전에 적용한 네트워크
+- CNN만 이용한 네트워크보다 좋은 성능을 보여주고 있음
+### 요약
+- 논문에서 제시한 ViT
+  - Transformer의 Encoder부분(Self-Attention)을 그대로 응용함
+  - 논문이 주는 강력한 메세지 : Vision Task에서 CNN을 이용하지 않고 충분한 퍼포먼스를 낼 수 있다는 점
+  - 단점 : 충분한 데이터 셋으로 Pretrain하고 타켓 도메인에 Fine-tuning해야 성능을 제대로 발휘할 수 있다는 점
+  - 이미지
+
+### 네트워크 구조
+#### 1) Image Patch 만들기
+- 트랜스포머는 NLP 분야에서 출발한만큼 1D 임베딩들을 필요로 함
+  - 그래서 이미지 패치를 만들어 1D 임베딩을 만들어 나감
+  - EX) [300,300,3]의 이미지를 [100,100,3] 이미지 9개로 만들었음
+#### 2-1) Patch Embedding 만들기
+- 패치화된 각 이미지를 1차원으로 만듦(Linear Projection)
+  - 앞서 하나의 패치가 [100,100,3]이었다면 각 픽셀들을 일렬로 이어 붙여서 [1,100x100x3]인 1차원으로 만듦
+  - 식
+    - $$x \in R^{H \times W \times C}$$ -> 원래 이미지 size
+    - $$x_p \in R^{N \times (P^2 \times C)}$$ -> Flatten한 뒤, ViT에 입력 : 벡터로 처리하여 입력
+    - $$N= \frac{HW}{P^2}$$
+      - N : Transformer의 sequence 길이(패치 수)
+      - P : 패치의 크기, 패치는 정사각형
+      - where 원본 이미지 해상도 : (H,W), 각 이미지 패치 해상도 : (P,P)
+
+#### 2-2) Class token 만들기
+- BERT의 CLS token과 유사하게, 임베딩된 patch의 맨 앞에 하나의 학습 가능한 Class token을 추가했음
+  - Class token : Transformer의 여러 encoder 층을 거쳐 최종 output으로 나왔을 때, 이미지에 대한 1차원 representation vector로써의 역할을 수행함
+ 
+#### 2-3) Position Embedding
+- 1차원으로 만든 벡터에 같은 차원의 Position Embedding을 더해줌
+- Position Embedding
+  - 오리지널 Transformer와 같이 임베딩에 순서 정보를 부여하기 위해서임
+  - 하지만 이 부분은 Optional이라고 소개한 사이트도 있는 것으로 보아 꼭 필요한 알고리즘은 아닌 것 같음)
+- 해당 과정을 마치면 전체 이미지는 [1,100x100x3] 차원의 embedding vector 10개로 정의되며 이후 Transformer의 Encoder로 들어가게 됨
+
+#### 3-1) Layer Normalization
+- 모든 이미지 임베딩을 채널 기준으로 Layer Normalization을 함
+
+#### 3-2) Multi-Head Self Attention(MSA)
 
 
 ## 5. CoAtNet(Convolution+Transformer)
