@@ -278,7 +278,8 @@
   - Transformer의 Encoder부분(Self-Attention)을 그대로 응용함
   - 논문이 주는 강력한 메세지 : Vision Task에서 CNN을 이용하지 않고 충분한 퍼포먼스를 낼 수 있다는 점
   - 단점 : 충분한 데이터 셋으로 Pretrain하고 타켓 도메인에 Fine-tuning해야 성능을 제대로 발휘할 수 있다는 점
-  - 이미지
+  - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/c2d9310b-b47a-4b39-8c49-96eafc43a230)
+
 
 ### 네트워크 구조
 #### 1) Image Patch 만들기
@@ -311,6 +312,12 @@
 - 모든 이미지 임베딩을 채널 기준으로 Layer Normalization을 함
 
 #### 3-2) Multi-Head Self Attention(MSA)
+- Patch + Position Embedding을 이용하여 Self-Attention을 수행하기 위해 임베딩 1개당 1개씩의 q(쿼리), k(키), v(밸류)를 학습 가중치 W_q, W_k, W_v를 이용하여 구함
+  - 만약 num_heads를 12이라고 하면 각 임배딩마다 [1,100x100x3/12] 차원의 q, k, v를 가지게 됨
+- 이렇게 구한 q, k, v를 이용하여 Attention Value를 구하고 이것들을 차원방향으로 concat하여 Multi-head Attetion을 만듦
+- ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/bde625f4-c9a2-46ac-a7a8-166f6312764e)
+  - 12번 self-attetion을 수행한다고 하면 image patch 한 개의 Attetion Value Matrix는 [1,100x100x3/12] 차원을 가짐
+  - num_heads 갯수인 12개 Attetion
 
 
 ## 5. CoAtNet(Convolution+Transformer)
