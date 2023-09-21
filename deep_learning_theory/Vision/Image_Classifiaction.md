@@ -278,6 +278,11 @@
       - 기울기 소실과 비슷한 문제
       - 입력과 가까운 계층이 학습한 특징이 최종 계층까지 도달하지 못하고 사라지는 문제
         - 많은 수의 가중치가 곱해져서 발생
+    - 해결 방법
+      - Stochastic Depth ResNet 논문 : 무작위로 residual block을 제거함
+        - dropout의 일종
+      - WRN : residual block에 dropout을 적용함
+        - 
 #### ResNeXt
 
 #### Deep Networks with Stochastic Depth
