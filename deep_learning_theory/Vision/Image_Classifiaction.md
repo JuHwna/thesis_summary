@@ -254,9 +254,30 @@
 - 해당 논문은 Residual이 왜 깊은 모델임에도 성능이 잘 나오는지를 설명 + 추가적인 아키텍처를 더하여 성능을 높임
 
 
-#### Wide Residual Networks
-
-
+#### Wide Residual Networks(WRN)
+- residual network의 넓이를 증가시키고 깊이를 감소시킨 모델
+  - 신경망의 넓이를 증가한다는 의미 : filter 수를 증가시킨다는 의미
+  - residual block을 구성하는 convolution layer의 filter 수를 증가시켜서 신경망의 넓이를 증가시킴
+- 등장 배경
+  - Pre-Activation ResNet : Residual block 내의 활성화 함수의 순서(Conv-BN-ReLU-> BN-ReLU-Conv)를 바꿔서 초기 입력값이 최종 출력값에 도달하도록 함
+  - 저자는 깊이와 활성화 함수의 순서를 제외하고 ResNet의 넓이에 따른 정확도 양상을 실험함
+    - WRN
+      - Residual blcok의 넓이를 증가시키는 것이 모델의 깊이를 증가시키는 것보다 효과적으로 성능을 향상시킬 수 있다고 함
+      - 16 layer의 WRN은 1000-layer의 ResNet의 성능을 뛰어 넘는 결과를 보여줌
+      - 학습 속도도 몇배는 빠름
+- ResNet의 문제점
+  - (1) circuit complexity theory
+    - circuit complexity theory : 얇은 circuit는 깊은 circuit보다 더 많은 요소들을 필요로 한다는 이론
+      - 깊은 신경망이 갖는 표현력을 얇은 신경망이 갖기 위해서는 엄청나게 넓은 신경망을 구성해야 된다고 생각해볼 수 있음
+      - 넓은 신경망을 구성하는 것은 parameter 수도 증가한다는 것을 의미
+    - ResNet은 이 이론을 접목시킴 -> bottleneck 구조를 제안함
+      - 해당 구조는 모델을 얇게 해 parameter 수를 감소시켜 깊이를 증가시킴
+      - residual block을 최대한 얇게 구성하여 모델의 깊이를 엄청나게 증가시킴
+  - (2) Diminishing feature reuse
+    - 순전파에서 발생하는 문제
+      - 기울기 소실과 비슷한 문제
+      - 입력과 가까운 계층이 학습한 특징이 최종 계층까지 도달하지 못하고 사라지는 문제
+        - 많은 수의 가중치가 곱해져서 발생
 #### ResNeXt
 
 #### Deep Networks with Stochastic Depth
