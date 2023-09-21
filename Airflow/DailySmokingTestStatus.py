@@ -30,17 +30,17 @@ finally:
     from datetime import datetime,timedelta
 
 # 입력값
-login_id      = 'admin' # 로그인 계정
-login_pw      = 'admin' # 로그인 비밀번호
+login_id      = '' # 로그인 계정
+login_pw      = '' # 로그인 비밀번호
 token_name    = ''      # Default는 공백
-sever_adress  = 'http://175.126.38.93:8085' # 서버 주소
-view_name     = '흡연탐지모델 현황 대시보드'   # 뷰 이름
+sever_adress  = '' # 서버 주소
+view_name     = ''   # 뷰 이름
 savefile_name = 'temp.png' # 저장 파일 이름
-channel_name  = '화면-일일흡연실험현황'
-path          = '/root/airflow/tableau_slack'
+channel_name  = '황'
+path          = ''
 loadfile_list = ['temp.png'] # 여러 이미지를 한번에 올릴 수 있으니 리스트형태
 
-slack_token = 'xoxb-1660008934132-4665180101347-QKWq9s4mJfv9KVWY2GMzt2uS' ## da bot
+slack_token = '' ## da bot
 
 ####################################### 고정 코드 #######################################
 
