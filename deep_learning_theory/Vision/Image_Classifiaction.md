@@ -282,7 +282,22 @@
       - Stochastic Depth ResNet 논문 : 무작위로 residual block을 제거함
         - dropout의 일종
       - WRN : residual block에 dropout을 적용함
-        - 
+        - residual block 내에서 dropout은 convolutional layer 사이에 적용함
+  - WRN의 해결방법
+    - (1) 넓이를 증가시켜서 해결
+    - (2) residual block 내에 있는 convolution layer 사이에 dropout을 적용
+- WRN(Wide residual networks) 내용
+  - (1) 각 합성곱 계층이 더 많은 특징 맵 채널을 만들 수 있게 하기(채널의 개수 = 너비)
+    - ResNet은 두 종류의 residual block으로 구성됨
+      - basic : 3x3 conv- BN(batch normalization) - ReLU - 3x3 conv - BN - ReLU => 그림 (a)에 해당함
+      - bottlenet : 1x1 conv(차원 축소) - BN - ReLU - 3x3 conv - BN - ReLU - 1x1 conv(차원 확대) - BN - ReLU
+        - 그림 (b)에 해당함
+        - 해당 구조는 모델을 얇게 만들기 위해 사용하므로 WRN에서는 사용하지 않음
+      - basic-wide : BN - ReLU - 3x3 conv
+        - Pre-activation resnet 논문에서 제안된 활성화 함수의 순서임
+        - 각 conv layer가 갖고 있는 필터 수를 k배함
+      - wide-dropout : conv와 conv 사이에 dropout 적용
+      - 
 #### ResNeXt
 
 #### Deep Networks with Stochastic Depth
