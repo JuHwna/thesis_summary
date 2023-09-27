@@ -287,17 +287,32 @@
     - (1) 넓이를 증가시켜서 해결
     - (2) residual block 내에 있는 convolution layer 사이에 dropout을 적용
 - WRN(Wide residual networks) 내용
-  - (1) 각 합성곱 계층이 더 많은 특징 맵 채널을 만들 수 있게 하기(채널의 개수 = 너비)
-    - ResNet은 두 종류의 residual block으로 구성됨
-      - basic : 3x3 conv- BN(batch normalization) - ReLU - 3x3 conv - BN - ReLU => 그림 (a)에 해당함
-      - bottlenet : 1x1 conv(차원 축소) - BN - ReLU - 3x3 conv - BN - ReLU - 1x1 conv(차원 확대) - BN - ReLU
-        - 그림 (b)에 해당함
-        - 해당 구조는 모델을 얇게 만들기 위해 사용하므로 WRN에서는 사용하지 않음
-      - basic-wide : BN - ReLU - 3x3 conv
-        - Pre-activation resnet 논문에서 제안된 활성화 함수의 순서임
-        - 각 conv layer가 갖고 있는 필터 수를 k배함
-      - wide-dropout : conv와 conv 사이에 dropout 적용
-      - 
+  - ResNet은 깊이에 따라 두 가지 블록을 사용하여 모델을 ㅈ어의
+    - 얕은 모델인 ResNet-18, ResNet-34
+      - Basic Block은 3x3 크기의 합성곱 연산을 2번 사용한 skip connection을 적용함
+    - 더 깊은 모델(ResNet-50, ResNet-101 등)
+      - BottleNeck Block은 연산량의 이점을 얻기 위해 1x1 합성곱을 적용하여 채널의 개수를 줄이고 3x3 합성곱을 적용한 뒤 다시 기존의 채널의 개수로 늘려주는 과정임
+  - PreAct ResNet
+    - Identity path의 중요성과 Activation function의 순서에 따른 성능 변화를 분석
+    - 기존의 ResNet의 연산 순서였던 Conv-bn-relu -> bn-relu-conv로 순서로 변경하게 됨
+      - 후자가 더 빠르게 학습되고 더 나은 결과를 가져옴
+  - Residual Block의 표현력(representation power)을 늘리기 위해 선택할 수 있는 방법
+    1) 블록별로 합성곱 계층을 더 추가하기
+      - 연산량의 이점을 잃어버림 -> 선택x
+    2) 각 합성곱 계층이 더 많은 특징 맵 채널을 만들 수 있게 하기
+      - 고려 O
+      - 채널의 개수 : 너비
+    3) 합성곱 계층의 필터 크기를 증가하기
+      - VGGNet에서 언급했다싶이 3x3 크기의 합성곱을 사용하는 것이 굉장히 효율적이기 때문에 고려대상이 아님x
+   
+  
+  - (1) Residual Block
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/86f0a106-47d9-4386-bcb7-feef13d22fb1)
+    - (a) basic : 3x3 conv- BN(batch normalization) - ReLU - 3x3 conv - BN - ReLU 
+    - (b) bottlenet : 1x1 conv(차원 축소) - BN - ReLU - 3x3 conv - BN - ReLU - 1x1 conv(차원 확대) - BN - ReLU
+      - 해당 구조는 모델을 얇게 만들기 위해 사용하므로 WRN에서는 사용하지 않음
+    - (c)와 (d) : WRN에서 정의한 새로운 블록 모양
+      - 3X3 크기의 합성곱 계층이 (a)와 (b)에 비해 훨씬 넓은 것을 볼 수 있음
 #### ResNeXt
 
 #### Deep Networks with Stochastic Depth
