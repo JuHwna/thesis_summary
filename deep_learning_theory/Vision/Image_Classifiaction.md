@@ -371,7 +371,11 @@
       - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a64dd4a3-e493-4ede-ac7a-72054a10c0cd)
         - CIFAR에서 최고의 성능을 낸 WRN-28-10가 thin ResNet-1001보다 1.6배 더 빠름
         - wide WRN-40-4는 ResNet-1001와 거의 유사한 accuary를 가지지만 8배 더 빠름
-
+  - Reference
+    - https://everyday-image-processing.tistory.com/456
+    - https://mldlcvmjw.tistory.com/297
+    - https://cumulu-s.tistory.com/35
+    - https://deep-learning-study.tistory.com/519
 #### ResNeXt
 
 #### Deep Networks with Stochastic Depth
