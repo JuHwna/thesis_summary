@@ -287,11 +287,11 @@
     - (1) 넓이를 증가시켜서 해결
     - (2) residual block 내에 있는 convolution layer 사이에 dropout을 적용
 - WRN(Wide residual networks) 내용
-  - ResNet은 깊이에 따라 두 가지 블록을 사용하여 모델을 ㅈ어의
+  - ResNet은 깊이에 따라 두 가지 블록을 사용하여 모델을 정의
     - 얕은 모델인 ResNet-18, ResNet-34
-      - Basic Block은 3x3 크기의 합성곱 연산을 2번 사용한 skip connection을 적용함
+      - Basic Block : 3x3 크기의 합성곱 연산을 2번 사용한 skip connection을 적용함
     - 더 깊은 모델(ResNet-50, ResNet-101 등)
-      - BottleNeck Block은 연산량의 이점을 얻기 위해 1x1 합성곱을 적용하여 채널의 개수를 줄이고 3x3 합성곱을 적용한 뒤 다시 기존의 채널의 개수로 늘려주는 과정임
+      - BottleNeck Block : 연산량의 이점을 얻기 위해 1x1 합성곱을 적용하여 채널의 개수를 줄이고 3x3 합성곱을 적용한 뒤 다시 기존의 채널의 개수로 늘려주는 과정임
   - PreAct ResNet
     - Identity path의 중요성과 Activation function의 순서에 따른 성능 변화를 분석
     - 기존의 ResNet의 연산 순서였던 Conv-bn-relu -> bn-relu-conv로 순서로 변경하게 됨
@@ -304,7 +304,7 @@
       - 채널의 개수 : 너비
     3) 합성곱 계층의 필터 크기를 증가하기
       - VGGNet에서 언급했다싶이 3x3 크기의 합성곱을 사용하는 것이 굉장히 효율적이기 때문에 고려대상이 아님x
-   
+      - 작은 필터가 성능이 좋음
   
   - (1) Residual Block
     - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/86f0a106-47d9-4386-bcb7-feef13d22fb1)
@@ -313,6 +313,65 @@
       - 해당 구조는 모델을 얇게 만들기 위해 사용하므로 WRN에서는 사용하지 않음
     - (c)와 (d) : WRN에서 정의한 새로운 블록 모양
       - 3X3 크기의 합성곱 계층이 (a)와 (b)에 비해 훨씬 넓은 것을 볼 수 있음
+      - 깊이가 아닌 각 블록에서 3x3 크기의 합성곱 계층의 출력 특징맵의 채널 개수를 증가시키게 되면 깊은 모델이 아니더라도 성능을 향상시킬 수 있다고 주장
+    - WRN에 추가된 파라미터
+      - 깊이 l : 모델의 깊이
+      - 너비 k : 기존의 Basic Block의 3x3 크기의 합성곱 계층의 출력 특징맵의 채널 개수에 곱하는 요소
+        - k가 클수록 더욱 넓은 모델이 되는 것
+  - (2) WRN architecture
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/29fec7f0-9c10-4f1e-a078-26244ec73266)
+  - (3) 새로운 기호 도입
+      - $B(M)$ : residual block의 구조
+      - M : 해당 블록에서 사용된 합성곱 계층의 필터 크기
+        - $B(3,1)$ : 3x3 크기의 합성곱과 1x1 크기의 합성곱을 Residual Block에서 사용했음을 의미
+      - 다양한 조합의 필터 크기에 대한 실험을 진행함
+        - 실험하는 블록
+          - (1) B(3,3) : Residual Block의 Basic Block
+          - (2) B(3,1,3) : Residual Block의 Basic Block에서 가운데 1x1 합성곱 계층 추가
+          - (3) B(1,3,1) : Residual Block의 BottleNeck Block
+          - (4) B(1,3) : 1x1 합성곱 적용 후 3x3 합성곱 적용
+          - (5) B(3,1) : 3x3 합성곱 적용 후 1x1 합성곱 적용
+          - (6) B(3,1,1) : Network-In-Network 스타일의 구조
+  - 실험의 결과
+    - (1) Types of Convolutions in Residual Block
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0f565af7-d76e-4c1e-8e38-fca7c09030a0)
+      - 깊이를 조절하면서 전체 파라미터의 개수를 맞추어 실험을 한 모습
+      - 실험 결과 : WRN-28-2-B(3,3)이 WRN-22-2-B(3,1,3)에 비해서 아주 살짝 성능이 향상됨
+    - (2) Number of Convolutions per Block
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/3a4c8682-1991-4f49-a352-2a6a3bc82f18)
+      - 블록별로 합성곱 계층의 개수를 다르게 하면서 실험을 진행함
+      - 2개의 계층을 사용했을 때 최고의 성능이 나옴
+    - (3) Width of Residual Blocks
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/93e8cbf8-2488-44aa-b859-e5e278959e4a)
+      - Widening Factor k와 Depth l에 대한 성능 변화를 측정
+      - k=1이라면 기존의 ResNet과 동일한 구조
+      - l=40으로 고정하고 성능을 비교해보면 k가 증가함에 따라 성능이 일관되게 향상되고 있음
+        - 기존의 ResNet과 비교해보면 k가 증가함에 따라 성능이 향상되고 있음
+      - k=10으로 고정 시, 깊어질수록 성능이 좋아짐
+      - WRN-28-10 vs WRN-40-8
+        - 깊이가 깊지 않음에도 Widening Factor K를 증가시킴으로써 충분히 좋은 성능을 낼 수 있음
+    - (4) Comparison between Other Models
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/b3a66a3a-8520-4e59-9349-5be606296b1a)
+        - 해당 실험은 심층 신경망을 설계할 때 너비에 대한 중요도가 생각보다 높음을 의미
+        - 깊이는 정규화 효과를 일으키고 너비는 과적합을 일으킨다는 이전의 주장에도 불구하고 ResNet-1001보다 몇 배 더 많은 매개변수를 가진 네트워크를 성공적으로 교육시킴
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/4a72125b-0fff-461f-9d4f-3d11141a46f0)
+        - ResNet과 WRN 사이의 에폭에 따른 손실함수 경향성을 비교하고 있음
+        - 과적합을 막으려면 시험 손실함수와 훈련 손실함수의 차이가 적어야함
+          - WRN은 ResNet보다 두 차이가 적기 때문에 과적합이 방지되고 있음
+    - (5) Dropout in Residual Blocks
+      - Dropout은 모델의 깊이가 상대적으로 깊을 때 더 높은 성능 향상을 얻을 수 있다는 것을 볼 수 있음
+      - Droupout 그 자체로 얇은 네트워크와 넓은 네트워크에서의 효과적인 regularization 기술임
+    - (6) ImageNet Classification
+    - 실험 내용 요약
+      - Widening은 다른 depth를 가지는 Residual Network 사이에서 일관적으로 성능을 향상함
+      - 깊이와 너비 둘 다 증가시키는 것은 파라미터의 수가 너무 많아지거나 혹은 더 강력한 regularization이 요구될 때까지는 도움이 됨
+      - 얇은 신경망과 동일한 수의 매개변수를 가진 넓은 신경망이 동일하거나 더 나은 성능을 낼 수 있기 때문에 Residual Network의 매우 깊은 깊이는 정규화 효과가 없는 것으로 보임. Wide Network는 얇은 네트워크보다 2배 이상의 많은 수의 매개변수를 사용하여 성공적으로 학습할 수 있음
+    - (7) Computational efficiency
+      - width를 증가시키는 것은 효과적으로 Computation을 균형 맞추는데 더욱 최적의 방식으로 도움을 주며, 얇은 네트워크보다 넓은 네트워크가 몇 배는 더 효율적임
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a64dd4a3-e493-4ede-ac7a-72054a10c0cd)
+        - CIFAR에서 최고의 성능을 낸 WRN-28-10가 thin ResNet-1001보다 1.6배 더 빠름
+        - wide WRN-40-4는 ResNet-1001와 거의 유사한 accuary를 가지지만 8배 더 빠름
+
 #### ResNeXt
 
 #### Deep Networks with Stochastic Depth
