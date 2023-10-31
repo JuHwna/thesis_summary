@@ -434,9 +434,27 @@
 - Patch + Position Embedding을 이용하여 Self-Attention을 수행하기 위해 임베딩 1개당 1개씩의 q(쿼리), k(키), v(밸류)를 학습 가중치 W_q, W_k, W_v를 이용하여 구함
   - 만약 num_heads를 12이라고 하면 각 임배딩마다 [1,100x100x3/12] 차원의 q, k, v를 가지게 됨
 - 이렇게 구한 q, k, v를 이용하여 Attention Value를 구하고 이것들을 차원방향으로 concat하여 Multi-head Attetion을 만듦
-- ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/bde625f4-c9a2-46ac-a7a8-166f6312764e)
-  - 12번 self-attetion을 수행한다고 하면 image patch 한 개의 Attetion Value Matrix는 [1,100x100x3/12] 차원을 가짐
-  - num_heads 갯수인 12개 Attetion
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/bde625f4-c9a2-46ac-a7a8-166f6312764e)
+
+
+- 12번 self-attetion을 수행한다고 하면 image patch 한 개의 Attetion Value Matrix는 [1,100x100x3/12] 차원을 가짐
+- num_heads 갯수인 12개 Attetion Value Matrix를 구하여 차원 방향으로 concat하면 한 개의 image patch당 [1100x100x3]개의 오리지널 임베딩의 차원을 회복함
+
+
+#### 3-3) Residual Connection (잔차 연결)
+- 2단계에서 구한 input 임베딩과 3-2단계에서 구한 multi-head attention을 더해 잔차 연결을 함
+  - 차원 : [10,1,100x100x3]으로 동일
+
+#### 4-1) Layer Normalization
+- 3-3단계에서 잔차 연결한 Matrix를 3-1번과 동일하게 채널 기준으로 Normalization을 실시함
+
+#### 4-2) Multi Layer Perceptron(MLP)
+- 두 개의 Linear Layer로 구성되며 첫 번째 레이어에서 임베딩 사이즈를 확장하고 두 번째 레이어에서 원래의 임베딩 사이즈로 복원함
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/ee42ac97-d414-4671-9b10-0cab45f88e50)
+
+#### 4-3) Residual Connection(잔차 연결)
+- 4-2단계에서 구한 Matrix와 3-3단계의 Matrix를 더해 최종 output feature를 만듦
+- 
 
 
 ## 5. CoAtNet(Convolution+Transformer)
