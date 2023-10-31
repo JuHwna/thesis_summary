@@ -434,6 +434,7 @@
 - Patch + Position Embedding을 이용하여 Self-Attention을 수행하기 위해 임베딩 1개당 1개씩의 q(쿼리), k(키), v(밸류)를 학습 가중치 W_q, W_k, W_v를 이용하여 구함
   - 만약 num_heads를 12이라고 하면 각 임배딩마다 [1,100x100x3/12] 차원의 q, k, v를 가지게 됨
 - 이렇게 구한 q, k, v를 이용하여 Attention Value를 구하고 이것들을 차원방향으로 concat하여 Multi-head Attetion을 만듦
+  
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/bde625f4-c9a2-46ac-a7a8-166f6312764e)
 
 
@@ -450,11 +451,32 @@
 
 #### 4-2) Multi Layer Perceptron(MLP)
 - 두 개의 Linear Layer로 구성되며 첫 번째 레이어에서 임베딩 사이즈를 확장하고 두 번째 레이어에서 원래의 임베딩 사이즈로 복원함
+  
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/ee42ac97-d414-4671-9b10-0cab45f88e50)
 
 #### 4-3) Residual Connection(잔차 연결)
 - 4-2단계에서 구한 Matrix와 3-3단계의 Matrix를 더해 최종 output feature를 만듦
-- 
+- 2번 input embedding이 3,4단계를 거쳐 최종 output feature를 만드는 과정을 수식으로 정리하면 아래와 같이 표현 가능
 
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/02a1601e-f8da-4cb5-a724-e86e79847055)
+
+#### 5) Multi Layer Perceptron (MLP) head
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/257cdfed-82a9-47cb-b2e2-0bbdc9a861f4)
+
+- Transformer의 output 출력단이라고 할 수 있으며 일반적인 CNN의 Image classifier와 동일함
+- 특이한 것은 Class token만을 사용한다는 점
+  - class token이 Transformer의 여러 encoder 층과 Layer Normalization을 거쳐 최종 output, y가 나왔을 때, 이 y가 이미지에 대한 1차원 representation vector로써의 역할을 수행하기 때문
+- MLP의 경우, y를 Flatten한 후 단순 Linear Layer를 통과시켜 classification을 수행함
+
+
+### ViT Training & Fine-Tuning
+- large-scale dataset에 대해 ViT를 pre-train하고 downstream task에 대해 fine-tuning을 수행함
+  - pre-trained Multi Layer Perceptron(MLP) head를 제거하고 0으로 초기화된 D×K feedforward layer를 추가함
+  - D : 100×100×3
+  - K : downstream class의 개수
 
 ## 5. CoAtNet(Convolution+Transformer)
+
+### Background
+-
