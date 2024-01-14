@@ -70,3 +70,31 @@
 - Boltzman machine
   - 입력층 1개, 은닉층 1개 그리고 모든 node들을 잇는 edge로 구성되어 있음
   - RBM과는 다르게 같은 layer 안에서도 연결이 있는 모델임
+  - 에너지 기반 모형
+    - 볼츠만 머신의 결합확률 분포 : $P(x)=\frac{exp(-E(x))}{Z}$ => 에너지 함수를 통해 정의됨
+    - E(x) : 하나의 에너지 함수
+    - Z는 $\displaystyle\sum_{x}^{} P(x)$=1 이 되게 하는 (확률의 합이 1이 되게 하는) 분할 함수
+    - 에너지 함수 : E(x) = $-x^{T} Ux-b^{T}x$
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0df28807-4861-4c02-a294-cbdbd6aad1a4)
+
+#### RBM(Restricted Boltzman Machine, 1980)
+- RBM : 입력층 1개와 은닉층 1개로 구성되어 있음
+  - 모든 hidden layer의 노드들은 visible layer(입력층)와 연결되어 있고 그 역도 마찬가지임
+  - 같은 layer 안에서는 연결이 되어 있지 않음(이를 bipartite graph라고 부름)
+  - 해당 특성 때문에 제한된 볼츠만 머신이라고 불림
+- Perceptron의 output은 결정론적인 것에 비해 RBN은 확률에 따라서 입력을 은닉층에 전달할지 전달하지 않을지 결정해 보냄
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/ff891b99-7ca6-44eb-9ea8-5300a99a9e1d)
+
+#### DBN(Deep belief network, 2006)
+- DBN : 2006년에 제안되어 최초로 Deep한 network 구조를 훈현할 수 있었던 모델
+  - 여러 개의 hidden layer를 가진 생성모델임
+  - 기본적인 구조는 RBM을 stacking해서 깊게 쌓아올린 것
+- Deep neural network를 학습할 때 사용하는 일반적인 것 : gradient descent
+  - 오차를 토대로 output layer에서부터 chain rule을 이용해 input layer까지 교정해나가는 방법
+  - 존재하는 문제점 : Gradient vanishing/ explosion
+    - 심층 모델의 학습에서는 대부분 발생하는 문제
+    - 당대에는 이 문제 해결이 불가능하다고 보고 네트워크를 깊게 쌓기보다는 kernel machine 등을 연구했었음
+- DBN은 거꾸로 아래층에서 위로 올라가면서 pre-training을 하면서 모델을 깊게 쌓아올리는 방법을 씀
+  - layer-wise pretraining이라고 부름
+- 아래에서 위로 올라가기 위해 unsupervised learning의 개념이 나옴
+  - DBN
