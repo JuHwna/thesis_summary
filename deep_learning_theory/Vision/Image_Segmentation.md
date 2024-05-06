@@ -78,4 +78,6 @@
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/21796b99-ea65-4c31-a555-156c47aa32e0)
 
 #### No. of Parameters
-
+- 기존 Convolution
+  - 하나의 filter가 가지는 parameter 크기 : K x K x C
+  - 하나의 filter에서 나오는 output : output channel 중 하나에 해당하니 output을 M개의 channel로 만들어 주려면 이러한 filter의 개수가 총 M개가 있어야 함
