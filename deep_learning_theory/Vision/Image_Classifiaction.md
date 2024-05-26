@@ -479,4 +479,23 @@
 ## 5. CoAtNet(Convolution+Transformer)
 
 ### Background
--
+- 2021년 6월, Google AI팀에서 EfficientNet-V2와 함께 발표
+- ImageNet top 1 accuracy SOTA를 갈아치운 모델
+- Convolution과 Attetion을 합친 방법을 제시
+
+### ViT의 문제점
+- JFT-300(3억개 정도)같은 엄청난 양의 데이터가 주어졌을 때 CNN보다 성능이 좋음
+- 하지만 그보다 못한 데이터 양이면 일반적으로 vanilla ResNet(기본적인 ResNet)보다도 성능이 떨어짐
+  - 이유 : CNN이 가지는 고유의 inductive bias보다 ViT가 가지는 inductive bias가 약하기 때문임
+    - inductive bias : 지금까지 만나보지 못했던 이미지를 봤을 때 정확한 판단을 내리기 위해 사용하는 추가적인 가정
+    - 
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/91067ad2-4d77-4f56-be57-1104be0b071d)
+
+- CNN의 inductive bias : **Locality**
+  - 모델의 설계 자체에 Vision task는 지역적인 정보에서 중요한게 많다는 가정이 깔려있는 것
+    - 실제로 Vision task에서는 적절한 가정
+    - CNN 특유의 generalization이 잘 된다는 특징 역시 이 가정을 기반으로 한 모델이기에 가능한 것
+  - 단점 : Global한 정보를 잘 이용하지 못함
+    - 이러한 단점을 보완하기 위해 receptive field를 넓히기 위해 층을 깊게 쌓는 식으로 진화해 왔음
+- CNN의 Locality와 ViT의 Self-attention, Input-dependent weightning을 모두 이용할 수 있는 방법
+
