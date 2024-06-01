@@ -498,4 +498,42 @@
   - 단점 : Global한 정보를 잘 이용하지 못함
     - 이러한 단점을 보완하기 위해 receptive field를 넓히기 위해 층을 깊게 쌓는 식으로 진화해 왔음
 - CNN의 Locality와 ViT의 Self-attention, Input-dependent weightning을 모두 이용할 수 있는 방법
+  - 시도한 방법 : 어떻게 Convolution에 Self-attention의 특징을 추가할지, 어떻게 ViT에 Convolution의 특징을 추가할지를 고민하는 방향으로 진행되었음
+  - 하지만 어떻게 넣느냐만큼이나 중요한 것이 각각의 특징을 얼마나 포함시켜 섞을지도 중요한 문제
+  - 이를 고려하여 제시된 모델 : CoatNet
 
+### Convolution과 Attention
+- CNN과 transformer를 베이스로 한 architecture는 상술했듯 각각의 장단점이 있음
+- Convolution과 Attention을 합치기 위해서 이 둘의 특징을 분석(CoatNet의 저자들은 둘 각각의 시스템적인 분석을 진행했음)
+  - Convolution layer : 빠르게 수렴할 수 있고 특유의 inductive bias(Locality, parameter sharing) 덕택에 generalization을 잘함
+    - translation equivariance
+    - 논문에서는 주로 MobileNet의 MBConv block에 초점을 맞췄음
+    - Attention의 FFN이 채널을 늘였다가 줄이는 Inverted Bottle neck이 MBConv와 유사하다고 판단
+  - Attention은 CNN과 반대로 Global receptive field를 가지고 Input-dependent한 weight는 여러 spatial position들 사이의 관계성을 잘 포착할 수 있으며 CNN과 비교했을 때 Capacity가 높음 -> 더 큰 dataset에 적합함
+ 
+- Computer vision의 문제를 해결하기 위해
+  - Conv layer로부터 Translation Equivariance를,
+  - Attention layer로부터는 Input-adaptive weighting과 Global receptive field라는 장점을 가져와야 한다고 생각해볼 수 있음
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/ba2b4d61-8d0a-4428-8b92-964c972b696f)
+
+- 저자들은 Attention에 Global static convolution kernel을 추가해서 시도했음
+  - Softmax 후에 넣을지, 전에 넣을지 두 가지 경우로 나눌 수 있음
+    - 이런 방법은 Relative Attetio이라고 정의했음
+   
+### 다양한 Block들을 어떻게 합칠 것인가?
+
+- Attention의 실용성을 해치는 가장 큰 원인 : 토큰의 제곱으로 증가하는 연산량
+- Attention을 기반으로 한 architecture들을 다양한 방법으로 Attention의 연산 방식을 바꿔 연산량을 줄이려는 시도를 했음
+  - ViT의 경우 이미지를 패치로 잘라 토큰을 줄이는 전략을 취함
+- CoatNet에서는 multi-stage layout을 이용해 ConvNet이 5개의 stage를 갖도록 구성했음
+  - S0 : simple 2-layer convolution 적용
+  - S1 : MBConv block과 Squeeze-excitation 적용
+  - S2-S4 : Convolution이 Local pattern 처리에 유리하다는 가정에 입각하여 각 stage의 초반부에는 Convolution(MBConv)을 넣고 뒤쪽에는 Transformer stage를 넣었음
+    - C를 Convolution, T를 transformer라고 했을 때
+    - 구성 : C-C-C-C, C-C-C-T, C-C-T-T, C-T-T-T
+
+### 모델 결정
+- 저자들은 Convolution의 장점인 generalization과 Attention의 장점인 model Capacity의 관점에서 비교를 진행했음
+  - Generalization : train과 validation score의 최소 gap
+  - Capacity : Overfit 없이 학습할 수 있는 데이터셋의 크기
