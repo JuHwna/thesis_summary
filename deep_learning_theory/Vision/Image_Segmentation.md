@@ -117,3 +117,51 @@
 - Atrous convolution, Depthwise separable convolution : sementic segmentation 모델 중 상위 성능을 보이는 Deep lab에서 공통적으로 사용하는 방법
 
 ## 2) Up-sampling
+- Down sampling의 반대로 디코딩시 복원하기 위해서 data의 크기를 늘리는 처리 과정
+- Upsampling의 방법 중 대표적인 것
+
+### Unpooling
+- Nearest Neighbor Unpooling : Maxpooling을 거꾸로 재현하여 주변 픽셀들을 동일한 값으로 채움
+- Bed of NailsUnpooling : 0으로 채워주는 방식
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0ba51ec6-ae1d-4aac-9a75-fe49207c60d7)
+
+### Max Unpooling
+- Unpooling 방식의 문제점
+  - 2x2의 Matrix로 Max pooling된 data가 있다고 하면, 원래 사이즈인 4x4의 Matrix로 Unpooling하게 되면 원래 Max pooled된 값의 위치를 알 수 없음
+- Max Unpooling : Unpooling 문제점 개선
+  - Max pooling할 때의 선택된 값들의 위치를 기억해 원래 자료의 동일한 위치에 Max값을 위치시켜 Unpooling함
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/2163db6e-7178-4f30-82aa-043a10213edd)
+
+### Bilinear Interpolation
+
+
+### Deconvolution
+- **convolution의 역연산으로 inversed matrix(역행렬)을 이용함**
+- convolution 연산 수식 : $f*i = o$
+  - f : filter(또는 kernel)
+  - \* : convolution 연산
+  - i : input
+  - o : output
+- Deconvolution : f,i,o 값을 모두 알고 있는 상황에서 f 역행렬 * o라는 연산을 통해 i를 알아내는 과정
+  - 수식 : $inverse matrix of f*i = o$
+
+### Transposed Convolution(Backward Strided Convolution)
+- 기존에 알고 있는 f의 역행렬을 구하는 것 x
+- **학습을 통해 새로운 f를 구함 => Deconvolution과 구별됨**
+  - 수식 : $f`*i=o$
+  - f` : 학습을 통해 만들어진 새로운 filter
+
+- 이름에 "transposed(전치, 행과 열이 바뀜)"라는 단어가 붙은 이유를 이해하기 위한 설명
+  - 일반적인 convolution의 계산 과정이 실제로는 어떻게 이루어지는지 확인 필요
+    - 3x3 Kernel* 4x4 input = 2x2 output을 도출하기 위해 일반적인 convolution의 matrix 연산 수행 과정
+       1. 3x3 kernel은 4x16 sparse matrix로 변환
+       2. 4x4 input은 16x1 vector로 변환
+       3. 4x1 output vector를 2x2 output으로 변환
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/4ec8008b-74ab-4172-bc6e-fa88591c6a5b)
+    - Transposed convolution 목표 : 3x3 kernel * 2x2 input = 4x4 output을 도출하는 것 => 연산 수행 과정
+       1. 3x3 kernel은 16x4 sparse matrix로 변환
+       2. 2x2 input은 4x1 vector로 변환
+       3. 16x1 output vector를 4x4 output으로 변환
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/c6624b7e-1940-440c-a767-8f1ceec02b50)
+
+
