@@ -389,10 +389,10 @@
 
 
 
-## 4. Vision Transformer
+### 4. Vision Transformer
 - NLP 분야에서의 트랜스포머를 컴퓨터 비전에 적용한 네트워크
 - CNN만 이용한 네트워크보다 좋은 성능을 보여주고 있음
-### 요약
+#### 요약
 - 논문에서 제시한 ViT
   - Transformer의 Encoder부분(Self-Attention)을 그대로 응용함
   - 논문이 주는 강력한 메세지 : Vision Task에서 CNN을 이용하지 않고 충분한 퍼포먼스를 낼 수 있다는 점
@@ -400,7 +400,7 @@
   - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/c2d9310b-b47a-4b39-8c49-96eafc43a230)
 
 
-### 네트워크 구조
+#### 네트워크 구조
 #### 1) Image Patch 만들기
 - 트랜스포머는 NLP 분야에서 출발한만큼 1D 임베딩들을 필요로 함
   - 그래서 이미지 패치를 만들어 1D 임베딩을 만들어 나감
@@ -470,20 +470,20 @@
 - MLP의 경우, y를 Flatten한 후 단순 Linear Layer를 통과시켜 classification을 수행함
 
 
-### ViT Training & Fine-Tuning
+#### ViT Training & Fine-Tuning
 - large-scale dataset에 대해 ViT를 pre-train하고 downstream task에 대해 fine-tuning을 수행함
   - pre-trained Multi Layer Perceptron(MLP) head를 제거하고 0으로 초기화된 D×K feedforward layer를 추가함
   - D : 100×100×3
   - K : downstream class의 개수
 
-## 5. CoAtNet(Convolution+Transformer)
+### 5. CoAtNet(Convolution+Transformer)
 
-### Background
+#### Background
 - 2021년 6월, Google AI팀에서 EfficientNet-V2와 함께 발표
 - ImageNet top 1 accuracy SOTA를 갈아치운 모델
 - Convolution과 Attetion을 합친 방법을 제시
 
-### ViT의 문제점
+#### ViT의 문제점
 - JFT-300(3억개 정도)같은 엄청난 양의 데이터가 주어졌을 때 CNN보다 성능이 좋음
 - 하지만 그보다 못한 데이터 양이면 일반적으로 vanilla ResNet(기본적인 ResNet)보다도 성능이 떨어짐
   - 이유 : CNN이 가지는 고유의 inductive bias보다 ViT가 가지는 inductive bias가 약하기 때문임
@@ -502,7 +502,7 @@
   - 하지만 어떻게 넣느냐만큼이나 중요한 것이 각각의 특징을 얼마나 포함시켜 섞을지도 중요한 문제
   - 이를 고려하여 제시된 모델 : CoatNet
 
-### Convolution과 Attention
+#### Convolution과 Attention
 - CNN과 transformer를 베이스로 한 architecture는 상술했듯 각각의 장단점이 있음
 - Convolution과 Attention을 합치기 위해서 이 둘의 특징을 분석(CoatNet의 저자들은 둘 각각의 시스템적인 분석을 진행했음)
   - Convolution layer : 빠르게 수렴할 수 있고 특유의 inductive bias(Locality, parameter sharing) 덕택에 generalization을 잘함
@@ -521,7 +521,7 @@
   - Softmax 후에 넣을지, 전에 넣을지 두 가지 경우로 나눌 수 있음
     - 이런 방법은 Relative Attetio이라고 정의했음
    
-### 다양한 Block들을 어떻게 합칠 것인가?
+#### 다양한 Block들을 어떻게 합칠 것인가?
 
 - Attention의 실용성을 해치는 가장 큰 원인 : 토큰의 제곱으로 증가하는 연산량
 - Attention을 기반으로 한 architecture들을 다양한 방법으로 Attention의 연산 방식을 바꿔 연산량을 줄이려는 시도를 했음
@@ -533,7 +533,39 @@
     - C를 Convolution, T를 transformer라고 했을 때
     - 구성 : C-C-C-C, C-C-C-T, C-C-T-T, C-T-T-T
 
-### 모델 결정
+#### 모델 결정
 - 저자들은 Convolution의 장점인 generalization과 Attention의 장점인 model Capacity의 관점에서 비교를 진행했음
   - Generalization : train과 validation score의 최소 gap
   - Capacity : Overfit 없이 학습할 수 있는 데이터셋의 크기
+
+#### Generalization
+- 성능 : ImageNet-1K 성능으로 비교함
+- ViT의 경우, Low-level information processing이 부족해 일반화 성능이 떨어졌고 Convolution layer가 많을수록 일반화 성능이 좋아졌음
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/2a680783-ea1b-44e7-af95-ad63339a7f6a)
+
+
+#### Capacity
+- 예상과는 다르게 ViT이 중간 정도의 Capacity만 가졌음
+- C-C-T-T/ C-T-T-T가 더 Capacity가 높았는데 이는 많은 transformer block이 vision에서는 높은 Capacity를 얻는데 필수적이지 않거나 ViT Sten이 너무 많은 정보를 잃어버림
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/1bb3bb1e-4f9e-40c8-a766-fa7b35e694d4)
+
+- 추가적으로 C-C-T-T와 C-T-T-T 사이에서 어느 것이 더 괜찮은지 결정하기 위해 JFT로 pre-training 시킨 후 fine tuning을 해서 성능 비교를 했음
+  - C-C-T-T가 더 괜찮은 성능을 보임
+ 
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/5e3dbf16-df27-4d09-9529-c2168e11b0ed)
+
+- C-C-T-T가 최종적으로 성능이 제일 괜찮았기 때문에 최종 구조는 최대한 C-C-T-T에 가깝게 결정되었음
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a25987e5-ef00-4a4c-ae64-9daa06b0b3dd)
+
+#### 성능평가
+- 기존 SOTA들과 비교했을 때 살짝 더 좋은 성능을 내는데 성공
+- 21K pretrained를 1K로 transfer했을 때는 더 괜찮은 성능을 보였음
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/4c891b71-348b-4971-9c6e-f427b36a1d55)
+
+
+
+
