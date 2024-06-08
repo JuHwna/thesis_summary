@@ -25,6 +25,7 @@
   - W,H를 입력이미지의 사이즈로 회복, 채널 수는 클래스의 사이로 맞춰 Segmentation map을 생성한다
 - 이미지 W,H를 보존하면서 피처를 추출하면 좋겠으나 메모리 문제로 입력 이미지의 W,H를 유지하며 피처를 추출할 수가 없음
   - 위와 같이 네트워크를 구성하고 학습을 진행하면 Instance/Sementic별 픽셀이 분할되도록 네트워크의 가중치가 학습됨
+  - 
 # 2. 이미지 분할 모델 이해를 위한 사전 지식
 ## 1) Down-sampling
 - 신호처리에서 말하는 용어 => sample의 개수를 줄이는 처리과정을 의미
@@ -163,5 +164,57 @@
        2. 2x2 input은 4x1 vector로 변환
        3. 16x1 output vector를 4x4 output으로 변환
     - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/c6624b7e-1940-440c-a767-8f1ceec02b50)
+      - transposed convolution할 때 가중치 w의 위치가 transposed된 것을 볼 수 있음
+        - 실제로는 위치도 전치되고 가중치의 값도 변함
+      - input, output 값을 알고 있으므로 학습을 통해 최적의 가중치 값을 찾아가게 됨
 
+### Transposed convolution의 구현
+- keras에서 transposed convolution을 구현할 때 : Conv2DTranspose를 통해 구현하게 됨
+- stride 값을 어떻게 하는지에 따라 output의 크기가 달라짐
+  - 왜 이런 결과가 나오는지?
+    - 파란색 feature map : 2x2 input
+    - 초록색 feature map : 4x4 or 5x5 output
+    - 일반적인 Convolution과 Transposed Convolution에서 stride의 의미가 반대
+      - 일반적인 Convolution에서 stride 2 = 한 번에 두 칸씩 움직인다.
+      - Transposed Convolution에서 stride 2 = 2칸 움직여야 다음 input 원소에 도달함
+    - transposed Convolution에서 stride=1인 경우 아래 그림처럼 작동하여 최종 output 크기는 4x4
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0ae87b07-68b0-4e8a-b3ab-84346e2e5e27)
+    - transposed Convolution에서 stride=2인 경우 아래 그림처럼 작동하여 최종 output 크기는 5x5
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/d35a4edd-b009-4e2b-8b16-c9ada657fa82)
 
+# 3. 이미지 분할 모델들
+## 1) FCN
+- 이미지 분류에서 우수한 성능을 보인 CNN 기반 모델(AlexNet, VGG16, GoogleNet)을 Semantic Segmentation Task를 수행할 수 있도록 변형시킨 모델
+  - FCN 네트워크는 이미지 분류 문제를 먼저 트레이닝 시킨 후 모델을 튜닝해 학습하는 Transfer Learning으로 구현함
+  - 이후 나온 Semantic Segmentation 방법은 대부분 FCN의 아이디어를 기반으로 했음
+
+### 네트워크 핵심 아이디어
+- 이미지 분류
+  - 이미지 내의 모든 픽셀에서 Feature를 추출(Extraction)하고 추출한 Feature들을 분류기(Classifier)에 넣어 입력 이미지(Total)의 Class를 예측하는 구조
+
+- 이미지 분할
+  - 이미지 분류에서 좀 더 나아가서 이미지(Total)의 Class 예측 X
+  - 이미지를 이루는 모든 픽셀들의 Class를 예측하는 문제로 생각
+
+- FCN
+  - 기존 이미지 분류에서 쓰인 네트워크를 트레인된 상태에서(Pretrain)
+  - Feature Extraction 레이어는 그대로 활용하여 Feature를 추출하고 FC 레이어를 버리고
+  - 1x1 Conv 그리고 Up-sampling(Transpose Convolution)로 변경하여(Fine-Tuning) 픽셀 클래스 분류와 입력이미지와 같은 사이즈 회복을 하도록 네트워크가 구성됨
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/83c61153-37eb-4736-9ab4-c5995d453071)
+
+### 네트워크 구조
+- FCN의 구조 : 4단계
+   1. Convolution Layer를 통해 Feature 추출
+   2. 1x1 Convolution Layer를 이용해 피처맵의 채널 수를 데이터셋 객체의 개수와 동일하게 변경
+   3. Up-sampling : 낮은 해상도의 Heat Map을 Upsampling(=Transposed Convolution)한 뒤, 입력 이미지와 같은 크기의 Map 생성
+   4. 최종 피처 맵과 라벨 피처맵의 차이를 이용하여 네트워크 학습
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0a5785cc-8b92-4b10-89cd-11726719a5fa)
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/6efcda91-9a58-47fe-b933-f388a39c6a8f)
+
+- 기본 FCN 네트워크 문제
+  - VGG16에서 입력 이미지의 크기가 224x224인 경우 5개의 convolution block을 통과하면 Feature map의 크기 : 7x7이 됨
+  - 기존 입력 이미지(크기 H x W)가 5개의 convolution block을 통과하면 H/32 x W/32 크기의 Feature map을 얻게 됨
+-
