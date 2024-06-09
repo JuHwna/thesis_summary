@@ -217,4 +217,81 @@
 - 기본 FCN 네트워크 문제
   - VGG16에서 입력 이미지의 크기가 224x224인 경우 5개의 convolution block을 통과하면 Feature map의 크기 : 7x7이 됨
   - 기존 입력 이미지(크기 H x W)가 5개의 convolution block을 통과하면 H/32 x W/32 크기의 Feature map을 얻게 됨
+  - Feature map의 한 픽셀 : 입력 이미지의 32x32 pixel를 대표하게 됨
+    - 해당 Feature map은 낮은 해상도를 가짐 -> 입력 이미지의 위치 정보를 대략적으로만 가지고 있음
+  - 문제는 3번 Up-sampling 과정에서 발생
+    - 입력 이미지 위치 정보를 **대략적으로** 가지고 있는 feature map을 Up-sampling하여 얻은 segmentation map은 기존 입력 이미지와 비교했을 때 뭉뚱그려져 있고 디테일하지 못함
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a38f7a1b-bf0e-4eec-8639-50ea15a624a8)
+
+### Up-sampling by Transposed convolution
+- 뭉그러짐 문제를 해결하기 위해 먼저 드는 생각
+  - Down-sampling을 하지 않아 feature map이 작아지지 않도록 하는 것
+    - but, Down-sampling을 통해 feature map의 사이즈를 줄이는 과정이 없다면 **연산량이 급격히 늘어나 학습에 필요한 시간 및 비용이 너무 커지게 됨**
+- Down-sampling은 필수, 이를 해결하기 위해 효과적인 Up-sampling을 위한 방법이 여러개 고안됨
+  - 추가 필요
+- FCN에서는 **Transposed convolution을 이용** => Up-sampling 진행
+
+### Skip architecture
+- 좀 더 디테일한 segmentation map을 얻기 위해 => Skip architecture라는 기법 제안
+  - 최종 피처맵은 지역 정보를 '대략적으로' 유지하고 있어 이미지가 뭉개지는 것을 보완한 방법
+- 핵심 아이디어 : 피처 추출 단계의 피처맵도 업샘플링에 포함하여 위치 정보 손실을 막자라는 것
+
+### FCN 확장 모델
+#### FCN-32s
+- 5번의 convolution block을 통과해 1/32만큼 줄어든 5번 Feature map(5번 feature map 크기 : 7x7)
+- 5번의 Feature map이 convolution layer를 통과하여 같은 크기의 6번 Feature map을 얻음
+- 6번 Feature map을 한 번에 32배 upsampling(H/32 x W/32 크기를 HxW 크기로)
+
+#### FCN-16s
+- 4번의 convolution block을 통과해 1/16만큼 줄어든 4번 Feature map, 4번의 Feature map 크기는 14x14
+- 4-1번 Feature map : 6번 Feature map을 2배 Upsampling(H/32 x W/32 크기를 H/16x W/16 크기로) 한 것과 4번 Feature map을 Sum함
+- 새롭게 얻은 4-1번 Feature map을 한 번에 16배 upsampling(H/16 x W/16 크기를 HxW 크기로)
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/8c9e95f5-47b6-4b8e-9208-c0caba818e4b)
+
+
+#### FCN-8s
+- FCN-16s과 유사한 Step이 추가됨
+- 3-1번 Feature map : 4-1번 Feature map을 2배 upsampling(H/16 x W/16 크기를 H/8 x W/8 크기로) 한 것과 3번 Feature map을 Sum함
+- 3-1번 Feature map을 한 번에 8배 upsampling(H/8 x W/8 크기를 HxW 크기로)
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0c4dd21e-522d-4734-af92-2275be3457ea)
+
+- 결과 이미지 : 위치 정보가 더 잘 전달되어 FCN-32s => FCN-16s => FCN-8s 순서로 더 정교해졌음
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/5537207d-74e8-40fa-9f4a-79b00a09daab)
+
+### 네트워크 트레이닝
+- 데이터 셋 구성 : {입력 데이터 : 이미지, 라벨 데이터 : 픽셀이 속하는 클래스}
+- 네트워크를 통해서 나온 출력값(Matrix) : 라벨 데이터와 같은 포맷으로 픽셀의 클래스를 값으로 갖는 피처 맵
+- 손실함수 : 모든 픽셀의 크로스 앤트로피를 구하고 이를 모두 더하여 최종적으로 손실을 구함
+  => 논문 : Multinomial logistic loss
+
+### 네트워크 장단점 및 시사점
+#### Skip architecture 아이디어
+- Skip architecture 아이디어 : 최종적으로 나오는 피처에 local 정보를 추가
+  - 파라미터의 큰 증가 없이 성능을 비약적으로 향상시켰음
+  - 후속 연구에도 큰 영향을 미침
+
+#### "이미지 분류" 네트워크를 "이미지 분할" 네트워크에 적용
+- 서로 다른 Task의 네트워크를 활용하여 문제 해결
+- 이미지 분류는 당시 엄청난 성능 향상이 이뤄진 상태
+  - 이미지 분류 베이스 모델을 수정하여 이미지 분할에 적용시켜 큰 성능향상을 가져옴
+- 이미지 분류 네트워크에서 추출하는 피쳐를 이미지 분할에 수정없이 사용가능하다는 점을 보여줌
+
+#### FC 레이어를 삭제하여 이미지 분할을 구현 가능하도록 만들었음
+- AlexNet, VGG 등 이미지 분류에 자주 쓰이는 FC 레이어를 이용하여 이미지 분할을 하는데 적합하지 않음
+- 대표적인 이유
+   1. FC layer(Fully connected layer)를 통과하고 나면 이미지의 위치 정보가 사라지기 때문
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/2df71985-440e-49c6-8db6-cf4bd48e080f)
+   2. FC layer는 고정된 크기의 input image만 받을 수 있기 때문
+      - Dense layer에 가중치 개수가 고정되어 있기 때문에 바로 앞 레이어의 Feature map의 크기도 고정됨
+      - 연쇄적으로 각 레이어의 Feature map 크기와 input image 크기 역시 고정됨
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/04c46c7c-0f74-4f31-9c1a-9e78a772d22e)
+   3. FC layer는 파라미터 개수를 너무 많이 필요로 함
+      - FC 레이어를 이용하여 픽셀마다의 클래스를 예측하게 구성하게 하거나 혹은 Class Presence Heat Map을 만들려면 파라미터의 수가 너무 많이 증가함
+      - ex) 4x4의 피처맵에서 2x2의 히트맵을 추출해낸다고 하면 FC 레이어는 4x4x4개의 weight가 필요함
+        - 피처맵이 4x4보다 훨씬 크고 뒤이어지는 Up-sampling을 생각하면 어마어마한 컴퓨터 성능을 필요하게 됨
+      - 해당 문제 해결을 위해 fully connected 레이어를 1x1 convolution 레이어로 바꿈
+      - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/fda661b3-1ae1-400f-974c-f7a6e5226baa)
+
 -
