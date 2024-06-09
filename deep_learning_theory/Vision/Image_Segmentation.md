@@ -294,4 +294,15 @@
       - 해당 문제 해결을 위해 fully connected 레이어를 1x1 convolution 레이어로 바꿈
       - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/fda661b3-1ae1-400f-974c-f7a6e5226baa)
 
--
+## 2) SegNet
+- 2016년에 공개된 모델
+- 모델 목적 : 도로를 달리면서 촬영한 영상에 대해 pixel-wise semantic segmentation하기 위해 설계
+- 자율 주행에 큰 역할을 한 모델
+  - 도로와 보도가 일견 보기에는 비슷해보이지만 두 class간의 경계를 잘 구분하기 때문
+- 기존의 sementic segmentation 모델의 문제
+   1. 해상도가 매우 떨어짐
+      - Max pooling, sub-sampling 연산을 수행할 시 : coarse(추상적인, 알맹이가 큰) feature map이 만들어지게 되는데 이런 feature map으로는 픽셀 단위로 정교하게 segmentation을 할 수 없음
+      - FCN에서 이를 해결하기 위해 Skip architecture등 다양한 해결 방법을 시도 => 역시 정교하지 못했음
+   2. 실시간으로 빠르게 segmentation 불 가능
+      
+- 실시간
