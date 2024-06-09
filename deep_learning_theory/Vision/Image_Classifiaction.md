@@ -113,7 +113,19 @@
 - CNN에서 사용되는 필터를 만드는 방법
   - Activation function
     - 필터들을 통해서 Feature map이 추출되면 이 Feature map에 Activation function을 적용하게 됨
-
+    - 개념 : 특징이 있다, 없다의 비선형 값으로 바꿔 주는 과정
+    - CNN에서는 보통 ReLU 많이 사용
+      - 이유
+        - 뉴럴 네트워크에서 신경망이 깊어질수록 학습이 어렵기 때문에 전체 레이어를 한번 계산한 후, 그 계산 값을 재활용하여 다시 계산하는 Back propagation이라는 방법 사용
+        - sigmoid 함수를 activation 함수로 사용할 경우, 레이어가 깊어지면 이 Back propagation이 제대로 작동하지 않기 때문에 ReLU함수 사용 => 값을 뒤에서 앞으로 전달할 때 희석이 되는 현상(Gradient Vanishing)
+       
+- 풀링(Sub sampling or Pooling)
+  - 컨볼루셔널 레이어를 거쳐서 추출된 특징들을 필요에 따라서 서브 샘플링이라는 과정을 거침
+    - 컨볼루셔널 계층을 통해서 어느정도 특징이 추출되었으면 이 모든 특징을 가지고 판단을 할 필요가 없음
+  - 추출된 Feature map(Activation map)을 인위로 줄이는 작업 => sub sampling 또는 pooling
+    - 방법 : max pooling, average pooling, L2-norm pooling 등
+  - Max pooling
+  - 
 
 
 ## 2. 이미지 분류 모델들
