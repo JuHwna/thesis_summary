@@ -125,7 +125,13 @@
   - 추출된 Feature map(Activation map)을 인위로 줄이는 작업 => sub sampling 또는 pooling
     - 방법 : max pooling, average pooling, L2-norm pooling 등
   - Max pooling
-  - 
+    - Feature map(activation map)을 MxN의 크기로 잘라낸 후, 그 안에서 가장 큰 값을 뽑아내는 방법
+    - 특징의 값이 큰 값이 다른 특징들을 대표한다는 개념을 기반
+      - 주의 : 풀링은 액티베이션 함수마다 매번 적용하는 것이 아니라 데이터의 크기를 줄이고 싶을 때 선택적으로 사용하는 것
+    - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/131d4300-d65a-40ba-a165-f875ee64ffbf)
+    - 장점
+      - 전체 데이터의 사이즈가 줄어들기 때문에 연산에 들억나느 컴퓨팅 리소스가 적어짐
+      - 데이터의 크기를 줄이면서 소실이 발생하기 때문에 오버피팅 방지
 
 
 ## 2. 이미지 분류 모델들
