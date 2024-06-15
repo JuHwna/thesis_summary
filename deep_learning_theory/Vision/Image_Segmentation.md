@@ -304,5 +304,66 @@
       - Max pooling, sub-sampling 연산을 수행할 시 : coarse(추상적인, 알맹이가 큰) feature map이 만들어지게 되는데 이런 feature map으로는 픽셀 단위로 정교하게 segmentation을 할 수 없음
       - FCN에서 이를 해결하기 위해 Skip architecture등 다양한 해결 방법을 시도 => 역시 정교하지 못했음
    2. 실시간으로 빠르게 segmentation 불 가능
-      
-- 실시간
+      - 정확도가 높다고 하더라도 계산량이 많거나 parameter 수가 많으면 빠르게 segmentation을 할 수 없음
+      - memory 및 inference time 측면에서 효율적으로 동작할 수 있어야 함
+- 위의 문제를 해결하고자 등장한 모델 : SegNet
+  - 특징 : Encoder - Decoder로 구성되어 있음
+    - 해당 구조는 최근의 모델에서도 흔히 사용되고 있음
+    - sementic segmentation 분야에 전체적으로 큰 영향을 끼친 구조로 볼 수 있음
+
+### 네트워크 구조
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a6bc532b-002c-41f4-994d-fab554c8f245)
+
+#### 1) Encoder Network
+- VGG16의 구조에서 FC layer를 뺀 13개의 layer를 사용 => 연산량 줄임
+  - 일반적으로 encoder-decoder network에서 encoder로 CNN 이용 시 : FC layer를 뺐음
+  - classification을 할 것이 아니라면 FC가 중요한 역할을 하지도 않음 => 계산량이 너무 많이 들기 때문
+
+#### 2) Decoder Network
+- Decoder network는 각 encoder network에 대응하여 존재(mirrored)
+  - Encoder의 pooling layer : Up-sampling layer로 대체
+  - Up-sampling layer 뒤에는 Conv + batch norm + ReLU가 연결됨
+- Coarse feature map이 생기는 이유 : pooling 및 convolution 연산 때문에 feature map의 정보가 소실되기 때문
+  - Decoder에서 up-sampling을 할 때 Encoder의 feature map 정보를 decoder로 전달할 수 있다면 소실된 정보를 다시 찾는 것이니 pixel 단위로 정교하게 segmentation을 할 수 있을 것
+
+- Encoder의 feature map 정보를 decoder로 전달하는 가장 정확한 방법
+  - 전체 feature map을 저장해 두었다가 Up-sampling할 때 모두 Decoder로 전달하는 것
+  - 단점 : 해당 방식을 수행하기 위해서 많은 메모리가 필요함
+- SegNet에서는 max-pooling indices(위치 정보)만을 저장해두었다 이후 Max Unpooling을 진행함
+  - 해당 방법은 accuracy는 아주 조금 감소, memory는 크게 아낄 수 있음
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/d17d8464-26a7-45bd-a307-9ed2bc8a5959)
+
+- Max Unpooling 방식으로 Up-sampling을 하면 장점
+   1. FCN에서는 Transposed convolution으로 unsampling을 진행했음
+     - SegNet은 Transposed convolution을 사용하지 x => 학습 파라미터가 없어 전체 parameter 개수를 줄일 수 있음
+   2. 전체 모델은 end-to-end 학습이 가능함
+   3. 다른 encoder-decoder 형식에 응용될 수 있고 변형도 가능함
+
+#### 3) Softmax classifier
+- Decoder의 output은 K-class softmax classifier로 들어가 최종적으로는 각 픽셀마다의 독립적인 확률값으로 계산됨
+- 위 결과에서 각 픽셀별로 가장 확률이 높은 class만을 출력하여 최종 segmentation이 됨
+
+### SegNet의 성능
+- SegNet의 성능을 다른 architecture(FCN, DeepLab-LargeFOV, DeconvNet 등)와 비교한 결과를 제시하고 있음
+- SegNet의 성능을 2가지 scene segmentation benchmark에서 평가했음
+   1. Cam Vid dataset - road scene segmentation
+   2. SUN RGB-D dataset - indoo scene segmentation
+- 정량적 평가 척도로 총 4가지 metric을 사용했음
+   1. Global accuracy(G) : 데이터셋 전체의 픽셀 수에서 올바르게 분류된 픽셀의 수
+   2. Class average accuracy(C) : 각 클래스마다 accuracy를 계산한 뒤, 평균낸 것
+   3. mloU
+   4. Boundary F1 Score(BF) : 2\*precision\*recall/(recall+precision)
+
+#### Cam Vid dataset
+- SegNet, DeconvNet이 가장 좋은 성능을 보임
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/95b403e0-27c3-4234-a6a7-111be6180b86)
+
+#### SUN RGB-D dataset
+- SegNet은 다른 모델들과 비교해서 G,C,mloU, BF 모두에서 우수한 성능을 보임
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/9746372a-ab47-420f-986c-2bd5ce60a789)
+
+## 3) U-NET
+- ISBI cell tracking challenge 2015 대회에서 등장한 모델
+- 
