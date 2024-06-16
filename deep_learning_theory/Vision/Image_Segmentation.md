@@ -396,3 +396,92 @@
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/f5a916b5-a3d3-49bf-acb2-b5bbfe50b433)
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/e8782878-f410-4b2a-b0df-b392cfa41b22)
 
+### Skip Architecture
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/5411dcbc-5ac0-4bbb-a506-b3cb98a1f6ca)
+
+- U-Net에서도 FCN과 비슷하게 Skip Architecture를 활용
+  - 다른 점 : 동일한 level에서 나온 Feature map을 더한다는 점
+- Contracting Path의 Feature map이 Expanding Path의 Feature map보다 큼
+  - Contracting Path에서 여러 번의 패딩이 없는 3x3 Convolution Layer를 지나면서 Feature map의 크기가 줄어들기 때문
+  - Contracting Path의 Feature map의 테두리 부분을 자른 후 크기를 동일하게 맞추어 둔 feature map을 합쳐 줌
+
+### 네트워크 특징
+- 총 23-Layers Fully Convolutional Network 구조
+- 최종 출력인 Segmentation map의 크기 : Input Image 크기보다 작음
+  - Convolution 연산에서 패딩을 사용하지 않았기 때문
+- https://medium.com/@msmapark2/u-net-%EB%85%BC%EB%AC%B8-%EB%A6%AC%EB%B7%B0-u-net-convolutional-networks-for-biomedical-image-segmentation-456d6901b28a
+
+### 입력 이미지(Input image)에 적용한 기법들
+- 일반적인 딥러닝 모델과 UNet과의 차이점 : 탐색 방식
+  - 일반적인 딥러닝 모델
+    - sliding window가 전체 이미지 위로 조금씩 이동하여 해당 영역을 각각의 DNN에 제시함
+    - 단점 : 이미 사용한 영역의 일부를 다음 순서에서도 다시 훓어보기 때문에 계산량이 많아짐
+      - Input image 크기가 클수록 모델의 속도도 확연이 저하됨
+
+  - UNET의 경우 : patch 탐색 방식 사용
+    - 이미지를 격자 모양으로 자름
+      - 중첩되는 부분이 존재X
+      - 속도 면에 있어 훨씬 나은 성능을 보임 => 이미 훓어본 영역은 깔끔하게 넘기고 다음 patch부터 탐색을 시작
+        
+- 해당 대회의 이미지 특징
+   1. 의료 데이터이며 크기가 천차만별이고 사이즈나 해상도가 큼
+   2. 부족한 데이터의 숫자
+  
+- 위의 문제를 해결하기 위해 논문의 저자는 두 가지 가정을 세움
+   1. 일단 작게 자르고 부족한 크기의 이미지는 테두리에 좌우대칭 패딩(Padding) 진행
+      - 테두리를 좌우대칭을 하는 것이 0으로 채워넣는 제로패딩보다 실제 삭제되지 않은 모습에 더 가까울 것
+   2. Cell들은 유사한 형상이므로 기초적인 변형들(deformation)을 주어도 실제로 있을법한 데이터가 될 것
+  
+- 위의 두 가지 가정을 이용하여 두 가지 기법 사용 : Overlap-tile strategy & Mirroring Extrapolation, Data Augmentation
+  - 위의 기법들은 데이터 전처리와 변형과 관련됨
+ 
+#### ① Overlap-tile strategy & Mirroring Extrapolation 데이터 전처리
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/36cd6930-c36b-45e4-a555-fe5fd3cb2dec)
+
+- UNE의 구조를 보면 388x388 크기의 Segmentation map을 얻기 위해 572x572 크기의 input image가 필요
+  - 위 그림에서 파란색 patch를 input image로 제시하면 노란색 영역의 Segmentation map이 출력됨
+  - 이미지 크기가 줄어들어 나오는 이유 : UNET에서 padding 없이 Convolution 연산을 반복적으로 수행했기 때문
+- 위의 missing data 문제를 해결하기 위해 사용한 것 : mirroring extrapolation임
+  - 파란색 박스의 빈 공간을 노란색 영역이 거울에 반사된 형태로 채우는 방식
+- 해당 영역을 zero pixel로 채울 수 있었음
+  - mirroring extrapolation을 하면서 data augmentation의 효과를 줄 수 있음
+  - 좌우 대칭을 해도 큰 영향이 없는 세포 등의 의학 데이터에서는 zero padding보다 나은 방법
+ 
+#### ② Data Augmentation
+- Sementic segmentation은 pixel 별로 class labeling 해주어야 해서 학습 데이터가 적은 편
+  - 해당 대회의 데이터 수 : 30개
+- UNET 저자들이 논문에서 언급한 data augmentation 방식 : 4가지
+  - Shift, Rotation, Gray value, Elastic Deformation
+  - Elastic Deformation : pixel이 랜덤하게 다른 방향으로 뒤틀리도록 변형하는 방식
+    - 현실 세계에 있을 법하게 변형되게 만드는 것
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/e8c6e7a4-d87f-4808-9b8f-80b58b9e1e80)
+
+
+### 네트워크 트레이닝
+- 손실함수를 픽셀마다의 구한 에너지 펑션의 총합으로 구현함
+- 픽셀의 예측값에 SoftMax를 구하고 이 구한 값에 크로스 엔트로피를 함
+- 특이하게 크로스 엔트로피에 픽셀 고유의 Weight를 곱함으로써 픽셀의 loss값을 계산함
+  - ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/bef029b8-b42d-47d2-8bfb-0467c3828bcd)
+  - 픽셀 고유의 Weight는 노드와 연결된 Weight를 의미하는 것이 아님
+    - 경계선 라인에 더 강한 학습을 시키기 위해 가우시안 분포를 가정하고 경계선 픽셀에 더 큰 loss를 주었음
+      - 모든 픽셀마다 각자의 weight를 가지고 있고 만약 픽셀이 경계선 픽셀일 경우 더 큰 손실값을 가지게 됨
+      - 학습 전에 경계선과 경계선 아닌 픽셀들의 weight를 모두 구했고 이것을 weight map으로 구현하여 개발 시 사용함
+
+### 네트워크 장점/단점/한계점
+- U-NET 네트워크 시사점
+  - FCN에서 나온 아이디어인 Skip architecture를 더욱 확장해서 사용한 모습을 보여줌
+  - 개발된 화자분리(Speech Separation) 등의 Segment를 하는 네트워크 : U-NET의 형상과 매우 유사함
+- 한계점
+  - 특정 데이터에 한정된 기법
+
+## 4) DeepLab V3+
+- DeepLab v1~ v3+ architecture : 구글에서 제시한 모델
+  - 2015년부터 현재에 이르기까지 계속해서 업데이트를 하고 있는 모델
+- DeepLab시리즈의 발전 : 앞선 모델들을 계승하면서 조금씩 추가되는 항목이 생김
+  - DeepLab V1 : Atrous convolution을 처음 적용
+  - DeepLab V2 : multi-scale context를 적용하기 위한 Atrous spatial pyramid pooling(ASPP) 제안
+  - DeepLab V3 : 기존 ResNe 구조에 Atrous convolution을 활용
+  - DeepLab V3+ : Depthwise separable convolution과 Atrous convolution을 결합한 Atrous separable convolution을 제안
+
+### 사용하고 있는 개념
+#### Atrous convolution
