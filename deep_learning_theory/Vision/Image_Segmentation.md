@@ -366,4 +366,33 @@
 
 ## 3) U-NET
 - ISBI cell tracking challenge 2015 대회에서 등장한 모델
-- 
+  - ISBI cell tracking challenge 2015 대회에서 사용된 데이터 셋의 특성
+    - Dataset : Transmitted light microscopy images(Phase contrast and DIC)
+    - Transmitted light microscopy images : 투과 광선 현미경 검사
+    - Phase contrast : 위상차 현미경
+    - DIC(Differential interference contrast microscope) = 차등간섭대비 현미경
+    - Input size : 512x512 pixel, 30개
+- U-NET은 매우 적은 수의 학습 데이터로도 정확한 이미지 세그멘테이션 성능을 보임
+  - 해당 대회에서 우승
+
+### 네트워크 핵심 아이디어
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/7bd83bd0-3224-4402-aafb-e06681d076f2)
+
+- U-Net 네트워크 : 네트워크 모양이 U
+- U-Net 네트워크의 핵심 아이디어(3가지)
+   1. 인코더(Contract path)의 피처맵을 디코더 피처맵에 Concat하여 위치 정보전달
+   2. 데이터셋의 전처리, 변형(deformation)을 이용하여 데이터 수 증가
+   3. 테두리(border line)를 더 잘 분할하기 위해 Weight를 추가한 손실함수(Loss function)
+
+### 네트워크 구조
+- 일반적으로 Semantic Segmentation 모델
+  - Down=sampling을 통해 크기가 줄어들었다가 다시 Up-sampling을 통해 크기가 늘어나는 구조를 취함
+- U-NET도 비슷하지만 이를 다르게 부르고 있음
+   1. Contracting Path : 점진적으로 넓은 범위의 이미지 픽셀을 보며 의미정보(Context Information)을 추출
+   2. Bottle Neck : 수축 경로에서 확장 경로로 전환되는 전환 구간
+   3. Expanding Path : 의미 정보를 픽셀 위치정보와 결합(Localization)하여 각 픽셀마다 어떤 객체 속하는지를 구분
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/f5a916b5-a3d3-49bf-acb2-b5bbfe50b433)
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/e8782878-f410-4b2a-b0df-b392cfa41b22)
+
