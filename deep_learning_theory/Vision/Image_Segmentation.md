@@ -485,5 +485,22 @@
 
 ### 사용하고 있는 개념
 #### Atrous convolution
+- classification이나 object detection에서 사용되는 신경망들을 semantic segmentation에 이용하는 경우
+  - 여러 번의 convolution과 pooling을 거치면서 디테일한 정보가 줄어들고 특성이 점점 추상화되는 단점이 있었음
+- FCN : 위의 문제를 skip layer를 통해 해결
+  - skip layer 이용 시 단점 : receptive field가 고정되어 다양한 scale의 object에 대응하기 힘듬
+  - 이를 해결하기 위해 Deep lap V1 ~ V3에서는 Atrous convolution을 이용
+- Atrous convolution 이용 시 : 기존 convolution과 동일한 양의 파라미터와 계산량을 유지하면서도 receptive field는 커짐
+  - 단순히 Pooling - Convolution 후 Upsampling 하는 것과 Dilated Convolution을 하는 것의 차이
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/6702ebeb-7da6-49a1-bf11-68cea6bd495c)
 
-dd
+- 전자의 경우, Pooling을 하면서 공간적 정보의 손실이 발생하는데 이를 그대로 upsampling하면서 해상도가 떨어짐
+- dilated convolution을 하게 되면 Receptive field를 크게 가져가면서도 Pooling 없어 정보의 손실을 최소화할 수 있어 해상도가 보다 좋은 output을 얻을 수 있음
+
+#### Atrous Spatial Pyramid Pooling(ASPP)
+- DeepLab V2에서 제안된 방법
+- feature map으로부터 확장비율(dilation rate,r)가 다른 Atrous convolution을 병렬로 적용한 뒤 다시 합쳐주는 방법
+- 아래 그림처럼 확장비율(dilation rate, r)을 6~24까지 다양하게 변화하면서 다양한 receptive field를 볼 수 있도록 적용하였음
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/99b6660a-4122-455b-8767-a64095861253)
+
+
