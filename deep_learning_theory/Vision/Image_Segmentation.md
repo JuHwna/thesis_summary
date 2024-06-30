@@ -572,5 +572,11 @@
 - POLY learning rate policy
   - 초기 learning rate =0.007로 설정
   - 해당 식을 따라 점점 learning rate을 줄여나가는 "poly" learning rate policy를 사용했음
-    - $(1- $
+    - $(1- \frac{iter}{max_iter})^{power}$
+- Crop size : 513x513 crop image을 사용
+- Batch normalization : batch size = 16을 사용
 
+### DeepLab V3+의 성능
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/30f3159d-b5d3-4886-abd9-04e7a363cdb1)
+
+- 2018/02 PASCAL VOC 2012와 Cityscapes dataset에서 State-of-art를 달성
