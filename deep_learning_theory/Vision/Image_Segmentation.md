@@ -503,4 +503,38 @@
 - 아래 그림처럼 확장비율(dilation rate, r)을 6~24까지 다양하게 변화하면서 다양한 receptive field를 볼 수 있도록 적용하였음
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/99b6660a-4122-455b-8767-a64095861253)
 
+- ASPP 활용 시, 다양한 크기의 feature map을 뽑아내 섞어서 활용할 수 있음
+  - receptive field가 정해져있어 작은 물체가 무시되거나 이상하게 인식되는 FCN과 비교 시, 직관적으로 괜찮은 접근법
+ 
+#### Depthwise separable convolution
+- 기존 Convolution 필터가 Spatial dimension과 Channel dimension을 동시에 처리하던 것을 따로 분리시켜 각각 처리하는 방법으로 해석할 수 있음
+  - 두 축을 분리시켜 처리를 하더라도 최종 결과값은 두 축 모두를 처리한 것 => 기존 convolution이 수행하던 역할을 대체할 수 있음
+  - 장점 : 기존 convolution 연산과 비교 시 사용하는 파라미터 수와 연산량을 획기적으로 줄일 수 있음
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/5e039420-f7bc-4170-9ce2-e83b0b2a5331)
+
+#### Xception model
+- 구글이 2017년에 발표한 모델
+- 2015년에 ILSVRC 대회에서 2등을 한 Google의 Inception-V3 모델보다 훨씬 좋은 결과를 냈음
+- Xception의 중점 포인트 : Modified Depthwise Separable Convolution
+- Xception의 목적 : 연산량과 parameter의 개수를 줄여서 큰 이미지 인식을 고속화시키자
+- 장점 : VGG처럼 네트워크의 구조가 간단해서(inception과 달리) 활용도가 높다
+- 논문에서 얘기하는 Xception의 바탕이 된 개념들
+  - VGG16의 구조 : Deep하게 쌓아가는 구조를 따왔음
+  - Inception Family : Conv를 할 때의 몇 개의 branch로 factorize해서 진행하는 것의 장점을 알려줬음
+  - Depthwise Separable Convolution을 적용함
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/51d9fef8-56ab-4a9d-aefc-85e9f85782d2)
+
+
+### DeepLab V3+ Architecture
+- 2018년 2월에 구글이 공개
+- 이 모델은 앞선 모델들의 방법을 모두 계승
+- 특성
+  - 2가지의 인코더를 제시함
+    - DeepLab V3를 인코더로
+    - 변형된 Xception를 인코더로
+  - Atrous Convolution, ASPP와 Depth-wise Separable Convolution을 적용
+  - Skip architecture로 Encoder-Decoder가 연결되어 있음
+
+#### DeepLab V3
 
