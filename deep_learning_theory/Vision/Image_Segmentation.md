@@ -535,6 +535,42 @@
     - 변형된 Xception를 인코더로
   - Atrous Convolution, ASPP와 Depth-wise Separable Convolution을 적용
   - Skip architecture로 Encoder-Decoder가 연결되어 있음
+ 
+#### DeepLab V3를 Encoder로 한 모델
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/6eb8f0fb-ee6f-441b-91f7-49df2997371f)
 
-#### DeepLab V3
+- DeepLab V3는 위와 같은 구조이고 Atrous Spatial Pyramid Pooling(ASPP)를 Encoder에 사용해 feature들을 추출함
+- DeepLab V3 encoder를 통과해서 나온 feature map은 원본 사진의 해상보다 16개가 작음(Output stride : 16)
+  - 16으로 한 이유 : 실험 결과 속도와 정확도의 좋은 trade-off point 였기 때문
+  - 
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/a33e18a7-b0c6-4e5a-acd8-9c6916719ad1)
+- DeepLab V3의 decoder에서는 encoder feature map을 단순히 16배 bilinear up-sample함
+- 하지만 이러면 segmentation 해상도가 너무 떨어지는 단점이 있음
+- DeepLab V3+에서는 이전의 FCN이나 UNET에서 사용했던 것처럼 Skip architecture를 도입하여 Encoder와 Decoder를 연결시켜줌
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/f1c0b4fc-42a6-4cbd-b07b-3434b94fa302)
+
+- DeepLab V3를 Encoder로 한 모델의 구조
+   1. Encoder에서 나온 최종 feature map에 대해 4배 bilinear upsample 수행
+   2. Encoder 중간에서 나온 feature map(Low-Level Features)을 1x1 convolution을 적용하여 channel을 줄임(2번 과정을 통해 1번과 2번 feature map이 concatenation이 가능해짐)
+   3. 1번과 2번 feature map을 concatenate함
+   4. 3x3 convolution layers를 거친 후 마지막 1x2 convolution을 거쳐 output을 뽑아냄
+   5. 4배 bilinear upsample을 수행하여 원래 input size로 복원된 최종 segmentated data를 출력함
+
+#### 변형된 Xception을 Encoder로 한 모델
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/40ccf952-db9d-45c1-a6e0-2581555d1e53)
+
+- Xception과 비슷하게 변형해서 사용함
+- 기존의 Xception과 비교해서
+   1. 더 깊고
+   2. Max Pooling을 stride가 있는 Depthwise Separable Convolution로 바꾸었고
+   3. 3x3 Depthwise Convolution 후에 Batch Normalization과 ReLU를 더 해주었음
+
+### DeepLab V3+의 loss function & training
+- ImageNet의 데이터로 pre-train된 ResNet-101 또는 modified aligned Xception을 backbone network로 사용했음
+- POLY learning rate policy
+  - 초기 learning rate =0.007로 설정
+  - 해당 식을 따라 점점 learning rate을 줄여나가는 "poly" learning rate policy를 사용했음
+    - $(1- $
 
