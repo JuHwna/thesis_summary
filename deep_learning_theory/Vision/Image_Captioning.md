@@ -102,8 +102,32 @@
 - 단어 간 유사도를 반영할 수 있도록 단어의 의미를 벡터화할 수 있는 방법 중 대표적인 방법
 - 두 가지 방식
   - CBOW(Continuous Bag of Words) : 주변에 있는 단어들을 가지고 중간에 있는 단어들을 예측하는 방법
-  - Skip-Gram : 중간에 있는 단어로 주변 단어들을 예측하는 방법
+  - Skip-Gram : 중간에 있는 단어로 주변 단어들을 예-측하는 방법
 - 두 가지 방식 모두 메커니즘 자체는 거의 동일함
 
 
-### 1. CBOW(
+### 1. CBOW(Continuous Bag of Words)
+- CBOW의 기본 아아디어 : 주변 단어를 통해 주어진 단어를 예측하는 것
+  - 총 단어가 C개라고 할 때 앞 뒤로 C/2개의 단어를 통해 주어진 단어를 예측하는 방법
+- ex) "The fat cat sat on the mat" {"The", "fat", "cat", "on", "the", "mat"}으로부터 sat을 예측하는 것 => CBOW가 하는 일
+  - 중심 단어(center word) : 예측해야하는 단어 sat
+  - 주변 단어(context word) : 예측에 사용되는 단어들
+  - 윈도우 : 중심 단어를 기준으로 앞 뒤로 몇 개의 단어를 볼지 선택하는 ㄴ범위
+    - ex) 위 예문에서 중심 단어가 cat이고 window가 2라면 "The", "fat", "on", "the" 단어를 참고
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/9f110264-5793-4c42-9f7e-2bbc9e323ecc)
+
+- 위 그림처럼 학습시킬 문장의 모든 단어들을 원-핫 인코딩 시켜줌
+- 그 다음 window = m 으로 설정하고 하나의 Center 단어에 대해 주변 단어의 벡터를 Input으로 넣어줌
+  - 수식 : $(x^{c-m},x^{c-m+1},...,x^{c-1},x^{c+1},...,x^{c+m-1},x{c+m}) \in IR^{|V|}$
+- CBOW 방식의 파라미터 : Input layr -> Hidden layer로 가는 weights와 Hidden layer -> Output layer로 가는 weights
+  - $W \in IR^{V \times N}, W` \in IR^{N \times V}$
+- 워드 임베딩된 벡터 : CBOW 신경망을 학습시켜 나온 최적의 가중치
+  - CBOW 모델은 맥락 단어로부터 타깃 단어를 예측하는 모델
+  - CBOW 모델의 입력 : 맥락 단어의 원-핫 벡터
+  - 출력 : 타깃 단어의 원-핫 벡터
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/5135f151-1e05-4f0c-922e-acff4471f270)
+
+- 위는 CBOW 신경망 모델의 개괄적인 모습
+  - Window가 2일 때의 예이며 입력인 맥락 단어는 fat, cat, on, the이며 출력인 타깃 단어는 sat임
+
