@@ -175,3 +175,24 @@
   - 이렇게 해서 얻은 분산 표현 W에는 '단어의 의미'도 잘 녹아 있음
 
 ### 2. Skip-gram
+- Skip-gram : 중심 단어에서 주변 단어를 예측함
+- 앞서 언급한 예문에 대해서 동일하게 윈도우 크기가 2일 때, 데이터셋은 다음과 같이 구성됨
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/45669b45-4f1b-453c-bbe1-9694b55dacf7)
+
+- 신경망을 도식화해보면 다음과 같음
+
+![image](https://github.com/JuHwna/thesis_summary/assets/49123169/32e3ff78-6bc5-4747-b5d3-788fd669ca43)
+
+- 중심 단어에 대해서 주변 단어를 예측하므로 투사층에서 벡터들의 평균을 구하는 과정은 없음
+- 성능 비교 : 전반적으로 Skip-gram이 CBOW보다 성능이 좋다고 알려져 있음
+
+# (3) 이미지 캡셔닝 모델들
+## 1) Show and Tell
+### 네트워크 핵심 아이디어
+- 2015년 구글에서 공개한 "Show and Tell: A Neural Image Caption Generator"에서 공개한 NIC모델임
+  - 이미지 캡셔닝 아이디어(이미지 캡셔닝의 문제를 기계번역으로 생각하겠다)의 시작이 된 논문임
+- 이미지의 임베딩을 추출하는 CNNs 네트워크로는 GoogleNet을 이용하였고 문장을 생성하는 RNNs 네트워크로는 Seq2Seq을 이용하였음
+
+- 이미지 캡셔닝 네트워크 : NLP분야와 큰 연관관계가 있음
+
