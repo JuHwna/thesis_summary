@@ -195,4 +195,43 @@
 - 이미지의 임베딩을 추출하는 CNNs 네트워크로는 GoogleNet을 이용하였고 문장을 생성하는 RNNs 네트워크로는 Seq2Seq을 이용하였음
 
 - 이미지 캡셔닝 네트워크 : NLP분야와 큰 연관관계가 있음
+- 해당 논문은 단순한 네트워크에 대한 설명 뿐만이 아니라 이미지 캡셔닝에서 생각봐야할 주제를 다루고 있음
+  - 평가방법(Metric)에 대한 한계, 그럼에도 저자들이 설명하기 위해 이용한 여러 Metric
+    - 적절한 Metric이 없어 숫자로 정확한 성능을 표현하지는 못하나 여러 불완전한 Metric으로 측정해보았을 때 이전 네트워크들에 비해서 매우 큰 발전을 보여준 논문
 
+### 네트워크 구조
+![image](https://github.com/user-attachments/assets/a7022d09-e3d7-447c-a9dd-5e95be0c93e0)
+
+- 네트워크 : 이미지 분류에 사용된 GoogleNet과 기계번역(Machine Translation)의 Seq2Seq 모델을 이어서 붙인 모습
+
+#### CNN 인코더(GoogleNet)
+- 이미지 분류에 사용된 GoogleNet을 거의 그대로 이용
+  - 과적합 방지하기 위해서 ImageNet 데이터셋을 이용하여 Pretrain함
+  - 마지막 FC layer를 추가하여 워드 임배딩과 같은 차원(2048->512)으로 맞추기 위해 사용하고 그 외의 네트워크 앞 부분 Weight들은 동일
+- 추출된 피처들은 기존 Seq2Seq네트워크의 Context Vector와 동일한 개념으로 이용됨
+
+#### RNN 디코더(Seq2Seq)
+- 기존 Seq2Seq2의 인코더 부분을 그대로 이용
+- 이미지 임베딩과 차원을 맞추어 Label 원핫벡터를 워드임베딩 이후 512 차원이 되도록 정의해 모델을 구현했음
+
+### 네트워크 트레이닝
+#### 손실함수(Loss function)
+- 가중치를 업데이트하기 위한 손실함수
+  - $\theta^{*} = argmax_{\theta}\displaystyle\sum_{(I,S)}logp(S|I;\theta)$
+  - 기계번역에서는 많이 쓰는 손실함수
+  - 이미지가 주어졌을 때 각 스텝에서 예측한 워드임베딩과 짝지어진 label의 워드임베딩(S,embedding word)과의 분포 차이의 합을 이용
+- 코드에서는 위 식에다 -1을 곱하여 유사도가 높을수록 손실값이 감소하도록 하여 훈련함
+- 손실함수를 이용하여 업데이트 되는 가중치들
+  - (1) CNN의 최상단 레이어, (2) 워드임베딩 벡터, (3) LSTM의 파라미터 (CNN인코더의 파라미터 : Pretrain됨)
+
+#### 데이터셋(Dataset)
+![image](https://github.com/user-attachments/assets/5a153cff-4bb8-42e2-b3b8-49e1807b0897)
+
+- Pascal VOC2008, Flickr8k, Flickr30k, MSCOCO, SBU data를 사용했음
+  - SBU를 제외하고는 모두 5개의 correct sentence 라벨이 있음
+  - SBU 데이터는 Flickr라는 사이트에 이미지를 올릴 때 같이 올린 이미지 설명으로 학습 시 일종의 noise로 작동함
+    - 인터넷에서 사진을 올리면서 아무렇게 끼적거린 설명이라서
+  - 나머지 4개의 data set으로 학습을 하고 Pascal 데이터는 test를 위해서만 사용
+ 
+#### 인퍼런스(inference)
+- 네트워크 트레인이과 관련된 부분은 아니지만 실제 모델 활용 시에 예측 문장의 후보들을 구하는 BeamSearch 기법을 사용했음
