@@ -244,3 +244,91 @@
 
 ### 네트워크 평가
 #### 모델 평가의 어려움에 대해서
+
+![image](https://github.com/user-attachments/assets/8ccbbe93-0674-4a51-9788-58d544af9c87)
+
+- 위 사진의 GT(Ground Truth) 캡셔닝은 무엇일까?
+  - 사람 3명이 길을 걷는다.
+  - 사람들이 차도 옆을 걸어간다
+  - 남자가 나무로 된 길을 건너간다.
+- 이미지 캡셔닝 Task에서는 이미지 분류와는 어떻게 보면 Ground Truth라는 것이 없음
+
+- 이 때문에 image captioning은 현재까지는 사람의 주관적인 평가 방법 외에는 100% 성능을 평가할 방법이 부족함
+  - 저자들은 다양한 관점에서 여러 가지 평가 척도(BLEU, METEOR, Cider, recall@k...)를 이용하여 모델의 성능을 보여줌
+
+#### Generation Result
+- BLEU, METEOR, CIDER라는 자동, 정량적 지표로 평가한 결과 높은 성능을 보임을 알 수 있음
+- 아래 Table 1,2에서 Human은 5개의 correct sentence label 중 하나를 선택해 나머지 4개와 비교하여 도출한 값임
+
+![image](https://github.com/user-attachments/assets/731b933a-d8df-427e-a89a-24dd914aaddb)
+
+
+#### Generation Divsersity Discussion
+- 모델이 생성하는 caption 중 학습 데이터에 포함되지 않은 새로운 caption이 만들어질 확률은 얼마나 될지?
+  - 저자들은 모델이 생성한 새로운 caption의 예시를 제시함
+- 각 input image에 대해 BLEU Score가 가장 좋은 caption을 뽑아보면 약 80%는 기존 학습 데이터에 포함되어 있던 문장들이었음
+- 다만 BLEU Score가 높은 순으로 15개의 caption을 뽑아보면 약 50% 정도는 새로운 문장이었다고 함
+
+#### Human Evalution
+- 사람을 이용해 NIC를 포함한 다양한 ML모델에서 생성된 Caption을 평가하도록 해봄
+- 모델들에서 생성한 Caption에서 랭킹을 매겨 평가한 결과는 다음과 같음
+
+![image](https://github.com/user-attachments/assets/6bfbf4c9-7f92-45ac-9154-90f3c939e838)
+
+- R@1은 No.1으로 꼽힌 캡션의 개수
+- 다른 모델과 대비해서는 아주 큰 성능차이를 ㅗ임
+
+- Flickr-8k: GT(Ground truth)와 비교했을 때 NIC(Neural Image Caption)의 성능이 현저히 떨어지는 것을 볼 수 있음
+  - NIC 성능의 한계를 보여주는 자료임
+  - 자동&정량적 평가지표인 BLEU의 한계를 보여주는 것
+    - BLEU-4에서는 사람이 만든 캡셔닝보다 NIC에서 만들어진 캡션의 점수가 오히려 더 높았음
+
+
+
+### 네트워크의 장단점 및 한계점
+- Show and Tell 논문의 시사점 : CNN 네트워크를 이용하여 뽑아낸 Feature를 NLP분야의 Context Vector로 이용가능 하다는 큰 아이디어를 준 논문
+
+## 2) Show, Attend and Tell
+- 이전 논문인 Show and Tell의 단점
+  - CNN의 FC layer를 통과한 context vector를 이용하여 image captioning을 진행하므로 항상 같은 context vector를 참고하여 캡셔닝을 생성하게 됨
+  - FC layer를 통과하면서 기존 이미지에서 공간 정보를 잃어버려 이미지의 어느 부분을 보고 캡셔닝을 생성했는지 네트워크 분석이 불가능함
+- 위의 단점을 보완하여 저자들이 발표한 Show, Attention and Tell(2016) 논문에서는
+  - 이미지에서 추출된 피쳐(Extract Feature)들을 한 개의 고정된 벡터(Context Vector)로 만들지 않고 어텐션 메커니즘을 이용하여 1개의 워드 예측하는 스텝마다 다른 분포의 벡터들을 생성하여 디코더의 입력으로 이용하도록 네트워크를 구성했음
+  - 더 나아가 어텐션을 메커니즘을 2가지 방법(Soft/Hard)로 적용하여 각각의 성능 및 분석 결과를 보여줌
+
+### 네트워크 구조
+- 논문 전체에서 네트워크의 전체 구조가 나타난 Figure는 딱 한개임
+- 이전 Show and Tell 논문과 비슷하게 네트워크의 구조가 혁신적이고 독창적인 구조를 만들어냈다기보다 기계 번역에서 존재했던 네트워크와 기법들을 잘 연결시켜서 이미지 캡션 문제를 풀었다고 봄
+
+![image](https://github.com/user-attachments/assets/0951ac2f-8704-4545-b504-dfe1e5c7af90)
+
+- Figure 1에서 1,2,4번에 해당하는 내용은 Show and Tell과 동일함
+  - 3번 순서인 RNN with attention이 가장 생소할 것임
+ 
+#### 어텐션 메커니즘(Attention mechanism)
+- 논문에서는 CNNs를 이용하여 생성된 피처맵(Feature map)을 어텐션을 이용하여 매 스텝마다 RNNs에 입력함
+- 과거 Show and Tell 논문에서도 피처 벡터를 매 스텝마다 입력으로 사용했음
+  - 과적합(Overfit)이 발생하여 해당 과정을 삭제했다고 저자가 말함
+- 매번 주어지는 이미지의 정보를 항상 동일한 피처 벡터가 아니라 매번 다른 가중치를 고려한 어텐션 메커니즘을 이용한 피처 벡터라면 결과는 달라짐
+![image](https://github.com/user-attachments/assets/db4401c8-aaec-40db-9a33-cde829226dcb)
+
+- 위의 그림을 이용하여 설명
+  - (1) 피처맵(3x3x128)을 LSTM셀에 넣어 첫번째 워드 임베딩을 가장 잘 유추해낼 수 있는 어텐션 분포를 구함
+    - 에텐션 분포 : 피처맵과 같은 차원(3X3)이나 채널 수는 1로 구해짐
+    - 이렇게 구한 어텐션 분포1을 피처맵의 각 채널과 곱하여 1X128 차원의 Weighted 피처 벡터를 만듦
+  - (2) 첫 번째 워드 임베딩(문장의 시작을 알려주는 워드임베딩)과 같이 LSTM 셀로 넣어줌
+    - LSTM은 2개의 Matrix를 출력하게 되는데 예측 워드와 다음 워드의 에텐션 분포임
+    - 이렇게 각 스텝마다 다음 워드를 예측하기 위한 서로 다른 에텐션 분포를 생성함
+  - LSTM셀의 입장에서는 **이전 워드와 예측할 워드의 정보가 담겨져있는 Context Vector를 입력받게 되는 것**
+    - 위와 같은 어텐션 메커니즘(Soft attention)을 보완하여 추가적으로 Hard 어텐션 메커니즘을 적용함
+
+### RNN with Attetion(Visual Attention)
+- Attention에 대한 개념
+  - 다른 곳에서 개념
+
+- Show, Attention and Tell 논문에 나온 Visual Attention에 대한 설명
+  - 기존 Show and Tell 논문에서 LSTM으로 입력되는 context vector는 CNN의 FC layer를 통과한 Vector였음
+  - Show, attnt and tell 논문에서는 CNN의 Feature Map(L x D)을 LSTM에 제시함
+  - 
+
+
