@@ -328,7 +328,25 @@
 
 - Show, Attention and Tell 논문에 나온 Visual Attention에 대한 설명
   - 기존 Show and Tell 논문에서 LSTM으로 입력되는 context vector는 CNN의 FC layer를 통과한 Vector였음
-  - Show, attnt and tell 논문에서는 CNN의 Feature Map(L x D)을 LSTM에 제시함
-  - 
+  - Show, attend and tell 논문에서는 CNN의 Feature Map(L x D)을 LSTM에 제시함
+    - 논문에서는 CNN 모델로 VGG 16을 사용했고 14x14x256 크기의 Feature map을 사용했음
+    - 14x14은 flatten 시켜서 196x256 크기의 feature map를 LSTM에 제시함
 
+- Feature map을 이용하여 어떻게 Attention Value를 만들어냈는지?
+  - LxD 크기의 Feature map을 0번째 Hidden cell h0에 넣어 첫 번째 attention value a1(Lx1)을 구함
+  - 첫 번째 attention value와 Feature map을 곱하여 하나의 Weighted feature z1를 만듦
+  - 이렇게 구해진 Weighted feature z1과 First word(y1)를 1번째 Hidden cell h1의 input으로 사용함
+
+- 1번째 Hidden cell h1의 output으로는 2가지가 나옴
+  - 하나는 0번째 Hidden cell h0의 output과 같은 attention value a2가 나옴
+  - 다른 하나는 prediction word의 원핫 벡터 distribution인 d1이 나옴
+  - 이와 같은 재귀적으로 반복하여 이미지에 대한 캡셔닝을 구할 수 있음
+- 해당 논문에서는 attetion value a를 구하는 방식을 두 가지로 제시하고 있음
+  - 각각 : soft attetion, hard attention이라고 부름
+
+### Soft attetion의 수식적 이해
+- Soft attetion은 우리가 흔히 쓰는 attention 개념
+  - 미분 가능한 형태이므로 Back Propagation을 통해 학습을 진행함
+- Hard Attetion은 미분 불가능한 형태로 학습을 위해 강화 학습을 사용함
+  - 이해하기 어렵고 많이 쓰이는 방법이 아니기에 설명 생랼
 
