@@ -348,5 +348,82 @@
 - Soft attetion은 우리가 흔히 쓰는 attention 개념
   - 미분 가능한 형태이므로 Back Propagation을 통해 학습을 진행함
 - Hard Attetion은 미분 불가능한 형태로 학습을 위해 강화 학습을 사용함
-  - 이해하기 어렵고 많이 쓰이는 방법이 아니기에 설명 생랼
+  - 이해하기 어렵고 많이 쓰이는 방법이 아님
 
+![image](https://github.com/user-attachments/assets/7ddb95d1-e230-4fc8-a7f7-c6b6225e095c)
+
+- i : input, f : forget, c : memory, o : output, h : hidden state of LSTM, E: embedding matrix, y : output word, z: context vector, y*z : capturing the visual information associated with a particular input location *
+- LSTM cell의 구조를 보면 이렇게 복잡하게 되어 있음
+- 기존 LSTM 구조와 비슷하게 input, forget, output gate가 존재하는데 각 gate로 들어가는 요소들이 조금 다름
+  - (1) h_t-1 : t-1번째 cell에서 출력된 hidden state
+  - (2) Ey_t-1 : t-1번째 cell에서 출력된 output word y_t-1의 Embedding matrix
+  - (3) Z_t : t번째 context vector z
+- 위에 3개를 input으로 넣어줌
+  - context vector z : capturing the visual information associated with a particular input location
+    - feature map의 특정 영역의 정보를 담고 있는 vector
+    - 이 모델의 핵심은 context vector z를 구하는 것
+
+- a : feature map L x D에서 뽑아낸 Vector
+  - a의 크기 : D
+  - 총 L개가 존재함
+- t번째 LSTM cell에 들어갈 알파 : L개의 a와 h_t-1 사이에서 구한 attention value
+  - 각 알파값을 모두 더하면 1이 됨
+- f_att = attention value를 구하는 함수
+  - soft attention은 우리가 흔히 쓰이는 attention 개념
+  - 이렇게 구한 a와 알파를 곱하여 context vector z를 구함
+ 
+![image](https://github.com/user-attachments/assets/ed50209b-e72e-4224-a144-78d4f13b5553)
+
+
+### 네트워크 결과 분석
+#### Soft, Hard Attention
+
+![image](https://github.com/user-attachments/assets/9aa086fc-01e9-4202-a1a5-1c7f006ab365)
+
+- 네트워크에서 캡셔닝을 할 때의 어텐션 부분을 시각화한 부분
+  - soft는 어텐션한 부분이 분포의 형태를 보임
+  - hard는 참고한 부분이 1과 0으로 확실하게 나누어져 있음
+  - 각 이미지에서 어텐션 영역이 동일하지 않음
+
+#### Attention with Caption
+
+![image](https://github.com/user-attachments/assets/a6890f9a-7a4d-49d9-a061-f0f1202b1a86)
+
+- 네트워크에서 캡션을 생성할 때 이미지에서 어텐션한 부분을 보여줌
+- 어텐션 메커니즘을 이용하니 NIC와 다르게 해석가능하다는 점 => 큰 장점
+
+- 논문에서 잘못 생성한 캡셔닝의 사례들도 아래와 같이 보여줌
+
+![image](https://github.com/user-attachments/assets/1c33f874-512d-4ab6-a06d-2137594c682e)
+
+
+### 네트워크 성능
+
+![image](https://github.com/user-attachments/assets/0058d386-577a-4c58-9d10-8506e268dc04)
+
+- 네트워크의 성능 : NIC보다 모두 다 높은 것으로 나옴
+- Soft와 Hard에서는 Hard Attetion을 적용한 모델이 성능이 더 좋게 나옴
+
+
+# (4) 모델 평가
+- Image captioning 결과를 사람이 직접 평가하는 Human evaluation은 정확
+  - but 비용과 시간이 너무 많이 듬, 평가하려는 언어에 대한 제한이 발생
+- 위의 문제를 해결하기 위해 다양한 자동 평가 지표들이 개발되었음
+- 여러 논문에 반복적으로 등장하는 대표적 평가 지표
+
+### Perplexity(PPL)
+- PPL : 언어 모델을 평가하기 위한 지표로 흔히 사용됨
+  - PPL 수치가 낮을수록 언어 모델의 성능이 좋다는 것을 이해할 수 있음
+  - 식 : ![image](https://github.com/user-attachments/assets/3afddfa5-508e-4920-b7c1-914707205510)
+    - 각 단어 W1 ~ W_n이 조합되어 해당 문장이 만들어질 확률에 -1/n을 취한 값
+- 예시
+![image](https://github.com/user-attachments/assets/c63289f8-902f-484f-ab44-794ba998620d)
+
+
+#### PPL을 이용한 언어모델 평가
+- PPL은 언어 모델이 특정 시점에서 평균적으로 몇 개의 선택지를 가지고 고민하는지 평가하는 지표
+  - EX) 언어 모델의 PPL이 10이 나왔으면 해당 언어 모델은 테스트 데이터에 대해서 다음 단어를 예측하는 모든 시점(time-step)마다 평균적으로 10개의 단어를 가지고 어떤 것이 정답인지 고민하고 있다고 볼 수 있음
+  - ![image](https://github.com/user-attachments/assets/a91f61c7-f21a-43a5-81a7-d600045f35d5)
+
+- 같은 테스트 데이터에 대해서 두 언어 모델의 PPL 값을 비교하면 두 언어 모델 중 어떤 것이 성능이 좋은지 판단이 가능함
+  - 예를 들어 A모델은 PPL이 10, B모델은 20이라고 했을 때 당연히 A모델의 성능이 더 좋은 것임
