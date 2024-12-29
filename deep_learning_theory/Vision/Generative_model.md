@@ -75,6 +75,8 @@
     - E(x) : 하나의 에너지 함수
     - Z는 $\displaystyle\sum_{x}^{} P(x)$=1 이 되게 하는 (확률의 합이 1이 되게 하는) 분할 함수
     - 에너지 함수 : E(x) = $-x^{T} Ux-b^{T}x$
+   
+
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/0df28807-4861-4c02-a294-cbdbd6aad1a4)
 
 #### RBM(Restricted Boltzman Machine, 1980)
@@ -83,6 +85,8 @@
   - 같은 layer 안에서는 연결이 되어 있지 않음(이를 bipartite graph라고 부름)
   - 해당 특성 때문에 제한된 볼츠만 머신이라고 불림
 - Perceptron의 output은 결정론적인 것에 비해 RBN은 확률에 따라서 입력을 은닉층에 전달할지 전달하지 않을지 결정해 보냄
+
+
 ![image](https://github.com/JuHwna/thesis_summary/assets/49123169/ff891b99-7ca6-44eb-9ea8-5300a99a9e1d)
 
 #### DBN(Deep belief network, 2006)
@@ -97,4 +101,12 @@
 - DBN은 거꾸로 아래층에서 위로 올라가면서 pre-training을 하면서 모델을 깊게 쌓아올리는 방법을 씀
   - layer-wise pretraining이라고 부름
 - 아래에서 위로 올라가기 위해 unsupervised learning의 개념이 나옴
-  - DBN
+  - DBN에서는 v(vision layer, input)만 알고 있다고 가정하고 이 입력이 어떤 h(hidden layer, 나아가서 y)의 값으로부터 만들어졌을까를 추론함
+  - 이 과정을 한 번 풀어서 생각해보면 h와 w를 랜덤하게 초기화 했다고 해보면
+    - 맨 처음 층에서 엉터리 h1와 w1가 있음
+    - 엉터리 h라도 이걸 토대로 x(입력 데이터)를 추론할 수 있고 x로 h를 추론할 수 있음
+    - 이 과정을 반복하면서 필터 w를 학습시킴
+    - h1이 입력이고 x`이 출력일 때 x`이 최대한 x와 같은 값을 만들 수 있도록 함
+    - 그리고 w1을 freeze 시키고 그 다음 단계에서 똑같은 작업을 진행함
+  - 학습 과정을 정리해보면
+  - 
