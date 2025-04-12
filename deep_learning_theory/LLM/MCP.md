@@ -72,4 +72,66 @@ interface JSONRPCMessage {
     - 리소스 정리
 
 - (3) 기능 컴포넌트
-- 
+- 리소스 관리
+
+~~~
+interface Resource {
+    uri: string;           // 리소스 식별자
+    name: string;          // 표시 이름
+    description?: string;  // 설명
+    mimeType?: string;    // 미디어 타입
+}
+~~~
+
+### 3. 호스트 클라이언트 서버구조
+- MCP의 3-티어 아키텍처
+  - 호스트, 클라이언트, 서버로 구성된 3티어 아키텍처를 채택하고 있음
+  - 각 계층은 명확한 역할과 책임을 가지며 이를 통해 유연하고 확장 가능한 시스템을 구현함
+
+- (1) 호스트
+  - MCP 시스템의 최상위 계층
+  - 사용자와 직접 상호작용하는 애플리케이션
+  - 주요 역할
+    - 사용자 인터페이스 제공
+    - LLM과의 통합
+    - 여러 MCP 클라이언트 관리
+    - 보안 정책 실행
+
+- 대표적인 호스트 애플리케이션
+- (1) Claude Desktop
+  - 완전한 MCP 지원
+  - 리소스, 프롬프트, 도구 통합
+  - 로컬 서버 연결 관리
+- (2) Zed Editor
+  - 코드 에디터 통합
+  - 프롬프트 기반 기능
+  - 개발자 중심 인터페이스
+- (3) Sourcegraph Cody
+
+### 4. 보안 및 신뢰 모델
+- MCP는 강력한 기능을 제공하는 만큼, 보안과 신뢰성이 매우 중요
+- 핵심 보안 원칙
+- (1) 사용자 동의 및 제어
+  - 명시적 동의 : 모든 데이터 접근과 작업은 사용자의 명시적 동의 필요
+  - 이해 가능한 권한 : 사용자가 이해하기 쉬운 방식으로 권한 설명
+  - 세분화된 제어 : 세부적인 수준에서 권한 관리 가능
+  - 권한 취소 : 언제든지 권한을 취소할 수 있는 기능
+- (2) 데이터 프라이버시
+
+~~~
+interface PrivacyControl {
+    // 데이터 접근 제어
+    dataAccess: {
+        requireConsent: boolean;
+        allowedScopes: string[];
+        retentionPolicy: string;
+    };
+
+    // 데이터 보호
+    dataProtection: {
+        encryption: boolean;
+        anonymization: boolean;
+        minimization: boolean;
+    };
+}
+~~~
