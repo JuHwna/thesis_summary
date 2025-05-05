@@ -213,6 +213,139 @@ interface Tool {
   - OpenCTX를 통한 리소스 지원
   - 확장 가능한 구조
 
+##### 호스트의 책임
+~~~
+interface HostResponsibilities {
+    // 사용자 인터페이스 관리
+    userInterface: {
+        displayResults: () => void;
+        collectUserInput: () => Promise<UserInput>;
+        showProgress: () => void;
+    };
+
+    // 클라이언트 관리
+    clientManagement: {
+        initializeClients: () => void;
+        manageConnections: () => void;
+        handleErrors: () => void;
+    };
+
+    // 보안 관리
+    security: {
+        authenticateUser: () => Promise<boolean>;
+        authorizeOperations: () => Promise<boolean>;
+        managePermissions: () => void;
+    };
+}
+~~~
+
+#### (2) 클라이언트(Client)
+- 클라이언트는 호스트와 서버 사이의 중개자 역할을 수행함
+
+##### 주요 역할
+- 서버와의 통신 관리
+- 메시지 변환 및 처리
+- 연결 상태 관리
+- 에러 핸들링
+
+##### 클라이언트 기능
+~~~
+interface ClientCapabilities {
+    // 기본 기능
+    roots?: {
+        listChanged?: boolean;
+    };
+    // 샘플링 지원
+    sampling?: object;
+    // 실험적 기능
+    experimental?: {
+        [key: string]: object;
+    };
+}
+~~~
+
+- (1) 연결 관리
+  - 연결 수립 및 유지
+  - 재연결 로직
+  - 타임아웃 처리
+- (2) 메시지 처리
+  - 직렬화/역직렬화
+  - 메시지 큐잉
+  - 응답 매칭
+- (3) 오류 처리
+  - 네트워크 오류
+  - 프로토콜 오류
+  - 비즈니스 로직 오류
+
+#### (3) 서버
+- 서버는 실제 기능과 리소스를 제공하는 계층
+
+##### 주요 역할
+- 리소스 제공
+- 도구 실행
+- 프롬프트 처리
+- 보안 구현
+
+##### 서버 기능
+~~~
+interface ServerCapabilities {
+    // 로깅 지원
+    logging?: object;
+    // 프롬프트 지원
+    prompts?: {
+        listChanged?: boolean;
+    };
+    // 리소스 지원
+    resources?: {
+        subscribe?: boolean;
+        listChanged?: boolean;
+    };
+    // 도구 지원
+    tools?: {
+        listChanged?: boolean;
+    };
+}
+~~~
+
+##### 서버 구현 유형
+- (1) 파일 시스템 서버
+~~~
+   interface FileSystemServer {
+       readFile: (path: string) => Promise<string>;
+       writeFile: (path: string, content: string) => Promise<void>;
+       listDirectory: (path: string) => Promise<string[]>;
+   }
+~~~
+
+- (2) 데이터베이스 서버
+~~~
+   interface DatabaseServer {
+       query: (sql: string) => Promise<any>;
+       connect: () => Promise<void>;
+       disconnect: () => Promise<void>;
+   }
+~~~
+
+- (3) 도구 서버
+~~~
+   interface ToolServer {
+       listTools: () => Promise<Tool[]>;
+       executeTool: (name: string, args: any) => Promise<any>;
+   }
+~~~
+
+##### 통신 흐름
+- (1) 초기화 과정
+
+![image](https://github.com/user-attachments/assets/01a63007-6b44-4fc2-a1f7-da225e52182b)
+
+- (2) 작업 실행
+
+![image](https://github.com/user-attachments/assets/f8652feb-0894-4e48-9cb4-21f25688150f)
+
+
+
+
 ### 4. 보안 및 신뢰 모델
 - MCP는 강력한 기능을 제공하는 만큼, 보안과 신뢰성이 매우 중요
 - 핵심 보안 원칙
