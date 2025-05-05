@@ -1,5 +1,5 @@
 # MCP(Model Context Protocol)
-## 1. MCP 소개
+## 1장. MCP 소개
 ### 1. 정의와 목적
 #### MPC란?
 - LLM 애플리케이션과 외부 데이터 소스 및 도구들 간의 원활한 통합을 가능하게 하는 개방형 프로토콜
@@ -348,12 +348,14 @@ interface ServerCapabilities {
 
 ### 4. 보안 및 신뢰 모델
 - MCP는 강력한 기능을 제공하는 만큼, 보안과 신뢰성이 매우 중요
-- 핵심 보안 원칙
+
+##### 핵심 보안 원칙
 - (1) 사용자 동의 및 제어
   - 명시적 동의 : 모든 데이터 접근과 작업은 사용자의 명시적 동의 필요
   - 이해 가능한 권한 : 사용자가 이해하기 쉬운 방식으로 권한 설명
   - 세분화된 제어 : 세부적인 수준에서 권한 관리 가능
   - 권한 취소 : 언제든지 권한을 취소할 수 있는 기능
+  - 
 - (2) 데이터 프라이버시
 
 ~~~
@@ -373,3 +375,278 @@ interface PrivacyControl {
     };
 }
 ~~~
+
+  - 동의 기반 접근 : 사용자 데이터는 명시적 동의 하에서만 접근
+  - 최소 권한 : 필요한 최소한의 데이터만 접근
+  - 데이터 보호 : 적절한 암호화와 보안 조치 적용
+- (3) 도구 안전성
+~~~
+interface ToolSafety {
+    // 실행 제어
+    executionControl: {
+        sandboxed: boolean;
+        resourceLimits: ResourceLimits;
+        timeoutSettings: TimeoutConfig;
+    };
+
+    // 권한 관리
+    permissions: {
+        requiredPermissions: string[];
+        scopeRestrictions: string[];
+        auditLog: boolean;
+    };
+}
+~~~
+
+  - 샌드박스 실행 : 도구는 격리된 환경에서 실행
+  - 리소스 제한 : CPU, 메모리 등 리소스 사용 제한
+  - 권한 분리 : 최소 권한 원칙에 따른 접근 제어
+
+##### 구현 메커니즘
+- (1) 인증 및 권한 부여
+
+![image](https://github.com/user-attachments/assets/fb8be397-90a1-42da-9a99-76c5a3f71e83)
+
+- (2) 데이터 보호 계층
+
+~~~
+interface DataProtection {
+    // 전송 보안
+    transport: {
+        encryption: 'TLS' | 'Custom';
+        version: string;
+        cipherSuite: string[];
+    };
+
+    // 저장 보안
+    storage: {
+        encryption: boolean;
+        keyManagement: string;
+        secureDelete: boolean;
+    };
+}
+~~~
+
+- (3) 감사 및 모니터링
+
+~~~
+interface AuditLog {
+    timestamp: string;
+    actor: string;
+    action: string;
+    resource: string;
+    result: 'success' | 'failure';
+    details: object;
+}
+~~~
+
+##### 신뢰 모델
+- (1) 호스트 신뢰
+  - 인증된 호스트 : 신뢰할 수 있는 호스트 애플리케이션
+  - 버전 관리 : 호스트 버전 검증
+  - 보안 업데이트 : 정기적인 보안 패치
+
+- (2) 서버 신뢰
+![image](https://github.com/user-attachments/assets/73ac81d2-8bc0-410d-8c15-a97d7041314c)
+
+  - 서버 검증 : 서버의 신뢰성 확인
+  - 능력 협상 : 지원 기능 확인
+  - 결과 검증 : 반환된 결과의 유효성 검사
+- (3) 데이터 신뢰
+  - 무결성 검사 : 데이터 변조 방지
+  - 출처 확인 : 데이터 소스 검증
+  - 버전 관리 : 데이터 버전 추적
+
+##### 보안 모범 사례
+- (1) 구현 가이드라인
+
+~~~
+interface SecurityGuidelines {
+    // 통신 보안
+    communication: {
+        useTLS: boolean;
+        validateCertificates: boolean;
+        useSecureProtocols: boolean;
+    };
+
+    // 인증
+    authentication: {
+        requireAuth: boolean;
+        useStrongAuth: boolean;
+        sessionManagement: boolean;
+    };
+
+    // 로깅
+    logging: {
+        auditLogging: boolean;
+        secureStorage: boolean;
+        retentionPolicy: string;
+    };
+}
+~~~
+
+- (2) 보안 체크리스트
+  - 통신 보안
+  - TLS 1.3 이상 사용
+  - 인증서 유효성 검사
+  - 안전한 암호화 suite 사용
+  - 인증 및 권한
+  - 강력한 인증 메커니즘 구현
+  - 세션 관리 구현
+  - 권한 검증 로직 구현
+  - 데이터 보호
+  - 민감 데이터 암호화
+  - 안전한 키 관리
+  - 데이터 백업 및 복구
+ 
+## 2장. MCP 핵심기능
+### 1. Resources
+#### 리소스 개요
+- MCP 핵심 기능 중 하나
+- LLM 애플리케이션이 외부 데이터와 컨텍스트에 안전하게 접근하게 접근할 수 있게 해주는 메커니즘
+
+#### 리소스 구조
+##### 기본 리소스 정의
+
+~~~
+interface Resource {
+    // 리소스의 고유 식별자 (URI 형식)
+    uri: string;
+
+    // 사용자에게 표시될 이름
+    name: string;
+
+    // 리소스에 대한 설명
+    description?: string;
+
+    // 리소스의 MIME 타입
+    mimeType?: string;
+}
+~~~
+
+##### 리소스 내용 형식
+~~~
+interface ResourceContents {
+    // 리소스의 URI
+    uri: string;
+
+    // MIME 타입
+    mimeType?: string;
+}
+
+interface TextResourceContents extends ResourceContents {
+    // 텍스트 내용
+    text: string;
+}
+
+interface BlobResourceContents extends ResourceContents {
+    // base64로 인코딩된 바이너리 데이터
+    blob: string;
+}
+~~~
+
+#### 리소스 작업
+##### (1) 리소스 목록 조회
+
+~~~
+interface ListResourcesRequest {
+    method: "resources/list";
+    params?: {
+        cursor?: string;  // 페이지네이션을 위한 커서
+    };
+}
+
+interface ListResourcesResult {
+    resources: Resource[];
+    nextCursor?: string;  // 다음 페이지 커서
+}
+~~~
+
+##### (2) 리소스 읽기
+
+~~~
+interface ReadResourceRequest {
+    method: "resources/read";
+    params: {
+        uri: string;  // 읽을 리소스의 URI
+    };
+}
+
+interface ReadResourceResult {
+    contents: (TextResourceContents | BlobResourceContents)[];
+}
+~~~
+
+##### (3) 리소스 구독
+~~~
+interface SubscribeRequest {
+    method: "resources/subscribe";
+    params: {
+        uri: string;  // 구독할 리소스의 URI
+    };
+}
+
+interface ResourceUpdatedNotification {
+    method: "notifications/resources/updated";
+    params: {
+        uri: string;  // 업데이트된 리소스의 URI
+    };
+}
+~~~
+
+#### 리소스 URI 체계
+- (1) 기본 URI 구조
+  - 스키마 : 리소스 유형 식별
+  - 경로 : 리소스의 실제 위치
+  - 쿼리 : 선택적 매개변수
+
+~~~
+(예시)
+file:///path/to/document.txt
+db://localhost/table/record
+note:///123
+~~~
+
+- (2) URI 템플릿
+
+~~~
+interface ResourceTemplate {
+    // URI 템플릿 (RFC 6570 기준)
+    uriTemplate: string;
+
+    // 템플릿 이름
+    name: string;
+
+    // 설명
+    description?: string;
+
+    // MIME 타입
+    mimeType?: string;
+}
+~~~
+
+#### 리소스 관리 고려사항
+- (1) 성능 최적화
+  - 페이지네이션 : 대량의 리소스 처리
+  - 캐싱 : 자주 접근하는 리소스 캐싱
+  - 지연 로딩 : 필요할 때만 데이터 로드
+- (2) 오류 처리
+
+~~~
+interface ResourceError {
+    code: number;      // 오류 코드
+    message: string;   // 오류 메시지
+    details?: object;  // 추가 정보
+}
+
+// 주요 오류 코드
+const RESOURCE_NOT_FOUND = 404;
+const RESOURCE_ACCESS_DENIED = 403;
+const RESOURCE_UNAVAILABLE = 503;
+~~~
+
+### 2. Prompts
+#### 프롬프트 시스템 개요
+- MCP의 핵심기능 중 하나
+- LLM 애플리케이션에서 사용할 수 있는 재사용 가능한 메시지 템플릿과 워크플로우를 정의
+  - 일관된 형식의 프롬프트를 생성, 컨텍스트를 효과적으로 관리할 수 있음.
