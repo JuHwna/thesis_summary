@@ -650,3 +650,473 @@ const RESOURCE_UNAVAILABLE = 503;
 - MCP의 핵심기능 중 하나
 - LLM 애플리케이션에서 사용할 수 있는 재사용 가능한 메시지 템플릿과 워크플로우를 정의
   - 일관된 형식의 프롬프트를 생성, 컨텍스트를 효과적으로 관리할 수 있음.
+
+#### 프롬프트 구조
+##### 기본 프롬프트 정의
+
+~~~
+interface Prompt {
+    // 프롬프트의 이름
+    name: string;
+
+    // 프롬프트에 대한 설명
+    description?: string;
+
+    // 템플릿 매개변수 정의
+    arguments?: PromptArgument[];
+}
+
+interface PromptArgument {
+    // 매개변수 이름
+    name: string;
+
+    // 매개변수 설명
+    description?: string;
+
+    // 필수 여부
+    required?: boolean;
+}
+~~~
+
+##### 프롬프트 메시지 구조
+~~~
+interface PromptMessage {
+    // 메시지 발신자/수신자 역할
+    role: "user" | "assistant";
+
+    // 메시지 내용
+    content: TextContent | ImageContent | EmbeddedResource;
+}
+
+interface TextContent {
+    type: "text";
+    text: string;
+}
+
+interface ImageContent {
+    type: "image";
+    data: string;      // base64 인코딩된 이미지
+    mimeType: string;  // 이미지 타입
+}
+~~~
+
+#### 프롬프트 작업
+##### (1) 프롬프트 목록 조회
+
+~~~
+interface ListPromptsRequest {
+    method: "prompts/list";
+    params?: {
+        cursor?: string;  // 페이지네이션용 커서
+    };
+}
+
+interface ListPromptsResult {
+    prompts: Prompt[];
+    nextCursor?: string;
+}
+~~~
+
+##### (2) 프롬프트 가져오기
+~~~
+interface GetPromptRequest {
+    method: "prompts/get";
+    params: {
+        name: string;                    // 프롬프트 이름
+        arguments?: {                    // 템플릿 매개변수
+            [key: string]: string;
+        };
+    };
+}
+
+interface GetPromptResult {
+    description?: string;
+    messages: PromptMessage[];
+}
+~~~
+
+#### 프롬프트 설계 고려사항
+##### (1) 템플릿 설계
+(1) 유연성
+- 다양한 사용 사례 지원
+- 커스터마이제이션 옵션
+- 확장 가능한 구조
+(2) 재사용성
+- 모듈식 설계
+- 공통 패턴 추출
+- 일관된 형식
+(3) 명확성
+- 이해하기 쉬운 매개변수
+- 명확한 설명
+- 예제 포함
+
+##### (2) 컨텍스트 관리
+
+~~~
+interface PromptContext {
+    // 기본 시스템 프롬프트
+    systemPrompt?: string;
+
+    // 컨텍스트 제한
+    contextLimit?: {
+        maxTokens: number;
+        truncateMethod: 'start' | 'end';
+    };
+
+    // 메타데이터
+    metadata?: {
+        source: string;
+        timestamp: string;
+        version: string;
+    };
+}
+~~~
+
+##### (3) 오류 처리
+
+~~~
+interface PromptError {
+    code: number;      // 오류 코드
+    message: string;   // 오류 메시지
+    details?: {
+        invalidArgs?: string[];
+        contextError?: string;
+        resourceError?: string;
+    };
+}
+~~~
+
+#### 고급 기능
+##### (1) 프롬프트 체이닝
+~~~
+interface ChainedPrompt {
+    steps: {
+        name: string;
+        dependsOn?: string[];
+        arguments?: {
+            [key: string]: string | {
+                fromStep: string;
+                field: string;
+            };
+        };
+    }[];
+}
+~~~
+
+##### (2) 컨텍스트 주입
+~~~
+interface ContextInjection {
+    // 전역 컨텍스트
+    global?: {
+        variables: { [key: string]: string };
+        resources: string[];
+    };
+
+    // 단계별 컨텍스트
+    stepContext?: {
+        [stepName: string]: {
+            variables: { [key: string]: string };
+            resources: string[];
+        };
+    };
+}
+~~~
+
+##### (3) 결과 후처리
+
+~~~
+interface PostProcessor {
+    // 결과 형식 변환
+    format?: 'text' | 'json' | 'markdown';
+
+    // 결과 필터링
+    filters?: {
+        excludePatterns?: string[];
+        includeOnly?: string[];
+    };
+
+    // 결과 검증
+    validation?: {
+        schema?: object;
+        rules?: string[];
+    };
+}
+~~~
+
+#### 모범 사례
+1. 프롬프트 설계
+   - 목적 명확화 : 각 프롬프트의 목적을 명확히 정의
+   - 일관된 형식 : 표준화된 형식과 구조 사용
+   - 문서화 : 상세한 설명과 예제 제공
+2. 구현 권장사항
+   - 비동기 처리 : 장시간 실행 작업 고려
+   - 리소스 효율성 : 메모리와 처리 시간 최적화
+   - 버전 관리 : 프롬프트 변경 이력 관리
+3. 보안 고려 사항
+   - 입력 검증 : 안전한 매개변수 처리
+   - 컨텍스트 제한 : 적절한 범위 설정
+   - 접근 제어 : 권한 기반 프롬프트 접근
+
+### 3. Tools
+#### Tools 개요
+- Model Context Protocol(MCP)의 핵심 기능 중 하나
+- AI 모델이 외부 시스템과 상호작용하고 실제 작업을 수행할 수 있게 됨
+- Tools는 기본적으로 모델 중심 제어를 위해 설계 되었음
+  - AI 모델이 컨텍스트를 이해하고 자동으로 도구를 찾아 호출할 수 있음
+  - 신뢰성과 안전성을 위해 실제 도구 실행 시에는 항상 사용자의 승인이 필요함
+
+#### 프로토콜 상세
+##### 1. Tools 기능 선언
+- MCP 서버에서 Tools를 지원하려면 반드시 Tools 기능을 선언해야 함
+
+~~~
+{
+  "capabilities": {
+    "tools": {
+      "listChanged": true #listChanged : 이 서버가 도구 목록 변경 알림을 지원하는지를 나타냄
+    }
+  }
+}
+~~~
+
+##### 2. 도구 정의 구조
+
+~~~
+{
+  "name": "도구_이름",
+  "description": "도구에 대한 설명",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "매개변수1": {
+        "type": "string",
+        "description": "매개변수 설명"
+      }
+    },
+    "required": ["필수_매개변수_목록"]
+  }
+}
+~~~
+
+##### 3. 주요 프로토콜 메시지
+- 도구 목록 조회 (Tools/list)
+  - 요청
+
+~~~
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list"
+}
+~~~
+
+  - 응답
+~~~
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "tools": [
+      {
+        "name": "example_tool",
+        "description": "Example tool",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "param": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+~~~
+
+- 도구 실행(Tools/call)
+  - 요청
+
+~~~
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "example_tool",
+    "arguments": {
+      "param": "value"
+    }
+  }
+}
+~~~
+
+  - 응답
+
+~~~
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [{
+      "type": "text",
+      "text": "Tool execution result"
+    }],
+    "isError": false
+  }
+}
+~~~
+
+#### 도구 유형과 예제
+##### 1. 시스템 도구
+- 시스템 리소스나 파일 시스템과 상호작용하는 도구
+
+~~~
+// TypeScript 예제
+{
+  name: "read_file",
+  description: "Read file contents",
+  inputSchema: {
+    type: "object",
+    properties: {
+      path: {
+        type: "string",
+        description: "File path to read"
+      }
+    },
+    required: ["path"]
+  }
+}
+~~~
+
+##### 2. API 도구
+- 외부 API와 통합하는 도구
+
+~~~
+// TypeScript 예제
+{
+  name: "github_create_issue",
+  description: "Create GitHub issue",
+  inputSchema: {
+    type: "object",
+    properties: {
+      title: {
+        type: "string",
+        description: "Issue title"
+      },
+      body: {
+        type: "string",
+        description: "Issue content"
+      }
+    },
+    required: ["title", "body"]
+  }
+}
+~~~
+
+##### 3. 데이터 처리 도구
+- 데이터를 변환하거나 분석하는 도구
+
+~~~
+// TypeScript 예제
+{
+  name: "analyze_data",
+  description: "Analyze dataset",
+  inputSchema: {
+    type: "object",
+    properties: {
+      data: {
+        type: "array",
+        items: { type: "number" }
+      },
+      operation: {
+        type: "string",
+        enum: ["mean", "median", "sum"]
+      }
+    },
+    required: ["data", "operation"]
+  }
+}
+~~~
+
+#### 오류 처리
+##### 1. 프로토콜 오류
+- 일반적인 통신 오류나 잘못된 요청은 JSON-RPC 오류로 처리됨
+
+~~~
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "error": {
+    "code": -32602,
+    "message": "Invalid tool name"
+  }
+}
+~~~
+
+##### 2. 도구 실행 오류
+- 도구 실행 중 발생하는 오류는 결과 객체에 포함하여 반환함
+
+~~~
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "result": {
+    "content": [{
+      "type": "text",
+      "text": "Failed to read file: Permission denied"
+    }],
+    "isError": true
+  }
+}
+~~~
+
+#### 구현 예제
+Python 구현
+
+~~~
+app = Server("example-server")
+
+@app.list_tools()
+async def list_tools() -> list[types.Tool]:
+    return [
+        types.Tool(
+            name="sum",
+            description="Add numbers",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "numbers": {
+                        "type": "array",
+                        "items": {"type": "number"}
+                    }
+                },
+                "required": ["numbers"]
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(
+    name: str,
+    arguments: dict
+) -> list[types.TextContent]:
+    if name == "sum":
+        numbers = arguments["numbers"]
+        total = sum(numbers)
+        return [
+            types.TextContent(
+                type="text",
+                text=f"Sum: {total}"
+            )
+        ]
+    raise ValueError(f"Unknown tool: {name}")
+~~~
+
+#### 마무리
+- Tools는 AI 모델에게 실제 작업을 수행할 수 있는 능력을 제공하는 강력한 기능
+  - AI는 단순한 대화를 넘어 시스템과 상호작용하고 실질적인 작업을 수행할 수 잇게 됨
+  - 이러한 능력에는 책임이 따르므로 보안과 안전성을 최우선으로 고려하여 구현해야 함
+
+### 4. Sampling
+#### Sampling 개요
