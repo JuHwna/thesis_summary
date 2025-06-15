@@ -316,3 +316,40 @@
   - 툴을 사용해 최신 데이터 사용 가능
 - 명확한 기능 : 툴의 기능이 명확해야 함
 
+#### 툴의 구성 요소
+- 툴에 대한 설명 : 함수가 수행하는 작업에 대한 설명
+- 호출 요소 : 수행할 수 있는 작업
+- 인수 : 유형이 지정된 인수
+- 출력 : (선택) 유형이 지정된 출력
+
+### 2. 툴의 작동 방식
+- 전체적인 프로세스
+  - (1) LLM에 툴 제공 : 텍스트로 툴을 LLM에 전달
+    - 명확한 툴 사용법 : 툴이 무엇을 하는지 LLM에 명확하게 전달 필요
+      - 툴의 기능, 툴의 입력값
+    - 구조화된 형식 : 명확한 툴 사용법 전달 필요
+      - 컴퓨터 언어나 JSON과 같은 일관된 형식으로 전달
+    - ![image](https://github.com/user-attachments/assets/7ca903d6-57e0-423d-83c0-7addc83dfed7)
+    - 툴 설명 자동 포맷팅
+      - Python 코드 : 함수 이름, 독스트링, 유형 힌트 사용
+      - 자동 텍스트 생성 : Python의 내부 기능을 활용하여 소스 코드에서 툴 설명 자동 추출
+      - 데코레이터 : @tool 데코레이터 사용
+    - ![image](https://github.com/user-attachments/assets/b40ac57d-657d-4dd4-b7e8-1b9916e10d54)
+    
+  - (2) LLM의 툴 호출 텍스트 생성 : 필요 시 코드 형태의 텍스트 출력
+  - (3) 에이전트의 툴 호출 : LLM 출력을 파싱하고 실제 툴 실행
+  - (4) 결과 도출 : 툴 출력을 메시지로 도출
+
+### 3. 일반적인 툴 구현
+
+![image](https://github.com/user-attachments/assets/f2160bdc-db13-4d76-b4ac-a9ef7ce6ffdc)
+
+#### Tool 클래스(init)
+
+![image](https://github.com/user-attachments/assets/f4480ed6-49c8-4d9c-bf86-59ebb01244fd)
+
+- name (str) : 툴의 이름
+- desciption (str) : 툴의 기능에 대한 설명
+- function (callable) : 툴이 실행하는 함수
+- arguments (list) : 예상되는 입력 매개변수
+- outputs (str 또는 list) : 툴의 예상 출
