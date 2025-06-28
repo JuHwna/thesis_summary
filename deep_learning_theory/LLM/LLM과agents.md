@@ -353,3 +353,33 @@
 - function (callable) : 툴이 실행하는 함수
 - arguments (list) : 예상되는 입력 매개변수
 - outputs (str 또는 list) : 툴의 예상 출
+
+#### Tool 클래스(to_string, call)
+
+![image](https://github.com/user-attachments/assets/cbcec2be-adb9-46c2-84ab-56609c337569)
+
+- \_call_() : 툴 인스터스가 호출될 때 함수 도출
+- to_string() : 툴의 속성을 텍스트 표현으로 변환
+
+#### Tool 클래스 사용 방법
+
+![image](https://github.com/user-attachments/assets/cd6bd620-c480-4356-af6f-de86a8077a5c)
+
+- @tool 데코레이터를 사용하면 Tool 클래스 사용 가능
+
+#### 시스템 프롬프트
+
+![image](https://github.com/user-attachments/assets/d1dd6017-920f-48fc-b9cf-01458744e004)
+
+#### 툴은 AI 에이전트의 기능을 향상시킴
+- 툴의 개념
+  - LLM에 추가 기능을 제공하는 함수
+- 툴 정의
+  - 명확한 설명
+  - 입출력
+  - 호출 가능한 요소
+- 툴의 필요성
+  - 정적 모델 훈련의 한계 극복
+  - 실시간 작업 처리 가능
+  - 특수한 작업 수행 가
+
