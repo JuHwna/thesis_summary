@@ -8,4 +8,7 @@
 - https://www.hanbit.co.kr/channel/view.html?cmscode=CMS0551375696
 - https://digitalbourgeois.tistory.com/1492
 - https://tech.ktcloud.com/entry/2025-03-ktcloud-ai-agent-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%ED%98%91%EC%97%85%EC%8B%9C%EC%8A%A4%ED%85%9C
-- 
+- https://fastcampus.co.kr/data_online_domain
+- https://www.makinarocks.ai/%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-ai%EC%99%80-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8B%B1-ai-%EC%B0%A8%EC%9D%B4/
+- https://www.hanbit.co.kr/channel/view.html?cmscode=CMS0951156378
+- https://railly-linker.tistory.com/205
