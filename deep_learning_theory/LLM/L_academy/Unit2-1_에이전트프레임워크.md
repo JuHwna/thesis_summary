@@ -40,7 +40,7 @@
 
 ### 코드 기반 vs JSON 기반
 - 일반적으로 다른 프레임워크에서는 에이전트가 JSON 형식으로 액션 작성
-- smolagents는 Python 코드 기반의 툴 호출이 중심
+- smolagents는 Python 코드 기반의 툴 호출이 중심(JSON 형식도 사용할 수 있음)
 - JSON을 해석하여 코드를 생성하는 과정 없이 LLM이 직접 실행 가능한 Python 코드를 출력하여 실행 가능
 
 <img width="1063" height="376" alt="image" src="https://github.com/user-attachments/assets/22d8ba34-1c5a-4251-9536-16eae282b1f3" />
