@@ -121,4 +121,141 @@
   - 응답의 구조를 트리 형태로 설
  
 ### RAG-평가
-  
+- Faithfulness Evaluator
+  - 충실도 : 사용자가 요청한 정보와 얼마나 잘 일치하는지를 분석
+- AnswerRelevancy Evaluator
+  - 관련성 : 질문과 응답 간의 관련성을 판단
+- Correctness Evaluator
+  - 정확성 : 사용자가 얻는 정보가 오류가 없고 사실에 기반하여 제공되도록 평가
+
+<img width="660" height="529" alt="image" src="https://github.com/user-attachments/assets/c97a0272-14b5-4625-83c8-fa17fb8531b5" />
+
+- 쿼리 결과의 충실도를 평가
+  - FaithfulnessEvaluator 사용
+  - 쿼리 엔진이 질문에 대한 응답을 반환
+  - evaluate_response를 사용하여 쿼리의 응답을 평가
+  - 평가 결과의 passing 속성을 호출하여 응답이 충실한지 여부를 확인(True/False)
+
+## 3. LlamaIndex 툴
+### 툴의 중요성
+- 명확하게 툴을 정의하여 성능을 향상시킬 수 있음
+  - 명확한 툴 인터페이스는 LLM이 쉽게 사용할 수 있도록 도와줌
+  - 소프트웨어 API처럼 도구의 작동 방식을 이해하는 것이 효과적
+
+### LlamaIndex 툴의 주요 유형
+- FunctionTool
+  - Python 함수를 툴로 변환
+- QueryEngine Tool
+  - 에이전트가 쿼리 엔진을 사용할 수 있도록 도와줌
+  - 다른 에이전트를 툴로 사용할 수 있음
+- Toolspecs
+  - 특정 서비스 및 커뮤니티에서 생성된 툴
+  - 특정 서비스와 통합 가능
+- Utility Tools
+  - 다른 툴로부터 대량의 데이터 처리 가능
+
+### FunctionTool
+- Python 함수를 툴로 변환
+- 지원하는 함수 유형 : 동기식 및 비동기식 함수
+- 선택적 매개변수 : name, description
+
+- 코드 예시
+  - get_weather : location의 날씨 정보(sunny) 변환
+  - FunctionTool.from_defaults
+    - 툴에 이름(my_weather_tool)과 설명을 추가
+    - 에이전트가 툴의 기능을 이해
+  - 출력 : Getting weather for New York
+  - 반환 : The weather in New York is sunny
+
+<img width="660" height="533" alt="image" src="https://github.com/user-attachments/assets/71789efb-8d19-4889-9188-7e725277a474" />
+
+### QueryEngineTool
+- 에이전트가 쿼리 엔진을 사용할 수 있도록 지원
+- 쿼리 엔진을 기반으로 구축
+- 다른 에이전트를 툴로 사용할 수 있는 기능 포함
+- 코드 예시
+  - 임베딩 모델과 벡터 저장소를 사용하여 쿼리 엔진 생성
+  - 생성한 쿼리 엔진을 툴로 변환
+
+<img width="659" height="537" alt="image" src="https://github.com/user-attachments/assets/454e0d3e-7e6e-4fed-b35b-a8effade4ab2" />
+
+### Toolspecs
+- 특정 목적을 위해 함께 작동하는 툴의 조합
+- 코드 예시
+  - GmailToolSpec을 사용하여 Gmail 관련 툴을 로드
+  - 각 툴의 메타데이터(name, descriptio)를 추출하여 리스트 형식으로 저장
+<img width="655" height="539" alt="image" src="https://github.com/user-attachments/assets/104d210f-ed1d-4da7-8651-b3d81de88ce1" />
+
+### Utility Tools
+- 다른 툴로부터 대량의 데이터를 처리할 수 있도록 지원
+- API를 직접 쿼리하면 대량의 데이터가 반환될 수 있음
+- 반환된 데이터 중 일부는 무관할 수 있으며 LLM의 컨텍스트 창을 초과하거나 불필요한 토큰 수를 증가시킬 수 있음
+  - Utility Tool을 사용해서 개선 가능
+- A. OnDemand ToolLoader
+  - 데이터를 필요에 따라 로드하고 인덱싱하여 쿼리할 수 있는 툴
+  - 자연어 쿼리로 호출하면 데이터를 가져오고 처리하는 모든 단계가 자동으로 수행됨
+- B. LoadAndSearch ToolSpec
+  - 로드 툴과 검색 툴을 결합한 툴
+  - 데이터를 로드하고 인덱싱한 후, 쿼리를 통해 정보를 검색할 수 있도록 함
+
+## 4. LlamaIndex 에이전트
+### LlamaIndex 주요 추론 에이전트
+- Function Calling
+  - 특정 함수를 호출하여 결과를 반환하는 에이전트
+- ReAct
+  - 텍스트 엔드포인트와 함께 작동하며 복잡한 추론 처리
+- Advanced
+  - 더 복잡한 작업과 워크플로를 처리하기 위한 방법
+
+### 에이전트 초기화
+- 에이전트 생성 시 기능을 정의하는 함수 및 툴 제공
+- 코드 예시
+  - multiply : 두 수의 곱을 반환
+  - LLM을 초기화
+  - multiply를 FunctionTool로 변환하여 에이전트 초기화
+
+<img width="654" height="430" alt="image" src="https://github.com/user-attachments/assets/ca41c530-ce8a-45c2-8771-e33d1c233886" />
+
+- Context 객체
+  - 에이전트는 기본적으로 이전의 대화를 기억하지 못함
+  - Context 객체를 사용해서 에이전트는 사용자가 이전에 한 말이나 요청을 기억할 수 있음
+  - 에이전트가 여러 메시지에 걸쳐 맥락을 유지할 수 있어, 자연스러운 대화 가능
+
+<img width="658" height="441" alt="image" src="https://github.com/user-attachments/assets/c263d219-ecde-4d15-a21a-d08dcc48bbd8" />
+
+### QueryEngineTool로 RAG 에이전트 만들기
+- RAG 에이전트
+  - 데이터를 기반으로 한 정보 검색 및 응답 생성을 위해 에이전트를 활용하는 효과적인 접근 방식
+  - QueryEngineTools를 통해 에이전트가 질문에 효과적으로 답변하도록 설정 가능
+
+<img width="1247" height="395" alt="image" src="https://github.com/user-attachments/assets/68e03646-0a11-474f-b99e-81a2e243be33" />
+
+### 다중 에이전트 시스템
+- 하나의 시스템에서 여러 에이전트가 협력하여 복잡한 작업을 수행
+- 다중 에이전트 시스템에서 에이전트의 역할
+  - 각 에이전트에 name과 discription을 부여
+  - 각 에이전트는 특정한 기능이나 역할을 갖고 있음
+    - 사용자의 요청에 대해 더 정확하고 관련성 높은 응답을 제공
+- 시스템의 활성 발화자 유지
+  - 하나의 에이전트가 사용자와의 주된 상호작용을 담당
+    - 일관된 대화 흐름을 유지
+
+## 5. LlamaIndex 워크플로우
+### 에이전틱 워크플로우
+- 여러 단계로 구성된 프로세스를 정의하여 작업을 체계적으로 수행
+
+- 명확한 코드 구성
+  - 코드가 명확하게 구성되어 유지 관리가 용이함
+- 유연한 제어 흐름
+  - 다양한 상황에 따라 유연하게 대응할 수 있는 구조
+- 시스템의 신뢰성
+  - 각 단계가 서로 안전하게 정보를 주고받을 수 있음.
+- 상태 관리
+  - 상태 관리 가능
+ 
+### 워크플로우
+- 기본 워크플로우 생성 : 단일 단계 워크플로우 생성
+- 단계 연결 : 단계 간에 데이터를 전달하는 사용자 정의 이벤트 생성
+- 루프 및 분기 생성 : 타입 헌팅을 통해 단계 간에 분기나 반복적인 작업을 쉽게 처리
+- 상태 관리 : 각 단계에서 작업을 수행할 때 현재 상태를 기억하고 계속 추적할 수 있도록 상태 관리 추가
+- 
