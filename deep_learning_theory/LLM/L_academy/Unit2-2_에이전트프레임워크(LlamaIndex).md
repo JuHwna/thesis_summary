@@ -226,6 +226,7 @@
   - Context 객체를 사용해서 에이전트는 사용자가 이전에 한 말이나 요청을 기억할 수 있음
   - 에이전트가 여러 메시지에 걸쳐 맥락을 유지할 수 있어, 자연스러운 대화 가능
   - 워크플로 상태를 추적하는 데 사용되는 올바른 객체
+  - 코드 : run(query_str,ctx=ctx)
 
 <img width="658" height="441" alt="image" src="https://github.com/user-attachments/assets/c263d219-ecde-4d15-a21a-d08dcc48bbd8" />
 
@@ -233,6 +234,7 @@
 - RAG 에이전트
   - 데이터를 기반으로 한 정보 검색 및 응답 생성을 위해 에이전트를 활용하는 효과적인 접근 방식
   - QueryEngineTools를 통해 에이전트가 질문에 효과적으로 답변하도록 설정 가능
+  - RAG 도구를 포함하여 질문에 답하기 위해 어떤 툴이든지 사용할 수 있도록 결정할 수 있음.
 
 <img width="1247" height="395" alt="image" src="https://github.com/user-attachments/assets/68e03646-0a11-474f-b99e-81a2e243be33" />
 
