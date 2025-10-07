@@ -43,6 +43,29 @@
 - 문서 형태에 따라 분기
 <img width="428" height="523" alt="image" src="https://github.com/user-attachments/assets/91d9740f-c75d-4aa6-b886-a8d28d4285ff" />
 
+- 일부는 텍스트화
+<img width="676" height="550" alt="image" src="https://github.com/user-attachments/assets/796002b6-13fa-454e-9d74-0e4a7c5a7f33" />
+
+- 일부는 툴 호출
+<img width="495" height="518" alt="image" src="https://github.com/user-attachments/assets/131dbe67-8a86-4391-8cf8-bf2d719d5ad6" />
+
+### LangGraph의 구성 요소
+- 노드(Node) : 애플리케이션의 개별 처리 단계 => LLM 호출, 툴 실행, 판단 로직
+- 엣지(Edge) : 한 노드에서 다음 노드로 이동하는 경로 => 질문 유형이 "표"일 경우 변환 노드로 이동
+- 상태(State) : 노드 간에 공유되는 데이터 흐름 제어에 사용 => 현재까지 수집된 입력값, 이전 응답 결과 등
+
+### "일반 Python 코드로도 모든 흐름을 처리할 수 있지 않나요?"
+- Python만으로도 흐름 제어는 가능하지만 LangGraph는 더 쉽고 체계적인 방식으로 복잡한 LLM 기반 애플리케이션을 설계할 수 있도록 지원
+
+||일반 Python 코드|LangGraph|
+|-|--------------|----------|
+|제어 흐름 설계|수동 구현(if, for, 함수 등으로 직접 작성)|유도 그래프 기반 구조 제공|
+|상태 관리|별도 전역 변수, 클래스 등으로 처리|내장된 상태 객체를 통한 간결한 관리|
+|시각화 및 로깅|외부 라이브러리 필요|기본 제공|
+|툴 추상화|직접 설계 필요|노드 단위로 추상화 가능|
+|인간 개입 처리|별도 로직 구성 필요|내장 기능으로 쉽게 구현 가능|
+
+## 2. LangGraph 구성 요소
 
 
 
