@@ -35,3 +35,56 @@
 - retriever.py : 검색 기능 구현
 - app.py : 모든 구성 요소를 통합하여 완전한 에이전트 구축
 
+### 데이터셋
+
+||설명|예시|
+|-|---|----|
+|name|손님의 이름|Ada Lovelace|
+|relation|게스트와 호스트의 관계|best friend|
+|description|게스트에 대한 설명|Lady Ada Lovelace is my best friend <br> She is an esteemed mathematician and friend|
+|email|초대장을 보내기 위한 연락처|ada.lovelace@example.com|
+
+## 2. 손님 정보 검색 툴
+### 예시 상호작용 - 손님에 대한 정보를 실시간으로 제공
+- 사용자 : "알프레드, 저 엠버서더와 대화하고 있는 신사는 누구인가요?"
+- 알프레드
+  - 데이터베이스 검색
+  - 손님의 배경, 최근 업적, 이메일 주소 등 상세 정보 제공
+
+### [STEP 1] 데이터셋 로드 및 준비(smolagents)
+- (1) 데이터셋 로드 및 준비
+- (2) 각 항목을 Document 객체로 변환
+  - langchain.docstore.document 모듈 사용
+- (3) Document 객체를 리스트로 저장
+<img width="649" height="529" alt="image" src="https://github.com/user-attachments/assets/be94cbda-c1cd-494f-8c67-d307e40536e2" />
+
+### [STEP 2] 검색 툴 생성(smolagents)
+- name, description
+  - 에이전트가 툴을 이해할 수 있도록 이름과 설명 설정
+- inputs : 툴이 필요로 하는 파라미터 정의
+- output_type : 반환 결과의 자료형은 문자열
+
+<img width="661" height="476" alt="image" src="https://github.com/user-attachments/assets/214862fb-6ab7-46cb-8dc7-c033b42d6b75" />
+
+- \_\_init\_\_ 메서드
+  - 미리 준비된 손님 정보 문서들(docs)을 받음
+  - BM25Retriever 생성
+    - langchain_community.retrievers 모듈 사용
+    - 텍스트 검색 알고리즘 활용
+    - 임베딩 없이도 강력한 성능을 발휘
+- forward 메서드
+  - 사용자의 쿼리를 처리해 가장 관련성 높은 손님 정보 3개를 반환
+
+<img width="653" height="467" alt="image" src="https://github.com/user-attachments/assets/b11f9a1f-5cb0-4fc2-8cd0-ce79b9730806" />
+
+### [STEP 3] 에이전트와 툴 통합(smolagents)
+- 에이전트 생성
+  - 모델 초기화
+    - Hugging Face에서 제공하는 모델 사용
+  - 에이전트 생성
+    - CodeAgent 사용
+    - 앞서 정의한 guest_info_tool을 사용할 수 있도록 연결
+- 에이전트 실행
+  - 쿼리의 의미 파악 => 손님 정보 요청임을 인식
+  - 연결된 툴 중 guest_info_tool이 적합하다고 판단
+  - 해당 툴을
