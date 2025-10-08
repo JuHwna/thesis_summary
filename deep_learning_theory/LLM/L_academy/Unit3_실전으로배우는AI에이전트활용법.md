@@ -104,3 +104,108 @@
 
 #### [STEP 2] 검색 툴 생성
 - BM25Retriever 생성
+  - 미리 준비된 손님 정보 문서들(docs)을 기반으로 생성
+  - llama_index.retrievers.bm25 모듈 사용
+  - 텍스트 검색 알고리즘 활용
+  - 임베딩 없이도 강력한 성능을 발휘
+- get_guest_info_retriever 메서드
+  - 사용자의 쿼리를 처리해 가장 관련성 높은 손님 정보 3개를 반환
+- FunctionTool로 매핑
+  - get_guest_info_retriever 메서드를 툴로 변환
+
+<img width="655" height="473" alt="image" src="https://github.com/user-attachments/assets/6d9371d7-7c0f-4254-90a0-c5ed7d6c2a69" />
+
+#### [STEP 3] 에이전트와 툴 통합
+- 에이전트 생성
+  - 모델 초기화
+    - HuggingFaceInferenceAPI 사용
+  - 에이전트 생성
+    - AgentWorkflow.from_tools_or_functions 사용
+    - 툴 리스트와 함께 LLM을 설정하면 워크플로우 에이전트를 생성
+    - 앞서 정의한 guest_info_tool을 사용할 수 있도록 연결
+
+<img width="632" height="441" alt="image" src="https://github.com/user-attachments/assets/25b9aa22-69de-4a88-a553-5c75eb374c80" />
+
+- 에이전트 실행
+  - 쿼리의 의미 분석
+  - 적합한 도구 선택(guest_info_tool)
+  - 도구에 쿼리 전달 -> 손님 정보 검색
+  - 응답 결과 정리 -> 자연어로 포맷팅하여 반환
+- await
+  - 비동기(async) 방식으로 실행
+
+### LangGraph
+#### [STEP 1] 데이터셋 로드 및 준비
+- 데이터셋 로드 및 준비
+- 각 항목을 Document 객체로 변환
+  - langchain.docstore.document 모듈 사용
+- Document 객체를 리스트로 저장
+
+<img width="655" height="529" alt="image" src="https://github.com/user-attachments/assets/826e466c-21d7-4e27-ad5e-dee0f46dbb78" />
+
+#### [STEP 2] 검색 툴 생성
+- BM25Retriever 생성
+  - 미리 준비된 손님 정보 문서들(docs)을 기반으로 생성
+  - langchain_community.retrievers 모듈 사용
+  - 텍스트 검색 알고리즘 활용
+  - 임베딩 없이도 강력한 성능을 발휘
+- extract_text 메서드
+  - 사용자의 쿼리를 처리해 가장 관련성 높은 손님 정보 3개를 반환
+ 
+<img width="582" height="419" alt="image" src="https://github.com/user-attachments/assets/b22301dc-bcd2-444c-a2c3-8d0f6d2e08ed" />
+
+- Tool 객체 생성
+  - langchain.tools 모듈 사용
+  - extract_text 메서드를 툴로 변환
+    - name : 내부적으로 식별되는 이름
+    - func : 연결되는 함수
+    - description : 에이전트가 적절한 도구를 선택할 수 있도록
+
+<img width="653" height="188" alt="image" src="https://github.com/user-attachments/assets/911f9de6-687e-43c0-adcf-90fb1e01aef7" />
+
+#### [STEP 3] 에이전트와 툴 통합
+- 모델 및 대화 인터페이스 구성
+  - HuggingFaceEndpoint
+    - HuggingFace에서 제공하는 LLM을 호출하기 위한 Endpoint 생성
+  - ChatHuggingFace : LLM에 대한 채팅 인터페이스 생성
+  - bind_tools(tools)
+    - 툴을 LLM에 연결
+    - LLM이 상황에 따라 툴을 사용할 수 있도록 설정
+
+<img width="659" height="348" alt="image" src="https://github.com/user-attachments/assets/4fcde567-81aa-4371-a2bc-4c9dbea2b66d" />
+
+- 상태 정의 및 어시스턴트 노두
+  - AgentState 클래스
+    - 에이전트가 사용하는 상태 구조를 정의
+    - messages : 인간과 AI 간 주고받은 메시지들의 리스트
+  - assistant 노드
+    - 현재까지의 메시지를 기반으로 LLM + 툴 선택 진행
+    - invoke를 통해 메시지를 해석하고 툴이 필요한지 판단
+   
+<img width="659" height="389" alt="image" src="https://github.com/user-attachments/assets/34d3b2d1-21e7-4d08-97c7-bf85c7c7082e" />
+
+- 그래프의 노드 정의
+  - assistant : 대화 응답 및 툴 판단
+  - tool : 실제 툴 실행(guest_info_tool)
+
+<img width="580" height="276" alt="image" src="https://github.com/user-attachments/assets/8a94ce3f-9fe3-474a-893a-303cd7c9bd97" />
+
+<img width="470" height="512" alt="image" src="https://github.com/user-attachments/assets/e777fa76-c148-46f9-a2da-416c733f6b38" />
+
+- 에이전트 실행
+  - 그래프를 컴파일하여 에이전트를 최종 생성
+  - 사용자 입력 메시지를 전달하여 실행
+  - 실행 프로세스
+    - 손님의 이름이 포함된 메시지를 이해
+    - 관련 도구를 선택해 검색
+    - 응답을 자연어로 구성함
+   
+<img width="712" height="477" alt="image" src="https://github.com/user-attachments/assets/7a90ae24-a2cc-4813-a2fa-2c05e7b5ac2f" />
+
+### 세 개의 에이전트 프레임워크 비교
+
+||smolagents|LlamaIndex|LangGraph|
+|-|---------|----------|---------|
+|툴구성|클래스 상속 + forward()|함수 -> FunctionTool|함수 -> Tool()|
+|BM25Retriever 호출|BM25Retrieve.from_documents|BM25Retrieve.from_defaults|BM25Retrieve.from_documents|
+||||
