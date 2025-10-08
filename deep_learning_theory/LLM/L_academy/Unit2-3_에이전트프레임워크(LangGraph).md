@@ -32,6 +32,10 @@
 - 복잡한 워크플로우 통합
   - 사용자의 개입이나 다중 구성 요소가 포함된 시스템에도 적용 가능
 
+- LLM의 할루시네이션 문제 다루는 방법
+  - LangGraph는 LLM의 출력을 검증하고 확인할 수 있는 구조화된 워크플로우를 제공함
+    - 검증단계, 오류 처리 경로 등을 포함한 구조적 접근을 통해 환각의 영향을 줄이는데 도움이 됨.
+
 ### 예시 : 문서 질의 응답
 - 문서에 대한 질문에 답변하는 LLM 어시스턴트
 - 워크플로우
@@ -66,6 +70,48 @@
 |인간 개입 처리|별도 로직 구성 필요|내장 기능으로 쉽게 구현 가능|
 
 ## 2. LangGraph 구성 요소
+### 기본 빌딩 블록
+<img width="670" height="292" alt="image" src="https://github.com/user-attachments/assets/85a5aea9-1da5-47e9-ad94-fa04461e7d2e" />
+
+- LangGraph의 애플리케이션은 진입점(entrypoint)에서 시작
+- 실행에 따라 흐름이 하나의 함수나 다른 함수로 이동하여 END에 도달
+
+### 노드(Node)
+- 하나의 동작 단위
+  - 입력 : 상태
+  - 출력 : 상태 반환
+- 워크플로우에서 특정 작업을 수행
+  - LLM 호출 : 텍스트 생성 또는 의사 결정
+  - 툴 호출 : 외부 시스템과 상호 작용
+  - 조건부 논리 : 다음 단계를 결정
+  - 상호작용 : 사용자로부터 입력 받기
+- Edge를 통해 노드 간의 호름 연결
+
+<img width="676" height="451" alt="image" src="https://github.com/user-attachments/assets/45d5b619-5f84-482a-95ea-bdca41e58734" />
+
+### 엣지(Edge)
+- 노드 간의 흐름
+- 기본 엣지 : 항상 다음 노드로 이동
+- 조건부 엣지 : 한 노드의 실행 결과에 따라 어떤 노드로 이동할지를 결정하는 조건부 연결
+
+<img width="676" height="455" alt="image" src="https://github.com/user-attachments/assets/fa73198f-ce3a-446b-8ef7-0273684c7bd5" />
+
+### 상태(State)
+- 현재 워크플로우의 정보를 담고 있는 구조체
+- 노드가 실행될 때마다 state 업데이트 => 업데이트된 state를 다음 노드로 전달
+- 예시 : 채팅 봇에서 사용자의 입력이나 이전 응답 같은 정보를 담은 상태
+
+<img width="693" height="245" alt="image" src="https://github.com/user-attachments/assets/ba3c4277-b700-473d-a7d1-64ce00e6ef3f" />
+
+### 상태 그래프(StateGraph)
+- 전체 에이전트 워크플로우를 담고 있는 컨테이너
+<img width="694" height="381" alt="image" src="https://github.com/user-attachments/assets/8c7989f4-e888-4eb5-8e62-62246b0ceb3f" />
+
+<img width="338" height="497" alt="image" src="https://github.com/user-attachments/assets/59c4ade2-7eda-45c4-966d-d40dc4649d6b" />
+
+- get_graph()를 통해 raw graph 구조를 가져옴
+- invoke를 통해 graph 실행
+
 
 
 
