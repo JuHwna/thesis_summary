@@ -51,14 +51,15 @@
   - 데이터베이스 검색
   - 손님의 배경, 최근 업적, 이메일 주소 등 상세 정보 제공
 
-### [STEP 1] 데이터셋 로드 및 준비(smolagents)
+### Smolagents
+#### [STEP 1] 데이터셋 로드 및 준비
 - (1) 데이터셋 로드 및 준비
 - (2) 각 항목을 Document 객체로 변환
   - langchain.docstore.document 모듈 사용
 - (3) Document 객체를 리스트로 저장
 <img width="649" height="529" alt="image" src="https://github.com/user-attachments/assets/be94cbda-c1cd-494f-8c67-d307e40536e2" />
 
-### [STEP 2] 검색 툴 생성(smolagents)
+#### [STEP 2] 검색 툴 생성
 - name, description
   - 에이전트가 툴을 이해할 수 있도록 이름과 설명 설정
 - inputs : 툴이 필요로 하는 파라미터 정의
@@ -77,7 +78,7 @@
 
 <img width="653" height="467" alt="image" src="https://github.com/user-attachments/assets/b11f9a1f-5cb0-4fc2-8cd0-ce79b9730806" />
 
-### [STEP 3] 에이전트와 툴 통합(smolagents)
+#### [STEP 3] 에이전트와 툴 통합
 - 에이전트 생성
   - 모델 초기화
     - Hugging Face에서 제공하는 모델 사용
@@ -87,4 +88,19 @@
 - 에이전트 실행
   - 쿼리의 의미 파악 => 손님 정보 요청임을 인식
   - 연결된 툴 중 guest_info_tool이 적합하다고 판단
-  - 해당 툴을
+  - 해당 툴을 호출하며 BM25 기반으로 손님 정보를 검색
+  - 검색 결과를 종합하여 자연스럽게 응답 생성
+
+<img width="706" height="464" alt="image" src="https://github.com/user-attachments/assets/2d492292-e52a-4b13-a847-6f34e7364dd2" />
+
+### LlamaIndex
+#### [STEP 1] 데이터셋 로드 및 준비
+- 데이터셋 로드 및 준비
+- 각 항목을 Document 객체로 변환
+  - llama_index.core.schema 모듈 사용
+- Document 객체를 리스트로 저장
+
+<img width="664" height="527" alt="image" src="https://github.com/user-attachments/assets/dec3da4e-d91d-4f87-a533-d978654dc5c0" />
+
+#### [STEP 2] 검색 툴 생성
+- BM25Retriever 생성
