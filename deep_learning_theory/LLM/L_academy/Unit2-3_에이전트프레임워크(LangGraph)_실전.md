@@ -266,3 +266,38 @@ email_graph.add_edge(
 ~~~
 
 ## 4단계 : 상태 그래프 생성 및 엣지 정의하기
+- 이제 모든 구성 요소를 연결하여 상태 그래프를 생성하고 엣지를 정의
+- 이 과정에서 각 노드를 추가하고 노드 간의 흐름을 결정하는 엣지도 설정함
+
+~~~
+# Compile the graph
+compiled_graph = email_graph.compile()
+
+from IPython.display import Image, display
+
+display(Image(compiled_graph.get_graph().draw_mermaid_png()))
+
+# Example emails for testing
+legitimate_email = {
+    "sender": "Joker",
+    "subject": "Found you Batman ! ",
+    "body": "Mr. Wayne,I found your secret identity ! I know you're batman ! Ther's no denying it, I have proof of that and I'm coming to find you soon. I'll get my revenge. JOKER",
+}
+
+spam_email = {
+    "sender": "Crypto bro",
+    "subject": "The best investment of 2025",
+    "body": "Mr Wayne, I just launched an ALT coin and want you to buy some !",
+}
+# Process legitimate email
+print("\nProcessing legitimate email...")
+legitimate_result = compiled_graph.invoke(
+    {"email": legitimate_email, "is_spam": None, "draft_response": None, "messages": []}
+)
+
+# Process spam email
+print("\nProcessing spam email...")
+spam_result = compiled_graph.invoke(
+    {"email": spam_email, "is_spam": None, "draft_response": None, "messages": []}
+)
+~~~
