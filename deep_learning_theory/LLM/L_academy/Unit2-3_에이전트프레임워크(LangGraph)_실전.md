@@ -1,4 +1,4 @@
-# LangGraph를 활용한 이메일 분류
+# (1) LangGraph를 활용한 이메일 분류
 - LangGraph를 사용하여 완전한 이메일 처리 워크플로우를 구축
 
 <img width="866" height="434" alt="image" src="https://github.com/user-attachments/assets/b88af34a-a9fb-45e1-8c69-b9384cf772b3" />
@@ -301,3 +301,5 @@ spam_result = compiled_graph.invoke(
     {"email": spam_email, "is_spam": None, "draft_response": None, "messages": []}
 )
 ~~~
+
+# (2) LangGraph를 활용한 문서 분석
