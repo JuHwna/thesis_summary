@@ -271,3 +271,100 @@
 
 ##### 실습 전체 프로세스
 <img width="1457" height="510" alt="image" src="https://github.com/user-attachments/assets/b02a7771-cc59-41ea-8e26-505e3cf08891" />
+
+##### Part 1. AI 기획 대화 - 간이 기획서 만들기
+<img width="1437" height="373" alt="image" src="https://github.com/user-attachments/assets/91785f4c-9c63-44c8-a332-9c876e0f2d70" />
+
+- 내가 하는 일들을 설명을 해보는 단계
+  - 어떤 업무를 반복하고 잇는지 어떤 흐름으로 일을 하고 있는지를 파악
+- 해결하려는 문제
+  - 무엇이 불편한지 무엇을 개선하고 싶은지
+- 문제의 원인
+  - 시간이 오래 걸리는지, 왜 오류가 발생하는지
+- 원하는 해결 방법
+  - 어떤 결과들을 만들고 싶은지, 자동화가 어떻게 동작하기를 원하는지
+
+##### 업무 자동 기획안 작성 : (1) AI와 기획 대화
+- 기획 대화 잉렇게 진행됨
+
+<img width="1440" height="497" alt="image" src="https://github.com/user-attachments/assets/ddcf80db-0fd9-44bc-aec2-b11b22954c4a" />
+
+##### 프롬프트1
+<img width="1461" height="748" alt="image" src="https://github.com/user-attachments/assets/a170f4bf-e38c-4289-a9fa-ce454637b80c" />
+
+- 해당 프롬프트 입력 시, AI가 해당 질문을 함
+  - 현재 맡고 있는 업무들이 무엇인지
+  - 그 업무를 한 문낭으로 설명해본다는지 이런 것들을 질문함
+ 
+##### 프롬프트2
+
+<img width="1403" height="730" alt="image" src="https://github.com/user-attachments/assets/d5b8fbfa-ba76-4e07-b307-ab5d48dc8130" />
+
+##### 프롬프트3
+
+<img width="1436" height="744" alt="image" src="https://github.com/user-attachments/assets/bb3d7601-6a1b-4c57-9434-95366c6fcbf4" />
+
+
+##### 강의 답
+- 업무 정의
+  - 매주 월요일 주간 매출 보고서 작성
+  - 주간 성과를 요약 보고하는 업무
+  - 매출 추이와 문제 지점을 빠르게 파악하고 의사결정을 지원하기 위한
+  - INPUT: 쇼핑몰 매출 엑셀 파일, OUTPUT : 요약 보고서 리포트
+- 문제점 분석
+  - 채널별로 데이터 포맷이 달라서 정리하는데 시간이 오래 걸림
+  - 매주 동일하게 템플릿의 데이터를 넣고 지표를 정리하고 반복 수행
+  - 필터를 잘못 걸거나 수식을 잘못 작성해서 계산이 틀릴 수 있음
+  - 월요일 오전에 고정되어 있어서 시간의 압박이 큼
+- 일이 힘들다고 느껴지시나요?
+  - 데이터가 여러 채널에 흩어져있어서 취합하기가 ㅎ미들어요
+- 근본 배경?
+  - 채널별로 각각 다른 플랫폼에서 데이터를 제공해주기 때문에
+- 근본 원인?
+  - 데이터 통합이 안 되어 있기 때문에, 개별적으로 정리해야되는 점
+- 자동화 기대 효과
+  - 소요 시간 단축, 통합 적용
+
+##### (결과물 예시) 간이 기획서
+<img width="1437" height="556" alt="image" src="https://github.com/user-attachments/assets/aeea1ca6-bc6b-4d70-8d7e-ec8d63941d16" />
+
+
+##### Part 2. 워크플로우 생성 - 시각화하기
+- 간이 기획서를 기반으로 워크플로우 시각화 다이어그램을 나타냄
+- 생성 페이지 사용 방법
+  - 1.[워크플로우 설계 단계로 이동] Gemini 또는 ChatGPT
+  - 2.[간이 기획서 붙여넣기] Step 1에서 완성한 기획서 내용 전체를 입력창에 붙여넣음
+  - 3.[워크플로우 시각화 확인] 기획에서 설계한 트리거->데이터->아웃풋 구조가 다이어그램으로 나타냄
+- 생성 결과물 이해하기
+  - 1.[확인 포인트] 시각화 다이어그램을 보면서 내가 원하는 흐름과 일치하는지 먼저 검토하세요.
+ 
+##### 워크플로우 시각화하기 - 프롬프트1
+<img width="1413" height="726" alt="image" src="https://github.com/user-attachments/assets/0a281794-72be-45dc-af2b-2d946ff7aa68" />
+
+
+##### 워크플로우 시각화하기 - 프롬프트2
+<img width="1441" height="736" alt="image" src="https://github.com/user-attachments/assets/3eb1d181-511a-4bc6-a7de-7f56dc0b3814" />
+
+##### 업무 자동화 기획안 작성 : (2) 워크플로우 생성
+- (결과물 예시) 워크플로우 시각
+<img width="1425" height="487" alt="image" src="https://github.com/user-attachments/assets/9bf0f912-ca71-4760-8ce9-94bb12210aa3" />
+
+## 2. 초기 세팅 및 워크플로우 이해
+### 1. [이론] Low Code Workflow 플랫폼 : n8n 이해하기
+#### Part 1. 업무 자동화와 n8n 소개
+- 1.[AI 시대 패러다임 변화] 단순 반복에서 지능형 의사결정으로
+  - 데이터를 기반으로 얼마나 지능형으로 의사결정을 하느냐가 중요함
+- 2.[3가지 혁신 기술] Document AI, LLM챗봇, Agent AI
+  - 문서를 이해하는 Document AI 기술
+  - 대화를 기반으로 사고하는 LLM 챗봇
+  - 스스로 판단하고 실행하는 Agent AI
+- 3.[n8n의 특별함] AI와 자동화의 완벽한 결합
+  - AI 기술과 기존 업무자동화를 연결해주는 플랫폼
+  - 단순 반복을 넘어서 실제 업무에 적용하게 만들어줌
+- 4.[실용적 비전] 왜 지금 n8n을 배워야 하는가
+
+##### Low Code Workflow 플랫폼 : n8n 소개
+
+<img width="1195" height="603" alt="image" src="https://github.com/user-attachments/assets/c4242f1d-63d8-41b5-90ac-94e6f51e5d09" />
+
+#### Park 2. n8n 설치 및 환경 구성
