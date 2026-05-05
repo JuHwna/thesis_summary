@@ -256,3 +256,18 @@
 ##### 핵심 정리 : 업무 자동화 프로세스 이해 및 기획하기
 <img width="1366" height="284" alt="image" src="https://github.com/user-attachments/assets/3baeca7e-ee73-4f27-9cb4-e2ac99ea5bac" />
 
+### 3. [실습] AI를 활용한 업무 자동화 프로세스 시각화하기 - 업무 자동화 기획안 작성
+#### 업무 자동화 기획안 작성
+##### 기획의 어려움, 그리고 AI 도구의 등장
+<img width="1452" height="485" alt="image" src="https://github.com/user-attachments/assets/dbd4756e-b224-44d9-8d32-de08fa62eb91" />
+
+##### 배운 이론이 AI 도구에서 이렇게 작동함
+<img width="1426" height="510" alt="image" src="https://github.com/user-attachments/assets/c79f3a59-8eb8-4928-8101-af8b3b0c3aa7" />
+
+##### AI 기획 도구 활용법
+- AI는 기획 과정을 대신하는 게 아님
+  - 우리가 생각한 방향을 더 빠르게 구조화해주는 도구 
+<img width="1437" height="504" alt="image" src="https://github.com/user-attachments/assets/56b64581-875a-455a-b02b-2ff73c358b93" />
+
+##### 실습 전체 프로세스
+<img width="1457" height="510" alt="image" src="https://github.com/user-attachments/assets/b02a7771-cc59-41ea-8e26-505e3cf08891" />
