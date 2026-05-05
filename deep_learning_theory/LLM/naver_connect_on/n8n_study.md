@@ -228,6 +228,31 @@
 - 2.[기준으로 필터링] 임팩트 + 기술 타당성으로 평가하기
 - 3.[하나 선택] 가장 좋은 하나에 집중하기
 
+##### 업무 자동화 프로세스: (1) 아이디어 선정
+<img width="1443" height="552" alt="image" src="https://github.com/user-attachments/assets/ae353c6c-652f-48c2-b5cd-ce389159d312" />
+<img width="1435" height="558" alt="image" src="https://github.com/user-attachments/assets/7e7cb946-76af-4f26-b11c-a86173664813" />
+<img width="1453" height="573" alt="image" src="https://github.com/user-attachments/assets/8d718e4f-8cf8-48d1-974c-996c1f98507c" />
 
+##### Part 2. 아웃풋 기획
+- 선정한 문제를 어떻게 자동화할지, 솔루션의 전체 구조를 먼저 그림
+- 1.[두 범주 이해] 모든 AI 솔루션은 이 두 레이어로 나눠 생각할 수 있음
+  - 디지털라이제이션(비정형 -> 구조화 데이터) -> 어플리케이션(데이터 -> 아웃풋 서비스)
+  - 데이터를 정리하는 단계(AI가 이해할 수 있는 형태로 정리하는 과정)
+  - 정리된 데이터를 활용해서 실제 결과로 만들어내는 단계
+- 2.[구조 설계] 트리거 -> 데이터 -> 아웃풋 흐름으로 구체화함
 
+##### 업무 자동화 프로세스 : (2) 아웃풋 기획
+<img width="1429" height="568" alt="image" src="https://github.com/user-attachments/assets/9e9fb862-ac51-4a51-9c5a-1fbc72de2973" />
+
+<img width="1448" height="600" alt="image" src="https://github.com/user-attachments/assets/d5677a8e-af37-4408-9ab7-53e4a712f897" />
+
+##### Part 3. 빠른 제작 - 기획을 워크플로우로
+- 기획 완료 후, 코딩 없이 워크플로우를 빠르게 구현하는 단계
+- 중요한 점 : 완벽하게 만드는 것이 목표 X
+  - 빠르게 제작해서 기획을 문서에 끝내지 않고 실제로 작동하는 워크플로우로 옮기는 것
+
+<img width="1418" height="522" alt="image" src="https://github.com/user-attachments/assets/8c74296f-3367-4114-b570-0b3c41cae6cf" />
+
+##### 핵심 정리 : 업무 자동화 프로세스 이해 및 기획하기
+<img width="1366" height="284" alt="image" src="https://github.com/user-attachments/assets/3baeca7e-ee73-4f27-9cb4-e2ac99ea5bac" />
 
