@@ -473,6 +473,16 @@
 - 외부 서비스 연동 노드 - 디지털 비서의 네트워
 <img width="1104" height="559" alt="image" src="https://github.com/user-attachments/assets/79bf304d-7ade-472c-add5-503073d5c3d1" />
 
+- 흐름 제어 노드 - 조건부 실행
+
+<img width="1121" height="547" alt="image" src="https://github.com/user-attachments/assets/32f2358b-4ac2-49fd-9a95-1f5e06ea0f14" />
+
+- 흐름 제어 노드 - 대기/중단 & 병합/나누기
+<img width="1074" height="596" alt="image" src="https://github.com/user-attachments/assets/de8a68a6-c307-4eba-aade-4b1f5cad4992" />
+
+
+
+
 
 
 
