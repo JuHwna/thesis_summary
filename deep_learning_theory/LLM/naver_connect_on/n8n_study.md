@@ -368,3 +368,111 @@
 <img width="1195" height="603" alt="image" src="https://github.com/user-attachments/assets/c4242f1d-63d8-41b5-90ac-94e6f51e5d09" />
 
 #### Park 2. n8n 설치 및 환경 구성
+- 1.[Docker 설치] 전문적인 자동화 사무실 구축
+- 2.[초기 계정 설정] 안전한 접근 권한 관리
+- 3.[보안 강화] localhost:5678 안전하게 운영하기
+
+##### Low Code Workflow 플랫폼 : n8n 설치 및 환경 구성
+<img width="1109" height="571" alt="image" src="https://github.com/user-attachments/assets/7d722674-7439-4368-88f8-30d94fdefba4" />
+
+- NPX를 이용한 간단 설치
+
+<img width="1213" height="553" alt="image" src="https://github.com/user-attachments/assets/1b7c2a0d-2108-49df-93f5-25a2b8fcf8f2" />
+
+- 관리자 설정 및 라이선스 활성화
+
+<img width="1242" height="595" alt="image" src="https://github.com/user-attachments/assets/5822b2f3-4c70-4d41-8996-0fbaac764b0d" />
+
+- Docker를 이용한 설치
+
+<img width="1175" height="597" alt="image" src="https://github.com/user-attachments/assets/b144fee7-4e48-4893-8f0e-9bb0ed139560" />
+
+- 자주 발생하는 설치 문제 해결
+
+<img width="1253" height="356" alt="image" src="https://github.com/user-attachments/assets/ad3d074a-2906-4f29-aebe-03f10aa21e38" />
+
+- 설치 완료 - 워크플로우 생성 준비
+
+<img width="1104" height="587" alt="image" src="https://github.com/user-attachments/assets/ea33b779-65e2-4bf1-b526-eb765ba94923" />
+
+- 메인 워크플로우 관리 화면
+
+<img width="1445" height="604" alt="image" src="https://github.com/user-attachments/assets/0b81a5dd-ec73-4268-88a4-8edbc4d62b18" />
+
+- 워크플로우 제작 화면
+
+<img width="1126" height="585" alt="image" src="https://github.com/user-attachments/assets/89fbbcbf-8128-4b99-9554-a1849013e75b" />
+
+- 워크플로우 제작 화면 개요
+
+<img width="1133" height="489" alt="image" src="https://github.com/user-attachments/assets/428670f2-8a47-4f03-9358-4326dbfea4b5" />
+
+#### Part 3. 트리거와 액션 노드
+- 트리거 노드(시작점) : 자동화의 시작점
+  - 1.[Manual Trigger] 수동 실행
+  - 2.[Schedule] 시간 기반
+  - 3.[Webhook] 이벤트 기반
+  - 4.[앱 연동] 서비스 기반
+
+- 액션 노드(처리부) : 실제로 일을 처리하는 단계
+  - 1.[데이터 수집] HTTP, DB
+  - 2.[데이터 가공] Set, Function
+  - 3.[데이터 저장] DB, 클라우드
+  - 4.[소통 도구] Gmail, Slack
+
+##### Low Code Workflow 플랫폼 : 워크플로우 구성 요소
+- n8n의 트리거 : 언제 어떤 방식으로 자동화를 시작하게 될지 결정하는 핵심적인 장치
+<img width="1197" height="454" alt="image" src="https://github.com/user-attachments/assets/5a6a3427-b0de-4f0c-8d6c-31ae415c5d44" />
+
+- Webhook - 나만의 똑똑한 대문
+  - 외부 세계의 n8n을 연결해주는 가장 중요한 관문을 함
+<img width="928" height="613" alt="image" src="https://github.com/user-attachments/assets/968cb663-6e11-42bf-976e-9ff51a915a0c" />
+
+- Webhook 실제 활용 사례
+
+<img width="1122" height="512" alt="image" src="https://github.com/user-attachments/assets/f5ebc167-3b8a-46a7-a9cc-487fa33a71b5" />
+
+- 스케줄 트리거 - 정확한 알람시계
+
+<img width="1206" height="464" alt="image" src="https://github.com/user-attachments/assets/99d5b8a3-f1ed-4f88-a692-e883bd856e21" />
+
+- 메뉴얼 트리거 - 워크플로우 테스트 버튼
+  - 워크플로우 로직 검증을 하거나
+  - 데이터 변환을 했을 때 결과를 확인하거나
+  - API가 잘 연결되어 있는지 상태를 점검할 때
+  - 오류 발생한 지점을 파악할 때 바로바로 수동으로 체크할 수 있는 기능
+  - 테스트 전용 실행도구
+<img width="1005" height="600" alt="image" src="https://github.com/user-attachments/assets/fcc835c0-2086-40dc-b247-f704429a1b72" />
+
+- Chat Trigger - AI 대화 테스트 도구
+  - 시나리오 검증
+  - 응답 품질 검증
+  - 오류 검증 테스트 할 수 있음
+<img width="1088" height="597" alt="image" src="https://github.com/user-attachments/assets/96f1b4bc-065c-4aa3-bfce-8a9aca3d0d56" />
+
+- 트리거에서 액션으로 - 신호에서 실행으로
+
+<img width="1130" height="369" alt="image" src="https://github.com/user-attachments/assets/56500165-5aed-40d4-98f9-c4d5efeec3ec" />
+
+- 액션 노드들의 분류
+
+<img width="1032" height="417" alt="image" src="https://github.com/user-attachments/assets/a49bed98-4068-4226-8143-da4388f85b44" />
+
+- SET 노드 - 데이터 필드 조작의 스위스 칼
+  - 간단한 값을 변경하고 필드를 추가하는 데 적합
+  - 복잡한 것들만 활용하면 점점 더 자동화가 복잡해질 수 있어서 가능하면 SET 노드를 조금 더 활용하는데 집중해야 함
+  - set 노드를 더 많이 쓰면 복잡성을 떨어뜨릴 수 있음 
+<img width="1095" height="614" alt="image" src="https://github.com/user-attachments/assets/a742a3d7-0263-4c31-abfe-50cd9a01dce2" />
+
+- Function 노드 - 프로그래밍의 힘
+  - 반복하고 조건이 걸리고 계산하고 API 호출 이런 더 정교한 제어가 필요할 때 사용하는 단계
+  - 정말 복잡한 작업만 Function 노드로 처리
+    - 자동화의 어떤 프로그래밍 역량을 더해주는 그런 확장적인 도구다로 활용
+<img width="1360" height="603" alt="image" src="https://github.com/user-attachments/assets/8a5a20df-f0a2-484a-860a-ec1c1282088b" />
+
+- 외부 서비스 연동 노드 - 디지털 비서의 네트워
+<img width="1104" height="559" alt="image" src="https://github.com/user-attachments/assets/79bf304d-7ade-472c-add5-503073d5c3d1" />
+
+
+
+
