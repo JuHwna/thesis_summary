@@ -129,6 +129,7 @@ claude --permission-mode plan
 - 매번 같은 명령에 허용을 누르는 것이 번거롭다면 /permissions로 규칙을 미리 설정할 수 있음
 
 |탭|역할|
+|--|---|
 |Allow|허용된 도구는 승인 없이 자동 실행|
 |Ask|이 도구를 쓸 때마다 항상 확인 요청|
 |Deny|거부된 도구는 항상 차단|
@@ -137,3 +138,60 @@ claude --permission-mode plan
 - 규칙은 도구명 또는 도구명(상세지정) 형식으로 작성함
 
 |규칙 예시|의미|
+|---------|----|
+|Bash(npm test|npm test 명령을 허용|
+|Bash(npm run *)|npm run으로 시작하는 모든 명령을 허용|
+|Read(.env)|.env 파일 읽기를 차단(Deny에 추가)|
+
+- 규칙이 겹치면 Deny > Ask> Allow 순서로 우선 적용됨
+- Deny에 넣으면 Allow에 있어도 차단됨
+- 규칙은 .claude/settings.json에 저장되어 팀원과 공유할 수도 있음
+
+## 민감 정보 보호
+- .env 파일이나 비밀번호가 포함된 파일이 있다면 접근을 차단함
+  - 프롬프트 : .env 파일과 secrets/ 폴더를 Claude가 읽기 못하도록 권한 설정해줘
+- Claude가 .claude/settings.json에 다음과 같은 deny 규칙을 추가
+~~~
+{
+  "permissions": {
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(secrets/**)",
+      "Edit(.env)",
+      "Edit(.env.*)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Edit(secrets/**)",
+      "Bash(cat:*.env*)",
+      "Bash(cat:*secrets/*)"
+    ]
+  }
+}
+~~~
+
+- 읽기(Read), 수정(Edit), 셀 명령(Bash)까지 모두 차단해야 확실함
+- Deny 규칙은 Claude의 시도 자체를 차단하는 1차 방어선
+  - 공식 문서에서도 이것을 1차 방어선으로 설명
+  - 추가로 sandbox와 hooks를 "defense-in-depth"(다층 방어)로 권장
+ 
+# 컨텍스트 관리
+## /clear와 /compact
+
+||/clear|/compact|
+|-|-----|--------|
+|효과|대화 이력 완전 초기화|핵심만 남기고 압축|
+|시점|새로운 작업을 시작할 때|같은 작업을 이어갈 때|
+|비유|노트를 지우고 새로 시작|핵심만 남기고 나머지를 지워서 공간 확보|
+
+## /clear - 새 노트로 시작
+- 하나의 작업을 끝내고 완전히 다른 작업을 시작할 때 사용
+- 이전 대화가 남아 있으면 Claude가 새 작업에 불필요한 맥락을 끌고 와서 엉뚱한 방향으로 갈 수 있음
+- /clear 후에는 이전 대화를 모름
+  - "아까 그 파일"이라고 하면 무엇을 가리키는지 알 수 없으므로, 구체적으로 다시 지시해야 함
+  - /clear는 같은 세션 안에서 노트만 비우는 것이고, 세션 자체를 종료하는 것은 아님
+- 새 세션으로 시작하고 싶으면 => /exit 후 claude를 다시 실행
+
+## /compact - 요약해서 공간 확보
